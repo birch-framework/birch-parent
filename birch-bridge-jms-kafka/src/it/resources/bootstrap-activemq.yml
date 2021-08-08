@@ -1,0 +1,46 @@
+server:
+  port: ${birch.bridge-port}
+
+# ActiveMQ Configuration
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616?jms.prefetchPolicy.queuePrefetch=10&wireFormat.tightEncodingEnabled=false
+    pool:
+      enabled: true
+      max-connections: 4
+
+birch:
+  bridge-port: 8097
+  bridges:
+    test-1-in:
+      source: jms
+      jms:
+        queue: test-queue1-in
+        key-property: key
+        correlation-id-property: corrID
+        filter-properties: corrID,key,index,isTrue
+      kafka:
+        topic: test-topic1-in
+    test-1-out:
+      source: kafka
+      kafka:
+        topic: test-topic1-out
+      jms:
+        queue: test-queue1-out
+        key-property: key
+        override-correlation-id: false
+    test-2-in:
+      source: jms
+      jms:
+        queue: test-queue2-in
+        key-property: key
+      kafka:
+        topic: test-topic2-in
+    test-2-out:
+      source: kafka
+      kafka:
+        topic: test-topic2-out
+      jms:
+        queue: test-queue2-out
+        key-property: key
+        override-correlation-id: false

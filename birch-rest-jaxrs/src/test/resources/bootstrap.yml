@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+
+server:
+  port: 8080
+
+services:
+  coindesk:
+    address: https://api.coindesk.com/v1

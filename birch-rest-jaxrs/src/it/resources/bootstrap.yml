@@ -1,0 +1,41 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+
+server:
+  port: 8080
+
+cxf:
+  path: /api
+  jaxrs:
+    component-scan: true
+    classes-scan-packages: org.birchframework, com.fasterxml.jackson.jaxrs.json, org.apache.cxf.metrics
+    client:
+      address: http://localhost:8080${cxf.path}
+
+birch:
+  security:
+    cxf:
+      cors:
+        allow: true
+  actuator:
+    uri-map:
+      service1: http://service1:8080
+      service2: http://service1:8080
+  i18n:
+    enabled: true
+    resource-bundle-base-name: messages
+  # Open API
+  openapi:
+    feature:
+      base-path: /api
+      title: TestApplication
+      description: Test Application
+      contact-name: Amplex Gustov
+      contact-url: http://www.birchframework.org/
+      license: Copyright (c) 2020 TEK Systems
+      license-url:
+      version: 1.0-SNAPSHOT
+      pretty-print: true
+      support-swagger-ui: true

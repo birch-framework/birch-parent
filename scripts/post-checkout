@@ -1,0 +1,39 @@
+#!/bin/bash
+
+#================================================================
+# Copyright (c) 2021 Birch Framework
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#================================================================
+
+#
+# Modifies build status badge within README.md with this branch's name, if it is not already so
+#
+
+BADGE_TEMPLATE_FILE=scripts/badge-template.txt
+
+if [ -r ${BADGE_TEMPLATE_FILE} ]; then
+   BADGE_TEMPLATE=$(<${BADGE_TEMPLATE_FILE})
+else
+   echo "${BADGE_TEMPLATE_FILE} does not exist or is not readable"
+   exit 1
+fi
+
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+if ! head -1 README.md | grep -q \/${BRANCH_NAME}; then
+   if echo ${BRANCH_NAME} | grep -q release; then
+      BRANCH_NAME=$(echo ${BRANCH_NAME} | sed "s/\//%252F/")
+   fi
+   NEW_BADGE=$(echo ${BADGE_TEMPLATE} | sed "s@BRANCH_NAME@${BRANCH_NAME}@g")
+   README_CONTENTS=$(tail +2 README.md) && echo "${NEW_BADGE}" > README.md && echo "${README_CONTENTS}" >> README.md
+   git add README.md && git commit README.md -m "post-checkout: Updated release badge URLs"
+fi

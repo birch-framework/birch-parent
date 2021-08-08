@@ -1,0 +1,47 @@
+server:
+  port: ${birch.bridge-port}
+
+spring:
+  jms:
+    cache:
+      enabled: true
+      session-cache-size: 75
+
+# IBM MQ Configuration
+ibm:
+  mq:
+    queue-manager: DOPSMQ01
+    channel: DEV.ADMIN.SVRCONN
+    conn-name: localhost(1414)
+    user: admin
+    password: passw0rd
+
+birch:
+  bridge-port: 8098
+  bridges:
+    test-1-in:
+      source: jms
+      concurrent-consumers: ${spring.jms.cache.session-cache-size}
+      transacted: false
+      jms:
+        queue: DEV.QUEUE.1
+        key-property: key
+      kafka:
+        topic: test-topic1-in
+    test-1-out:
+      source: kafka
+      kafka:
+        topic: test-topic1-out
+        consumers-count: 10
+      jms:
+        queue: DEV.QUEUE.2
+        key-property: key
+        override-correlation-id: false
+    test-2-in:
+      source: jms
+      jms:
+        queue: DEV.QUEUE.3
+        key-regex: .*((World)!)$
+        key-regex-capture: 2
+      kafka:
+        topic: test-topic2-in

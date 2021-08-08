@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--*************************************************************
+  * Copyright (c) 2021 Birch Framework
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * any later version.
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ************************************************************-->
+<Configuration status="WARN">
+   <Properties>
+      <Property name="LOG_PATTERN">
+         %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level} %style{[%15.15t]}{Magenta} %style{%50.50logger{1.}}{Green} %style{corrID:[%X{Correlation-ID}]}{Bold, Yellow}: %style{%m%n}{Bold, Cyan}
+      </Property>
+
+      <Property name="APP_NAME">${env:LOG4J_APP_NAME:-app}</Property>
+   </Properties>
+
+   <Appenders>
+      <Console name="console" target="SYSTEM_OUT">
+         <PatternLayout pattern="${log4j:LOG_PATTERN}" disableAnsi="${env:LOG4J_CONSOLE_LAYOUT_DISABLE_ANSI:-true}"/>
+      </Console>
+
+      <RollingFile  name="file" fileName="${log4j:APP_NAME}.log" filePattern="${log4j:APP_NAME}-%i.log.gz" append="${env:LOG4J_FILE_APPENDER_APPEND:-false}">
+         <JsonLayout properties="true" compact="true" eventEol="true"/>
+         <Policies>
+            <SizeBasedTriggeringPolicy size="${env:LOG4J_FILE_APPENDER_FILE_SIZE:-200 MB}"/>
+         </Policies>
+         <DefaultRolloverStrategy max="1"/>
+      </RollingFile>
+
+      <Async name="console-async" bufferSize="${env:LOG4J_CONSOLE_APPENDER_ASYNC_BUFFER:-2048}">
+         <AppenderRef ref="console"/>
+      </Async>
+
+      <Async name="file-async" bufferSize="${env:LOG4J_FILE_APPENDER_ASYNC_BUFFER:-4096}">
+         <AppenderRef ref="file"/>
+      </Async>
+   </Appenders>
+
+   <Loggers>
+      <Root level="info">
+         <AppenderRef ref="${env:LOG4J_CONSOLE_APPENDER_REF:-console}"/>
+      </Root>
+   </Loggers>
+</Configuration>

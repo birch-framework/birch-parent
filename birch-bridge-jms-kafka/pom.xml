@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--*************************************************************
+  * Copyright (c) 2021 Birch Framework
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * any later version.
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ************************************************************-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <artifactId>birch-bridge-jms-kafka</artifactId>
+   <packaging>jar</packaging>
+
+   <name>${project.artifactId}</name>
+   <description>Birch Framework JMS/Kafka Bridge</description>
+
+   <parent>
+      <groupId>org.birchframework</groupId>
+      <artifactId>birch-parent</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+   </parent>
+
+   <properties>
+      <active.profile>native</active.profile>
+      <ibm-mq.version>2.4.2</ibm-mq.version>
+   </properties>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.birchframework</groupId>
+         <artifactId>birch-common</artifactId>
+         <version>${project.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.apache.cxf</groupId>
+               <artifactId>cxf-rt-databinding-jaxb</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.apache.cxf</groupId>
+               <artifactId>cxf-spring-boot-starter-jaxrs</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.apache.cxf</groupId>
+               <artifactId>cxf-rt-rs-extension-providers</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.apache.cxf</groupId>
+               <artifactId>cxf-rt-rs-service-description-openapi-v3</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-actuator</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-spring-boot-starter</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-jms-starter</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>org.springframework</groupId>
+               <artifactId>spring-jms</artifactId>
+            </exclusion>
+         </exclusions>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-kafka-starter</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-zookeeper-starter</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-jackson-starter</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-ognl-starter</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel</groupId>
+         <artifactId>camel-componentdsl</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-micrometer-starter</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel.springboot</groupId>
+         <artifactId>camel-servlet-starter</artifactId>
+         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-jms</artifactId>
+         <version>${spring-jms.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.camel</groupId>
+         <artifactId>camel-activemq</artifactId>
+         <version>${camel.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.commons</groupId>
+         <artifactId>commons-lang3</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>io.micrometer</groupId>
+         <artifactId>micrometer-registry-prometheus</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.activemq.tooling</groupId>
+         <artifactId>activemq-junit</artifactId>
+         <version>${activemq.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.activemq</groupId>
+         <artifactId>activemq-broker</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.guava</groupId>
+               <artifactId>guava</artifactId>
+            </exclusion>
+         </exclusions>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.messaginghub</groupId>
+         <artifactId>pooled-jms</artifactId>
+         <version>${pooled-jms.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>com.ibm.mq</groupId>
+         <artifactId>mq-jms-spring-boot-starter</artifactId>
+         <version>${ibm-mq.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.springframework.boot</groupId>
+               <artifactId>spring-boot-starter-tomcat</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.messaginghub</groupId>
+               <artifactId>pooled-jms</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.springframework</groupId>
+               <artifactId>spring-jms</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.bouncycastle</groupId>
+               <artifactId>bcpkix-jdk15on</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.bouncycastle</groupId>
+               <artifactId>bcprov-jdk15on</artifactId>
+            </exclusion>
+         </exclusions>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.birchframework</groupId>
+         <artifactId>birch-ems-support</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.tibco</groupId>
+         <artifactId>tibjms</artifactId>
+         <version>${tibco-ems.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.tibco</groupId>
+         <artifactId>tibcrypt</artifactId>
+         <version>${tibco-ems.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-test</artifactId>
+         <scope>test</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>junit</groupId>
+               <artifactId>junit</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.junit.vintage</groupId>
+               <artifactId>junit-vintage-engine</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.ow2.asm</groupId>
+               <artifactId>asm</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.junit.jupiter</groupId>
+         <artifactId>junit-jupiter-api</artifactId>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+</project>

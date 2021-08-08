@@ -1,0 +1,73 @@
+server:
+  port: ${birch.bridge-port}
+
+# Tibco EMS Settings
+tibco:
+  ems:
+    jndi:
+      url: ${tibco.ems.factory.url}
+      principal: ${tibco.ems.factory.username}
+      protocol: ${tibco.ems.factory.protocol}
+      #authentication: simple
+    factory:
+      #url: tcp://localhost:7222
+      url: ssl://localhost:7441
+      username: admin
+      protocol: ssl
+    ssl:
+      verify-host: false
+      verify-hostname: false
+      #auth-only: false
+    queue-connection-factory-name: QueueConnectionFactory
+    topic-connection-factory-name: TopicConnectionFactory
+    pool:
+      enabled: true
+      max-connections: 4
+    connect:
+      attempt-delay: 2s
+      attempt-timeout: 2s
+
+birch:
+  bridge-port: 8099
+  #bridges-global-configs:
+  #  max-redeliveries: 5
+  bridges:
+    test-1-in:
+      source: jms
+      concurrent-consumers: 20
+      #transacted: false
+      #after-receive-consumer: org.birchframework.bridge.TestAfterReceive
+      #before-send-consumer: org.birchframework.bridge.TestBeforeSend
+      jms:
+        queue: test-queue1-in
+        key-property: key
+        message-type: bytes
+        dead-letter-queue: queue.sample
+      kafka:
+        topic: test-topic1-in
+    test-1-out:
+      source: kafka
+      kafka:
+        topic: test-topic1-out
+      jms:
+        queue: test-queue1-out
+        key-property: key
+        override-correlation-id: false
+    test-2-in:
+      enabled: false
+      source: jms
+      jms:
+        queue: test-queue2-in
+        key-property: key
+        message-type: bytes
+      kafka:
+        topic: test-topic2-in
+    test-2-out:
+      enabled: false
+      source: kafka
+      kafka:
+        topic: test-topic2-in
+      jms:
+        topic: topic.sample
+        key-property: key
+        override-correlation-id: false

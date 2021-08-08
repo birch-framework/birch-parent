@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--*************************************************************
+  * Copyright (c) 2021 Birch Framework
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * any later version.
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ************************************************************-->
+<configuration>
+   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+  		<encoder class="org.birchframework.framework.logging.logback.PatternLayoutEncoder">
+         <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      	<charset>${CONSOLE_LOG_CHARSET}</charset>
+  		</encoder>
+  	</appender>
+   <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="CONSOLE"/>
+      <queueSize>2500</queueSize>
+      <maxFlushTime>1500</maxFlushTime>
+   </appender>
+   <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+   </root>
+</configuration>

@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: oauth2-test
+  cloud:
+    config:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: beans,env,health,info
+
+cxf:
+  path: /api
+  jaxrs:
+    component-scan: false
+    classes-scan: false
+    classes-scan-packages: org.birchframework
+
+birch:
+  security:
+    unsecure-context-paths: /config
+    oauth2:
+      enabled: true
+      realms:
+        khalichi-adfs:
+          name: Khalichi.com ADFS
+          description: Khalichi.com AD FS Identity Provider
+          idp-type: primary-idp
+          authorization-uri: https://fs.khalichi.com/adfs/oauth2/authorize
+          token-uri: https://fs.khalichi.com/adfs/oauth2/token
+          user-info-uri: https://fs.khalichi.com/adfs/userinfo
+          user-name-claim-name: email
+          groups-claim-name: role
+          issuer-uri: https://fs.khalichi.com/adfs
+          logout-redirect-uri: https://www.google.com
+          #logout-redirect-uri: /test/idpTypes
+          #jwk-set-uri: https://fs.khalichi.com/adfs/discovery/keys
+          client-name: Test Client
+          client-id: 22affd0d-d2ba-40ac-a5bc-5a29d4fa2dc7
+          client-secret: Vt2leIcyreL6h8Hz2fsASyHNmsF8rfVqpC5gdP-u
+          scope: openid email profile
+          realm-context-path: /adfs
+          disable-ssl-validation: true
+        facebook:
+          name: Facebook OAuth
+          description: Facebook OAuth Authorization
+          idp-type: alternate
+          authorization-uri: https://www.facebook.com/v9.0/dialog/oauth
+          token-uri: https://graph.facebook.com/oauth/access_token
+          user-name-claim-name: email
+          groups-claim-name: role
+          client-name: Test Client
+          client-id: 2775810139299980
+          client-secret: a2f752ca0f89de9eb754c43f4db4696b
+          scope: openid
+          realm-context-path: /fb
+          granted-authorities-builder: org.birchframework.test.security.oauth2.TestGrantedAuthsBuilder

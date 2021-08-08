@@ -1,0 +1,7 @@
+{
+   "error" : "InternalServerError",
+   "message" : "A null pointer exception has occurred",
+   "path" : "/api/some/uri",
+   "status" : 500,
+   "timestamp" : "2019-08-23T21:12:00Z"
+}

@@ -1,0 +1,6 @@
+Age: 27 | Last Name: Stardust  | First Name: Ziggy    | Alive: N | ROCK_STAR
+Age: 24 | Last Name: Sheers    | First Name: Billy    | Alive: n | ROCK_STAR
+Age 42  | Last Name: Roark     | First Name: Howard   | Alive: N | CHARACTER
+Age: 33 | Last Name: Holden    | First Name: James    | Alive: y | CHARACTER
+Age: 66 | Last Name: Avasarala | First Name: Chrisjen | Alive: Y | CHARACTER
+Age: 37 | Last Name: Kamal     , First Name: Alex     | Alive: T | CHARACTER

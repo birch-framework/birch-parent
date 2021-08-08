@@ -1,0 +1,42 @@
+server:
+  port: 8095
+
+spring:
+  cloud:
+    config:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,env,mappings,logfile,loggers,metrics,beans,conditions,scheduledtasks,configprops,jolokia,refresh,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+cxf:
+  path: /api
+  jaxrs:
+    component-scan: true
+    classes-scan-packages: com.fasterxml.jackson.jaxrs.json, org.apache.cxf.metrics, org.birchframework
+
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) %magenta([%15.15t]) %green(%50.50logger{50}) - %boldYellow(corrID:[%X{Correlation-ID}]) : %boldCyan(%m%n)'
+  level:
+    root: info
+    org:
+      birchframework: debug
+
+birch:
+  kafka:
+    admin:
+      bootstrap-servers: localhost:9092
+  openapi:
+    feature:
+      base-path: ${cxf.path}
+      pretty-print: true
+      support-swagger-ui: true
+  aspect:
+    logging-trace: enabled

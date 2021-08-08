@@ -1,0 +1,24 @@
+$Header:
+JMSMessageID=ID:DNDCEM02.35B85E7D31EB1:8152048F0
+JMSTimestamp=Fri Dec 11 12:55:04 222 CST 2020
+JMSDestination=Queue[queue-1]
+JMSDeliveryMode=PERSISTENT
+JMSPriority=4
+$Properties:
+isNew=Boolean:true
+charValue=Character:G
+invalidProperty=String:0:Val1,Val2
+isOld=Boolean:false
+bucket=Integer:31
+firstName=String:Michael
+date=String:12122020
+_key_=String:SomeValue
+isBoarded=Boolean:false
+shortValue=Short:45
+booleanValue=boolean:true
+eliteLevelSet=Boolean:false
+fullFarePasssenger=Boolean:true
+iteration=Long:1928374565748392910
+checkedBox=Boolean:false
+$TextBody:
+{ "error" : "InternalServerError", "message" : "A null pointer exception has occurred", "path" : "/api/some/uri", "status" : 500, "timestamp" : "2019-08-23T21:12:00Z" }

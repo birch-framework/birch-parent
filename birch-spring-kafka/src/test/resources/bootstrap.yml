@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+
+birch:
+  actuator:
+    uri-map:
+      service1: http://service1:8080
+      service2: http://service1:8080

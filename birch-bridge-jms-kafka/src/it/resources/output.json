@@ -1,0 +1,86 @@
+{
+   "correlationID": "5312d5b2-fb22-4af2-b5a5-d0db22db9f71",
+   "deliveryMode": 2,
+   "destination": {
+      "destinationType": "org.apache.activemq.command.ActiveMQQueue",
+      "name": "test-queue1-in"
+   },
+   "replyTo": null,
+   "expiration": 0,
+   "map": null,
+   "messageID": "ID:AGLPC0J2D82-55316-1594840090009-1:1:1:1:1",
+   "messageType": null,
+   "priority": null,
+   "redelivered": false,
+   "text": "{\"id\":-40, \"description\":\"The point of equality.\"}",
+   "timestamp": 1594840090192,
+   "type": null,
+   "properties": {
+      "isTrue": {
+         "propertyType": "boolean",
+         "boolean": true,
+         "byte": null,
+         "double": null,
+         "float": null,
+         "integer": null,
+         "long": null,
+         "short": null,
+         "string": null
+      },
+      "corrID": {
+         "propertyType": "string",
+         "boolean": null,
+         "byte": null,
+         "double": null,
+         "float": null,
+         "integer": null,
+         "long": null,
+         "short": null,
+         "string": "079d2881-cee4-40b5-99ff-97d53d36f1dd"
+      },
+      "CamelCorrelationId": {
+         "propertyType": "string",
+         "boolean": null,
+         "byte": null,
+         "double": null,
+         "float": null,
+         "integer": null,
+         "long": null,
+         "short": null,
+         "string": "5312d5b2-fb22-4af2-b5a5-d0db22db9f71"
+      },
+      "index": {
+         "propertyType": "int",
+         "boolean": null,
+         "byte": null,
+         "double": null,
+         "float": null,
+         "integer": 0,
+         "long": null,
+         "short": null,
+         "string": null
+      },
+      "kafka.KEY": {
+         "propertyType": "string",
+         "boolean": null,
+         "byte": null,
+         "double": null,
+         "float": null,
+         "integer": null,
+         "long": null,
+         "short": null,
+         "string": "test-key"
+      },
+      "key": {
+         "propertyType": "string",
+         "boolean": null,
+         "byte": null,
+         "double": null,
+         "float": null,
+         "integer": null,
+         "long": null,
+         "short": null,
+         "string": "test-key"
+      }
+   }
+}

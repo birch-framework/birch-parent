@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--*************************************************************
+  * Copyright (c) 2021 Birch Framework
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * any later version.
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ************************************************************-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <artifactId>birch-rest-jaxrs</artifactId>
+   <packaging>jar</packaging>
+
+   <name>${project.artifactId}</name>
+   <description>Birch Framework REST Support via JAX-RS</description>
+
+   <parent>
+      <groupId>org.birchframework</groupId>
+      <artifactId>birch-parent</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+   </parent>
+
+   <properties>
+      <active.profile>native</active.profile>
+   </properties>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.birchframework</groupId>
+         <artifactId>birch-common</artifactId>
+         <version>${project.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.glassfish.jaxb</groupId>
+               <artifactId>jaxb-runtime</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.cxf</groupId>
+         <artifactId>cxf-rt-databinding-jaxb</artifactId>
+         <version>${cxf.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.ow2.asm</groupId>
+               <artifactId>asm</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.xml.soap</groupId>
+               <artifactId>jakarta.xml.soap-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.xml.ws</groupId>
+               <artifactId>jakarta.xml.ws-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.jws</groupId>
+               <artifactId>jakarta.jws-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>com.sun.xml.messaging.saaj</groupId>
+               <artifactId>saaj-impl</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.cxf</groupId>
+         <artifactId>cxf-spring-boot-starter-jaxrs</artifactId>
+         <version>${cxf.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>javax.validation</groupId>
+               <artifactId>validation-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.xml.soap</groupId>
+               <artifactId>jakarta.xml.soap-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.xml.ws</groupId>
+               <artifactId>jakarta.xml.ws-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.jws</groupId>
+               <artifactId>jakarta.jws-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>com.sun.xml.messaging.saaj</groupId>
+               <artifactId>saaj-impl</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-web</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>org.springframework.boot</groupId>
+               <artifactId>spring-boot-starter-tomcat</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-jetty</artifactId>
+         <scope>${servlet.container.scope}</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.cxf</groupId>
+         <artifactId>cxf-rt-rs-service-description-openapi-v3</artifactId>
+         <version>${cxf.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.guava</groupId>
+               <artifactId>guava</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.xml.soap</groupId>
+               <artifactId>jakarta.xml.soap-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.jws</groupId>
+               <artifactId>jakarta.jws-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>com.sun.xml.messaging.saaj</groupId>
+               <artifactId>saaj-impl</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.javassist</groupId>
+               <artifactId>javassist</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.cxf</groupId>
+         <artifactId>cxf-rt-rs-extension-providers</artifactId>
+         <version>${cxf.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.guava</groupId>
+               <artifactId>guava</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.xml.soap</groupId>
+               <artifactId>jakarta.xml.soap-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.xml.ws</groupId>
+               <artifactId>jakarta.xml.ws-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jakarta.jws</groupId>
+               <artifactId>jakarta.jws-api</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>com.sun.xml.messaging.saaj</groupId>
+               <artifactId>saaj-impl</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-test</artifactId>
+         <scope>test</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>junit</groupId>
+               <artifactId>junit</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.junit.vintage</groupId>
+               <artifactId>junit-vintage-engine</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.ow2.asm</groupId>
+               <artifactId>asm</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.junit.jupiter</groupId>
+         <artifactId>junit-jupiter-api</artifactId>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+</project>
