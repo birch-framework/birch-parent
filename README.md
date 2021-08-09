@@ -24,7 +24,7 @@ Birch Framework also provides support for messaging bridges between the followin
 * IBM MQ
 * Tibco EMS
 
-NOTE: the aforementioned product dependencies must be also be included when using the bridge module.  They are not included by the Birch Framework.
+NOTE: the aforementioned product dependencies must be included when using the bridge module.  They are not included by the Birch Framework.
 
 Bridge stack uses the following dependencies:
 * Apache Camel (birch-bridge-jms-kafka)
@@ -99,4 +99,4 @@ In order to create a release:
 
    **Do not deviate from default tag naming convention of `birch-parent-<version>` where `<version>` is in the format `<major>.<minor>.<release>`**
 
-4. Release will be committed to `release/<version>` branch and pushed to the repository.  When CI/CD discovers this new release branch, it will deploy it to Artifactory.
+4. Release will be committed to `release/<version>` branch and pushed to the repository.  When CI/CD discovers this new release branch, it will publish it to Maven Central.
