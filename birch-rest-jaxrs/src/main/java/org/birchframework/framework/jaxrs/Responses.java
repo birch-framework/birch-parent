@@ -17,16 +17,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.Response.StatusType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
@@ -37,7 +33,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.reflections.Reflections;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES;
@@ -75,12 +71,10 @@ public class Responses {
    private static final ObjectMapper objectMapper          = Jackson2ObjectMapperBuilder.json().build();
    private static final ObjectMapper errorCodeObjectMapper = Jackson2ObjectMapperBuilder.json().featuresToEnable(ALLOW_UNQUOTED_FIELD_NAMES).build();
 
-   /** Reference to the {@link ErrorCode} implementation class.  Its value is looked up and initialized the very first time this class is loaded */
+   /** Reference to the {@link ErrorCode} implementation class.  Its value is looked up and initialized the very first time this class is loaded. */
    private static final Class<? extends Enum<?>> errorCodeClass;
 
    static {
-      Reflections.log = log;
-
       errorCodeClass = (Class<? extends Enum<?>>) Beans.findImplementation(ErrorCode.class, BirchErrorCode.class)
                                                        .filter(Enum.class::isAssignableFrom)
                                                        .orElse(BirchErrorCode.class);
@@ -107,8 +101,7 @@ public class Responses {
     * @param theResponse the object to be wrapped
     * @return an instance of this class
     */
-   public static Responses of(@NotNull final Response theResponse) {
-      Objects.requireNonNull(theResponse);
+   public static Responses of(@NonNull final Response theResponse) {
       return new Responses(theResponse);
    }
 
@@ -128,7 +121,7 @@ public class Responses {
     * @return true if response was {@link Status#OK}
     */
    public static <T extends Response> boolean ok(final T theResponse) {
-      return theResponse != null && theResponse.getStatus() == OK.getStatusCode();
+      return theResponse != null && theResponse.getStatus() == HTTP_OK;
    }
 
    /**
@@ -139,7 +132,7 @@ public class Responses {
     * @return true if response was {@link Status#CREATED}
     */
    public static <T extends Response> boolean created(final T theResponse) {
-      return theResponse != null && theResponse.getStatus() == CREATED.getStatusCode();
+      return theResponse != null && theResponse.getStatus() == HTTP_CREATED;
    }
 
    /**
@@ -150,7 +143,7 @@ public class Responses {
     * @return true if response was {@link Status#NOT_FOUND}
     */
    public static <T extends Response> boolean notFound(final T theResponse) {
-      return theResponse != null && theResponse.getStatus() == NOT_FOUND.getStatusCode();
+      return theResponse != null && theResponse.getStatus() == HTTP_NOT_FOUND;
    }
 
    /**
@@ -161,7 +154,7 @@ public class Responses {
     * @return true if response was {@link Status#NOT_MODIFIED}
     */
    public static <T extends Response> boolean notModified(final T theResponse) {
-      return theResponse != null && theResponse.getStatus() == NOT_MODIFIED.getStatusCode();
+      return theResponse != null && theResponse.getStatus() == HTTP_NOT_MODIFIED;
    }
 
    /**
@@ -172,7 +165,7 @@ public class Responses {
     * @return true if response was {@link Status#INTERNAL_SERVER_ERROR}
     */
    public static <T extends Response> boolean internalServerError(final T theResponse) {
-      return theResponse != null && theResponse.getStatus() == INTERNAL_SERVER_ERROR.getStatusCode();
+      return theResponse != null && theResponse.getStatus() == HTTP_INTERNAL_SERVER_ERROR;
    }
 
    /**
@@ -180,7 +173,7 @@ public class Responses {
     * @return true if response was {@link Status#BAD_REQUEST}
     */
    public boolean badRequest() {
-      return this.response != null && this.response.getStatus() == BAD_REQUEST.getStatusCode();
+      return this.response != null && this.response.getStatus() == HTTP_BAD_REQUEST;
    }
 
    /**
@@ -188,7 +181,7 @@ public class Responses {
     * @return true if response was {@link Status#OK}
     */
    public boolean ok() {
-      return this.response != null && this.response.getStatus() == OK.getStatusCode();
+      return this.response != null && this.response.getStatus() == HTTP_OK;
    }
 
    /**
@@ -196,7 +189,7 @@ public class Responses {
     * @return true if response was {@link Status#CREATED}
     */
    public boolean created() {
-      return this.response != null && this.response.getStatus() == CREATED.getStatusCode();
+      return this.response != null && this.response.getStatus() == HTTP_CREATED;
    }
 
    /**
@@ -204,7 +197,7 @@ public class Responses {
     * @return true if response was {@link Status#NOT_FOUND}
     */
    public boolean notFound() {
-      return this.response != null && this.response.getStatus() == NOT_FOUND.getStatusCode();
+      return this.response != null && this.response.getStatus() == HTTP_NOT_FOUND;
    }
 
    /**
@@ -212,7 +205,7 @@ public class Responses {
     * @return true if response was {@link Status#NOT_MODIFIED}
     */
    public boolean notModified() {
-      return this.response != null && this.response.getStatus() == NOT_MODIFIED.getStatusCode();
+      return this.response != null && this.response.getStatus() == HTTP_NOT_MODIFIED;
    }
 
    /**
@@ -220,11 +213,11 @@ public class Responses {
     * @return true if response was {@link Status#INTERNAL_SERVER_ERROR}
     */
    public boolean internalServerError() {
-      return this.response != null && this.response.getStatus() == INTERNAL_SERVER_ERROR.getStatusCode();
+      return this.response != null && this.response.getStatus() == HTTP_INTERNAL_SERVER_ERROR;
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified type for the executing function.
     * @param theClass the the target entity type
     * @param theAction the function to be executed when the condition is met
@@ -239,7 +232,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified type for the executing function.
     * @param theType the the target entity type
     * @param theAction the function to be executed when the condition is met
@@ -254,7 +247,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
     * @param theType the the target entity type
@@ -270,7 +263,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
     * @param theClass the the target entity type
@@ -289,7 +282,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
     * @param theType the the target entity type
@@ -308,7 +301,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
     * @param theType the the target entity type
@@ -327,7 +320,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter.
     * @param theClass the the target entity type
@@ -346,7 +339,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter.
     * @param theType the the target entity type
@@ -365,7 +358,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was {@link Status#OK}.
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
     * Otherwise will execute the {@code theElseAction} parameter.
@@ -385,7 +378,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#CREATED}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified type for the executing function.
     * @param theClass the the target entity type
     * @param theAction the function to be executed when the condition is met
@@ -400,7 +393,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#CREATED}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified type for the executing function.
     * @param theType the the target entity type
     * @param theAction the function to be executed when the condition is met
@@ -415,7 +408,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#CREATED}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#CREATED}.
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
     * @param theType the the target entity type
@@ -432,7 +425,7 @@ public class Responses {
 
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
@@ -452,7 +445,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
@@ -472,7 +465,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}.  Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified
     * type for the executing function.
     * @param theType the the target entity type
@@ -492,7 +485,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter.
@@ -512,7 +505,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}. Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the
     * executing function. Otherwise will execute the {@code theElseAction} parameter.
     * @param theType the the target entity type
@@ -531,7 +524,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with 2 lambdas.  Will only executed {@code theAction} parameter if the wrapped response was
+    * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}.  Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified
     * type for the executing function. Otherwise will execute the {@code theElseAction} parameter.
     * @param theType the the target entity type
@@ -550,7 +543,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#NOT_FOUND}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#NOT_FOUND}.
     * Unmarshalls the entity, if one is present, into an {@link Enum} that implements {@link ErrorCode}, and provides it to the provided function.
     * @param theAction the function to be executed when the condition is met
     * @return a reference to this object for the purposes of chaining
@@ -563,7 +556,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#NOT_MODIFIED}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#NOT_MODIFIED}.
     * Unmarshalls the entity, if one is present, into an {@link Enum} that implements {@link ErrorCode}, and provides it to the provided function.
     * @param theAction the function to be executed when the condition is met
     * @return a reference to this object for the purposes of chaining
@@ -576,7 +569,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#INTERNAL_SERVER_ERROR}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#INTERNAL_SERVER_ERROR}.
     * Unmarshalls the entity, if one is present, into an {@link Enum} that implements {@link ErrorCode}, and provides it to the provided function.
     * @param theAction the function to be executed when the condition is met
     * @return a reference to this object for the purposes of chaining
@@ -589,7 +582,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response was {@link Status#BAD_REQUEST}.
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#BAD_REQUEST}.
     * Unmarshalls the entity, if one is present, into an {@link Enum} that implements {@link ErrorCode}, and provides it to the provided function.
     * @param theAction the function to be executed when the condition is met
     * @return a reference to this object for the purposes of chaining
@@ -602,7 +595,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only be executed if the wrapped response has an entity, regardless of
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response has an entity, regardless of
     * {@link Response#getStatus()}.
     * @param theClass the type of the entity
     * @param theAction the function to be executed only if the wrapped response {@link Response#hasEntity()}
@@ -617,7 +610,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only be executed if the wrapped response has an entity, regardless of
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response has an entity, regardless of
     * {@link Response#getStatus()}.
     * @param theType the type of the entity
     * @param theAction the function to be executed only if the wrapped response {@link Response#hasEntity()}
@@ -632,7 +625,7 @@ public class Responses {
    }
 
    /**
-    * Functional method that can be implemented with a lambda.  Will only executed if the wrapped response has an entity, regardless of
+    * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter  if the wrapped response has an entity, regardless of
     * {@link Response#getStatus()}.
     * @param theType the type of the entity
     * @param theAction the function to be executed only if the wrapped response {@link Response#hasEntity()}
@@ -654,8 +647,7 @@ public class Responses {
     * @param <O> the type of the return object
     * @return the transformed object instance
     */
-   public <T,O> O map(final Class<T> theClass, final Function<T, O> theMapper) {
-      Objects.requireNonNull(theMapper);
+   public <T,O> O map(final Class<T> theClass, @NonNull final Function<T, O> theMapper) {
       if (this.response.hasEntity() && this.ok()) {
          return theMapper.apply(this.entity(theClass).orElse(null));
       }
@@ -672,8 +664,7 @@ public class Responses {
     * @param <O> the type of the return object
     * @return the transformed object instance
     */
-   public <T,O> O map(final GenericType<T> theType, final Function<T, O> theMapper) {
-      Objects.requireNonNull(theMapper);
+   public <T,O> O map(final GenericType<T> theType, @NonNull final Function<T, O> theMapper) {
       if (this.response.hasEntity() && this.ok()) {
          return theMapper.apply(this.entity(theType).orElse(null));
       }
@@ -690,24 +681,13 @@ public class Responses {
     * @param <O> the type of the return object
     * @return the transformed object instance
     */
-   public <T,O> O map(final TypeReference<T> theType, final Function<T, O> theMapper) {
-      Objects.requireNonNull(theMapper);
+   public <T,O> O map(final TypeReference<T> theType, @NonNull final Function<T, O> theMapper) {
       if (this.response.hasEntity() && this.ok()) {
          return theMapper.apply(this.entity(theType).orElse(null));
       }
       else {
          return theMapper.apply(null);
       }
-   }
-
-   /**
-    * Used to filter the entity associated with the wrapped response based on a predicate.
-    * @param thePredicate the function to be executed
-    * @return a reference to this object for the purposes of chaining
-    */
-   public Responses filter(final Predicate<StatusType> thePredicate) {
-      Objects.requireNonNull(thePredicate);
-      return thePredicate.test(this.response.getStatusInfo()) ? this : null;
    }
 
    private <T> Optional<T> entity(final Class<T> theClass) {
