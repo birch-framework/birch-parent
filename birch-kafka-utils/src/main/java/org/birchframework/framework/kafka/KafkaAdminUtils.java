@@ -77,7 +77,7 @@ public class KafkaAdminUtils {
    }
 
    @PreDestroy
-   void init() {
+   void preDestroy() {
       this.kafkaConsumer.close();
    }
 
