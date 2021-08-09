@@ -13,6 +13,7 @@
  ==============================================================*/
 package org.birchfw.test.framework.cxf;
 
+import java.lang.reflect.Proxy;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.birchframework.framework.jaxrs.Responses;
 import org.birchfw.test.dto.Bitcoin;
@@ -53,6 +54,7 @@ public class ResourceClientProxyTest {
    @BeforeEach
    void before() {
       this.coinDeskResource = context.getBean(CoinDeskResource.class);
+      assertThat(Proxy.isProxyClass(this.coinDeskResource.getClass())).isTrue();
    }
 
    /**
