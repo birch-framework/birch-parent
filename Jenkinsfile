@@ -52,13 +52,25 @@ node {
 
    stage ('Configuration') {
       Globals.setVersionInfo(env.BRANCH_NAME as String)
-      withMaven() {
+      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
          sh "mvn clean -version"
       }
    }
 
+   stage ('Site Deploy') {
+      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+         sh "mvn site:site site:deploy"
+      }
+//      if (Globals.release) {
+//         // TODO publish to Maven Central
+//      }
+//      else {
+//         echo "${env.BRANCH_NAME} branch does not deploy site"
+//      }
+   }
+
    stage ('Test and Install') {
-      withMaven() {
+      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
          sh "mvn install"
       }
    }
@@ -70,7 +82,7 @@ node {
    }
 
    stage ('Sources and Javadocs') {
-      withMaven() {
+      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
          sh "mvn source:jar javadoc:jar -pl :birch-common,:birch-rest-jaxrs,:birch-bridge-jms-kafka,:birch-security-oauth-spring,:birch-spring-kafka,:birch-kafka-utils,:birch-starter"
       }
    }
