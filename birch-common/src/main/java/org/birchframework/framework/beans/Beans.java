@@ -170,7 +170,7 @@ public class Beans {
    }
 
    /**
-    * Registers a mapping to the provided model class from its superclass (class -> superclass).  The superclass must be a class other than {@link Object}.
+    * Registers a mapping to the provided model class from its superclass (class --&gt; superclass).  The superclass must be a class other than {@link Object}.
     * @param theModelClass the model class
     * @param theMapNulls map null values in superclass instance to the subclass instance
     * @param theIgnoredProperties ignored property names while mapping
@@ -386,7 +386,6 @@ public class Beans {
     * @param theObject the object to be tested and consumed by the {@code theConsumer}
     * @param theConsumer the consumer
     * @param <T> the datatype of the object being tested and possibly consumed
-    * @return the result of {@code theConsumer}, null if {@code theObject} is null
     */
    public static <T> void consumeIfNotNull(final T theObject, final Consumer<T> theConsumer) {
       if (theObject != null) {
