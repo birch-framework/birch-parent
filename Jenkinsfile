@@ -16,9 +16,6 @@ class Globals {
    static final String RELEASE_REPO_LOCAL = 'libs-release-local'
    static final String SNAPSHOT_REPO_LOCAL = 'libs-snapshot-local'
 
-   static server
-   static rtMaven
-   static buildInfo
    static String version
    static boolean release = false
 
