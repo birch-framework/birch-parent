@@ -23,7 +23,7 @@
    <packaging>pom</packaging>
 
    <name>${project.artifactId}</name>
-   <description>Birch Framework Aggregator</description>
+   <description>Birch Framework</description>
    <url>http://www.birchframework.org</url>
    <organization>
       <name>Birch Framework</name>
@@ -35,8 +35,32 @@
          <name>gpl_v3</name>
          <distribution>repo</distribution>
          <comments>GNU Public License version 3.0</comments>
+         <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
       </license>
    </licenses>
+   <contributors>
+      <contributor>
+         <roles>
+            <role>Creator</role>
+            <role>Principal</role>
+         </roles>
+         <name>Keivan Khalichi</name>
+         <email>keivan21@gmail.com</email>
+         <timezone>-5</timezone>
+      </contributor>
+   </contributors>
+   <scm>
+      <url>https://github.com/birch-framework/birch-parent</url>
+      <developerConnection>scm:git:git:https://github.com/birch-framework/birch-parent.git</developerConnection>
+      <tag>HEAD</tag>
+   </scm>
+
+   <distributionManagement>
+      <site>
+         <id>github-pages</id>
+         <url>scm:git:https://github.com/birch-framework/web.git</url>
+      </site>
+   </distributionManagement>
 
    <parent>
       <groupId>org.springframework.boot</groupId>
@@ -55,11 +79,6 @@
       <module>birch-spring-kafka</module>
       <module>birch-kafka-utils</module>
    </modules>
-
-   <scm>
-      <developerConnection>scm:git:https://git.khalichi.com/git/birch-parent.git</developerConnection>
-      <tag>HEAD</tag>
-   </scm>
 
    <profiles>
       <profile>
@@ -197,7 +216,12 @@
       <release.plugin.version>2.5.3</release.plugin.version>
       <groovy.plugin.version>2.1.1</groovy.plugin.version>
       <license.plugin.version>2.0.0</license.plugin.version>
-      <jxr.plugin.version>3.0.0</jxr.plugin.version>
+      <jxr.plugin.version>3.1.1</jxr.plugin.version>
+      <site.plugin.version>3.8.2</site.plugin.version>
+      <project-info.plugin.version>3.1.2</project-info.plugin.version>
+      <github-site.plugin.version>0.12</github-site.plugin.version>
+      <maven-scm-git.provider.version>1.11.2</maven-scm-git.provider.version>
+      <wagon-scm.extension.version>3.4.3</wagon-scm.extension.version>
 
       <spring-cloud.version>2020.0.3</spring-cloud.version>
 
@@ -252,11 +276,6 @@
             <type>pom</type>
             <scope>import</scope>
          </dependency>
-         <dependency>
-            <groupId>org.birchframework</groupId>
-            <artifactId>birch-ems-support</artifactId>
-            <version>${project.version}</version>
-         </dependency>
       </dependencies>
    </dependencyManagement>
 
@@ -289,7 +308,6 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jxr-plugin</artifactId>
-            <version>${jxr.plugin.version}</version>
          </plugin>
          <plugin>
             <groupId>com.github.spotbugs</groupId>
@@ -555,18 +573,6 @@
                      </image>
                   </images>
                </configuration>
-               <executions>
-                  <execution>
-                     <id>fmp-run</id>
-                     <phase>pre-site</phase>
-                     <goals>
-                        <goal>resource</goal>
-                        <goal>build</goal>
-                        <goal>push</goal>
-                        <goal>deploy</goal>
-                     </goals>
-                  </execution>
-               </executions>
             </plugin>
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
@@ -599,10 +605,78 @@
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-site-plugin</artifactId>
+               <version>${site.plugin.version}</version>
+               <executions>
+                  <execution>
+                     <id>attach-descriptor</id>
+                     <goals>
+                        <goal>attach-descriptor</goal>
+                     </goals>
+                  </execution>
+               </executions>
                <configuration>
-                  <skip>true</skip>
-                  <skipDeploy>true</skipDeploy>
+                  <skip>false</skip>
+                  <skipDeploy>false</skipDeploy>
+                  <reporting>
+                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <version>${project-info.plugin.version}</version>
+                        <reportSets>
+                           <reportSet>
+                              <reports>
+                                 <report>index</report>
+                                 <report>licenses</report>
+                                 <report>summary</report>
+                                 <report>team</report>
+                                 <report>scm</report>
+                                 <report>dependencies</report>
+                                 <report>modules</report>
+                              </reports>
+                           </reportSet>
+                        </reportSets>
+                     </plugin>
+                  </reporting>
                </configuration>
+               <dependencies>
+                  <dependency>
+                     <groupId>org.apache.maven.scm</groupId>
+                     <artifactId>maven-scm-provider-gitexe</artifactId>
+                     <version>${maven-scm-git.provider.version}</version>
+                  </dependency>
+                  <dependency>
+                     <groupId>org.apache.maven.scm</groupId>
+                     <artifactId>maven-scm-manager-plexus</artifactId>
+                     <version>${maven-scm-git.provider.version}</version>
+                  </dependency>
+                  <dependency>
+                     <groupId>org.apache.maven.wagon</groupId>
+                     <artifactId>wagon-scm</artifactId>
+                     <version>${wagon-scm.extension.version}</version>
+                  </dependency>
+               </dependencies>
+            </plugin>
+            <plugin>
+               <groupId>com.github.github</groupId>
+               <artifactId>site-maven-plugin</artifactId>
+               <version>${github-site.plugin.version}</version>
+               <executions>
+                  <execution>
+                     <goals>
+                        <goal>site</goal>
+                     </goals>
+                     <phase>site-deploy</phase>
+                     <configuration>
+                        <server>github</server>
+                        <merge>true</merge>
+                     </configuration>
+                  </execution>
+               </executions>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-jxr-plugin</artifactId>
+               <version>${jxr.plugin.version}</version>
             </plugin>
          </plugins>
       </pluginManagement>
@@ -616,6 +690,25 @@
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-maven-plugin</artifactId>
          </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+         </plugin>
       </plugins>
+
+      <extensions>
+         <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-scm</artifactId>
+         </extension>
+         <extension>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-manager-plexus</artifactId>
+         </extension>
+         <extension>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+         </extension>
+      </extensions>
    </build>
 </project>
