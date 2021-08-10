@@ -57,18 +57,6 @@ node {
       }
    }
 
-   stage ('Site Deploy') {
-      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-         bat "mvn site:site site:deploy"
-      }
-//      if (Globals.release) {
-//         // TODO publish to Maven Central
-//      }
-//      else {
-//         echo "${env.BRANCH_NAME} branch does not deploy site"
-//      }
-   }
-
    stage ('Test and Install') {
       withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
          bat "mvn install"
@@ -93,6 +81,17 @@ node {
       }
       else {
          echo "${env.BRANCH_NAME} branch does not publish artifacts"
+      }
+   }
+
+   stage ('Site Deploy') {
+      if (Globals.release) {
+         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+            bat "mvn site:site site:deploy"
+         }
+      }
+      else {
+         echo "${env.BRANCH_NAME} branch does not deploy site"
       }
    }
 }
