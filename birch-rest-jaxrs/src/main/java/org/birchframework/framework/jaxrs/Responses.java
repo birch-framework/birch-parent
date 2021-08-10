@@ -47,8 +47,8 @@ import static javax.ws.rs.core.Response.Status.*;
  * <pre>
  * Responses.of(service.findBookByISBN(anISBN)).ifOKOrElse(
  *    Book.class,
- *    book -> log.info("Book: {}", book.toString()),   // book is automatically desrialized as an instance of Book.class
- *    errorCode -> log.error("Error retrieving book with ISBN: {}; error: {}", anISBN, errorCode.asString())
+ *    book -&gt; log.info("Book: {}", book.toString()),   // book is automatically desrialized as an instance of Book.class
+ *    errorCode -&gt; log.error("Error retrieving book with ISBN: {}; error: {}", anISBN, errorCode.asString())
  * );
  * </pre>
  * This class is not thread-safe.  The factory {@link Responses#of(Response)} must be called for each new {@link Response} object.
@@ -270,7 +270,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifOKOrElse(final Class<T> theClass, final Consumer<T> theAction, final Consumer<ErrorCode<?>> theElseAction) {
       if (this.ok()) {
@@ -289,7 +288,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifOKOrElse(final GenericType<T> theType, final Consumer<T> theAction, final Consumer<ErrorCode<?>> theElseAction) {
       if (this.ok()) {
@@ -308,7 +306,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifOKOrElse(final TypeReference<T> theType, final Consumer<T> theAction, final Consumer<ErrorCode<?>> theElseAction) {
       if (this.ok()) {
@@ -327,7 +324,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifOKOrElse(final Class<T> theClass, final Consumer<T> theAction, final Runnable theElseAction) {
       if (this.ok()) {
@@ -346,7 +342,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifOKOrElse(final GenericType<T> theType, final Consumer<T> theAction, final Runnable theElseAction) {
       if (this.ok()) {
@@ -366,7 +361,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifOKOrElse(final TypeReference<T> theType, final Consumer<T> theAction, final Runnable theElseAction) {
       if (this.ok()) {
@@ -433,7 +427,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifCreatedOrElse(final Class<T> theClass, final Consumer<T> theAction, final Consumer<ErrorCode<?>> theElseAction) {
       if (this.created()) {
@@ -453,7 +446,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifCreatedOrElse(final GenericType<T> theType, final Consumer<T> theAction, final Consumer<ErrorCode<?>> theElseAction) {
       if (this.created()) {
@@ -472,7 +464,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifCreatedOrElse(final TypeReference<T> theType, final Consumer<T> theAction,
                                                         final Consumer<ErrorCode<?>> theElseAction) {
@@ -493,7 +484,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifCreatedOrElse(final Class<T> theClass, final Consumer<T> theAction, final Runnable theElseAction) {
       if (this.created()) {
@@ -512,7 +502,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifCreatedOrElse(final GenericType<T> theType, final Consumer<T> theAction, final Runnable theElseAction) {
       if (this.created()) {
@@ -531,7 +520,6 @@ public class Responses {
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
-    * @return a reference to this object for the purposes of chaining
     */
    public <T extends Serializable> void ifCreatedOrElse(final TypeReference<T> theType, final Consumer<T> theAction, final Runnable theElseAction) {
       if (this.created()) {
