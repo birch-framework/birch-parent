@@ -616,7 +616,7 @@
                </executions>
                <configuration>
                   <skip>false</skip>
-                  <skipDeploy>false</skipDeploy>
+                  <skipDeploy>true</skipDeploy>
                   <reporting>
                      <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
