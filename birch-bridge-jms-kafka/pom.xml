@@ -68,6 +68,12 @@
          <groupId>org.apache.camel.springboot</groupId>
          <artifactId>camel-zookeeper-starter</artifactId>
          <version>${camel.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.guava</groupId>
+               <artifactId>guava</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.apache.camel.springboot</groupId>
