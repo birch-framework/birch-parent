@@ -43,7 +43,7 @@ import org.springframework.util.CollectionUtils;
  * <pre>
  * final var rateGauge = RateGauge.builder()
  *                                .name("my.app.metric")
- *                                .valueFunction((count, time) -> count / (time / 1000D))   // Calculate rate as count per second
+ *                                .valueFunction((count, time) -&gt; count / (time / 1000D))   // Calculate rate as count per second
  *                                .register();
  * </pre>
  * The {@link #increment()} method updates the internal atomic counter, asynchronously in order to minimize performance degradation at the caller.
