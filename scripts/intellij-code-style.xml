@@ -11,7 +11,7 @@
   * You should have received a copy of the GNU General Public License
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ************************************************************-->
-<code_scheme name="United" version="173">
+<code_scheme name="Birch" version="173">
   <option name="OTHER_INDENT_OPTIONS">
     <value>
       <option name="INDENT_SIZE" value="3" />
@@ -94,12 +94,10 @@
       <value>
         <package name="java.awt" withSubpackages="false" static="false" />
         <package name="org.assertj.core.api.Assertions" withSubpackages="true" static="true" />
-        <package name="com.united.baggage.bm.common.dto.BMErrorCode" withSubpackages="false" static="true" />
         <package name="java.lang.Boolean" withSubpackages="false" static="true" />
         <package name="javax.ws.rs.core.MediaType" withSubpackages="false" static="true" />
         <package name="javax.ws.rs.core.Response.Status" withSubpackages="false" static="true" />
         <package name="javax.swing" withSubpackages="false" static="false" />
-        <package name="com.united.baggage.bm.common.dto.BMErrorCode" withSubpackages="true" static="true" />
       </value>
     </option>
     <option name="IMPORT_LAYOUT_TABLE">
