@@ -20,7 +20,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import javax.ws.rs.core.HttpHeaders;
-import org.birchframework.framework.beans.Beans;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,7 +35,7 @@ import static lombok.AccessLevel.PACKAGE;
 @Getter
 @ToString
 @NoArgsConstructor(access = PACKAGE)
-@SuppressWarnings("InstanceVariableMayNotBeInitialized")
+@SuppressWarnings({"InstanceVariableMayNotBeInitialized", "unused"})
 class SpanHeadersContainer {
 
    public static final String LOCALE_HEADER          = HttpHeaders.ACCEPT_LANGUAGE;
@@ -49,9 +48,10 @@ class SpanHeadersContainer {
    @Getter(PACKAGE)
    private final Map<String, Serializable> map = new HashMap<>();
 
-   @SuppressWarnings({"ThisEscapedInObjectConstruction", "CopyConstructorMissesField"})
    SpanHeadersContainer(final SpanHeadersContainer theOtherSpanContainer) {
-      Beans.copyProperties(theOtherSpanContainer, this);
+      this.locale        = theOtherSpanContainer.locale;
+      this.correlationID = theOtherSpanContainer.correlationID;
+      this.map.putAll(theOtherSpanContainer.map);
    }
 
    void setCorrelationID(final UUID theCorrelationID) {
