@@ -121,6 +121,8 @@
       <profile>
          <id>ci</id>
          <properties>
+            <jvm.memory.min>64</jvm.memory.min>
+            <jvm.memory.max>256</jvm.memory.max>
             <app.log.level>DEBUG</app.log.level>
             <root.log.level>DEBUG</root.log.level>
             <packaging.type>jar</packaging.type>
@@ -137,7 +139,7 @@
                      <excludes>
                         <exclude>**/*IT.java</exclude>
                      </excludes>
-                     <forkCount>0</forkCount>
+                     <!--<forkCount>0</forkCount>-->
                   </configuration>
                </plugin>
                <plugin>
