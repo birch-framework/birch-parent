@@ -13,9 +13,6 @@
  ***************************************************************/
 class Globals {
 
-   static final String RELEASE_REPO_LOCAL = 'libs-release-local'
-   static final String SNAPSHOT_REPO_LOCAL = 'libs-snapshot-local'
-
    static String version
    static boolean release = false
 
@@ -65,19 +62,23 @@ node {
 
    stage ('Quality Analysis') {
 //      withSonarQubeEnv ('SonarQube server') {
-//         sh 'mvn sonar:sonar'
+//         bat 'mvn sonar:sonar'
 //      }
    }
 
    stage ('Sources and Javadocs') {
       withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-         bat "mvn source:jar javadoc:jar -pl :birch-common,:birch-rest-jaxrs,:birch-bridge-jms-kafka,:birch-security-oauth-spring,:birch-spring-kafka,:birch-kafka-utils,:birch-starter"
+         bat "mvn source:jar javadoc:jar -pl :birch-common,:birch-rest-jaxrs,:birch-bridge-jms-kafka,:birch-security-oauth-spring,:birch-spring-kafka,:birch-ems-support,:birch-kafka-utils,:birch-starter"
       }
    }
 
-   stage ('Publish') {
+   stage ('Release') {
       if (Globals.release) {
-         // TODO publish to Maven Central
+         withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
+            withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+               bat "mvn -Dgpg.passphrase=$PASSPHRASE deploy"
+            }
+         }
       }
       else {
          echo "${env.BRANCH_NAME} branch does not publish artifacts"
@@ -87,7 +88,7 @@ node {
    stage ('Site Deploy') {
       if (Globals.release) {
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn site:site site:deploy"
+            bat "mvn site-deploy"
          }
       }
       else {
