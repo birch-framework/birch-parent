@@ -112,7 +112,6 @@
                      <excludes>
                         <exclude>**/*IT.java</exclude>
                      </excludes>
-                     <!--<useSystemClassLoader>false</useSystemClassLoader>-->
                   </configuration>
                </plugin>
             </plugins>
