@@ -60,6 +60,14 @@
          <id>github-pages</id>
          <url>scm:git:https://github.com/birch-framework/web.git</url>
       </site>
+      <snapshotRepository>
+         <id>ossrh</id>
+         <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      </snapshotRepository>
+      <repository>
+         <id>ossrh</id>
+         <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      </repository>
    </distributionManagement>
 
    <parent>
@@ -222,6 +230,8 @@
       <github-site.plugin.version>0.12</github-site.plugin.version>
       <maven-scm-git.provider.version>1.11.2</maven-scm-git.provider.version>
       <wagon-scm.extension.version>3.4.3</wagon-scm.extension.version>
+      <nexus-staging.plugin.version>1.6.8</nexus-staging.plugin.version>
+      <maven-gpg.plugin.vesrion>3.0.1</maven-gpg.plugin.vesrion>
 
       <spring-cloud.version>2020.0.3</spring-cloud.version>
 
@@ -586,13 +596,13 @@
                <artifactId>maven-release-plugin</artifactId>
                <version>${release.plugin.version}</version>
                <configuration>
+                  <localCheckout>true</localCheckout>
+                  <pushChanges>false</pushChanges>
                   <updateBranchVersions>true</updateBranchVersions>
                   <autoVersionSubmodules>true</autoVersionSubmodules>
                   <generateReleasePoms>false</generateReleasePoms>
-                  <remoteTagging>true</remoteTagging>
-                  <suppressCommitBeforeTag>false</suppressCommitBeforeTag>
-                  <localCheckout>false</localCheckout>
-                  <pushChanges>true</pushChanges>
+                  <remoteTagging>false</remoteTagging>
+                  <suppressCommitBeforeTag>true</suppressCommitBeforeTag>
                </configuration>
             </plugin>
             <plugin>
@@ -678,6 +688,65 @@
                <artifactId>maven-jxr-plugin</artifactId>
                <version>${jxr.plugin.version}</version>
             </plugin>
+            <plugin>
+               <groupId>org.sonatype.plugins</groupId>
+               <artifactId>nexus-staging-maven-plugin</artifactId>
+               <version>${nexus-staging.plugin.version}</version>
+               <extensions>true</extensions>
+               <executions>
+                  <execution>
+                     <phase>deploy</phase>
+                     <goals>
+                        <goal>deploy</goal>
+                     </goals>
+                  </execution>
+               </executions>
+               <configuration>
+                  <serverId>ossrh</serverId>
+                  <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                  <autoReleaseAfterClose>true</autoReleaseAfterClose>
+               </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-gpg-plugin</artifactId>
+               <version>${maven-gpg.plugin.vesrion}</version>
+               <executions>
+                  <execution>
+                     <id>sign-artifacts</id>
+                     <phase>verify</phase>
+                     <goals>
+                        <goal>sign</goal>
+                     </goals>
+                  </execution>
+               </executions>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-source-plugin</artifactId>
+               <version>${maven-source-plugin.version}</version>
+               <executions>
+                  <execution>
+                     <id>attach-sources</id>
+                     <goals>
+                        <goal>jar-no-fork</goal>
+                     </goals>
+                  </execution>
+               </executions>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-javadoc-plugin</artifactId>
+               <version>${maven-javadoc-plugin.version}</version>
+               <executions>
+                  <execution>
+                     <id>attach-javadocs</id>
+                     <goals>
+                        <goal>jar</goal>
+                     </goals>
+                  </execution>
+               </executions>
+            </plugin>
          </plugins>
       </pluginManagement>
 
@@ -693,6 +762,22 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-site-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
          </plugin>
       </plugins>
 
