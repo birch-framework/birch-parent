@@ -56,7 +56,7 @@ node {
 
    stage ('Test and Install') {
       withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-         bat "mvn install"
+         bat "mvn install -P ci"
       }
    }
 
@@ -66,17 +66,17 @@ node {
 //      }
    }
 
-   stage ('Sources and Javadocs') {
-      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-         bat "mvn source:jar javadoc:jar -pl :birch-common,:birch-rest-jaxrs,:birch-bridge-jms-kafka,:birch-security-oauth-spring,:birch-spring-kafka,:birch-ems-support,:birch-kafka-utils,:birch-starter"
-      }
-   }
+//   stage ('Sources and Javadocs') {
+//      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+//         bat "mvn source:jar javadoc:jar -pl :birch-common,:birch-rest-jaxrs,:birch-bridge-jms-kafka,:birch-security-oauth-spring,:birch-spring-kafka,:birch-ems-support,:birch-kafka-utils,:birch-starter"
+//      }
+//   }
 
    stage ('Release') {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn -Dgpg.passphrase=$PASSPHRASE deploy"
+               bat "mvn -Dgpg.passphrase=$PASSPHRASE deploy -P ci"
             }
          }
       }
