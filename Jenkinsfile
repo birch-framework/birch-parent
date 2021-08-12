@@ -55,8 +55,10 @@ node {
    }
 
    stage ('Test and Install') {
-      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-         bat "mvn install -P ci"
+      withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
+         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+            bat "mvn install -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci"
+         }
       }
    }
 
@@ -76,7 +78,7 @@ node {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn -Dgpg.passphrase=$PASSPHRASE deploy -P ci"
+               bat "mvn deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci"
             }
          }
       }
