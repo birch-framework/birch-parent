@@ -55,24 +55,24 @@ node {
    }
 
    stage ('Test and Install') {
-      withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
-         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn install -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci"
+      if (Globals.release) {
+         echo "Release branch detected; Test and Install will occur in the Release stage"
+      }
+      else {
+         withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
+            withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+               bat "mvn install -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci"
+            }
          }
       }
    }
 
    stage ('Quality Analysis') {
+      // TODO
 //      withSonarQubeEnv ('SonarQube server') {
 //         bat 'mvn sonar:sonar'
 //      }
    }
-
-//   stage ('Sources and Javadocs') {
-//      withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-//         bat "mvn source:jar javadoc:jar -pl :birch-common,:birch-rest-jaxrs,:birch-bridge-jms-kafka,:birch-security-oauth-spring,:birch-spring-kafka,:birch-ems-support,:birch-kafka-utils,:birch-starter"
-//      }
-//   }
 
    stage ('Release') {
       if (Globals.release) {
