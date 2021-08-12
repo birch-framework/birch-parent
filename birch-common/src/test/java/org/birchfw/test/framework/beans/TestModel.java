@@ -11,7 +11,10 @@
  = You should have received a copy of the GNU General Public License
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
-package org.birchframework.framework.beans;
+package org.birchfw.test.framework.beans;
+
+import org.birchframework.framework.beans.MappingModel;
+import org.birchframework.framework.beans.TestDTO;
 
 /**
  * @author Keivan Khalichi

@@ -15,12 +15,8 @@ package org.birchframework.framework.beans;
 
 import java.lang.StackWalker.StackFrame;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -33,7 +29,6 @@ import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import ma.glasnost.orika.metadata.ClassMapBuilder;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.birchframework.dto.ErrorCode;
@@ -47,7 +42,6 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
 import static java.lang.StackWalker.Option.RETAIN_CLASS_REFERENCE;
@@ -78,104 +72,13 @@ public class Beans {
    }
 
    /**
-    * Copies properties from source to a new instance of the target class, provided the properties match in name and type.  Property names listed within
-    * the {@code theIgnoredProperties} parameter are skipped.
-    * @param theSource the source bean
-    * @param theTargetClass the target bean's class type; instance is returned by method
-    * @param theIgnoredProperties the property names to skip
-    * @param <S> the type of the source bean
-    * @param <T> the type of the target bean
-    * @return returns a reference to the newly created target bean
-    */
-   public static <S,T> T copyProperties(@NonNull final S theSource, @NonNull final Class<T> theTargetClass, final String... theIgnoredProperties) {
-      try {
-         return copyProperties(theSource, theTargetClass.getDeclaredConstructor().newInstance(), false, theIgnoredProperties);
-      }
-      catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-         final var aMessage = String.format("Unable to create new instantce of target class %s", theTargetClass.getName());
-         throw new RuntimeException(aMessage, e);
-      }
-   }
-
-   /**
-    * Copies properties from source to target, provided they match in name and type.  Property names listed within the {@code theIgnoredProperties} parameter
-    * are skipped.
-    * @param theSource the source bean
-    * @param theTarget the target bean
-    * @param theIgnoredProperties the property names to skip
-    * @param <S> the type of the source bean
-    * @param <T> the type of the target bean
-    * @return returns a reference to the target
-    * @deprecated Use {@link #mapProperties(Object, Object)} or {@link #mapProperties(Object, Class)} instead
-    */
-   @Deprecated(forRemoval = true)
-   public static <S,T> T copyProperties(@NonNull final S theSource, @NonNull final T theTarget, final String... theIgnoredProperties) {
-      return copyProperties(theSource, theTarget, false, theIgnoredProperties);
-   }
-
-   /**
-    * Copies properties from source to target, provided they match in name and type.  Property names listed within the {@code theIgnoredProperties} parameter
-    * are skipped.
-    * @param theSource the source bean
-    * @param theTarget the target bean
-    * @param theSkipNulls if true, skips copying null source values
-    * @param theIgnoredProperties the property names to skip
-    * @param <S> the type of the source bean
-    * @param <T> the type of the target bean
-    * @return returns a reference to the target
-    * @deprecated Use {@code #mapProperties} instead
-    */
-   @Deprecated(forRemoval = true)
-   public static <S,T> T copyProperties(@NonNull final S theSource, @NonNull final T theTarget, final boolean theSkipNulls, final String... theIgnoredProperties) {
-      Objects.requireNonNull(theSource);
-      Objects.requireNonNull(theTarget);
-
-      final var aTargetClass = theTarget.getClass();
-      final var aTargetDescriptors  = BeanUtils.getPropertyDescriptors(aTargetClass);
-      final var anIgnoredList = theIgnoredProperties == null ? Collections.emptyList() : List.of(theIgnoredProperties);
-
-      Stream.of(aTargetDescriptors).filter(td -> !anIgnoredList.contains(td.getName()) && td.getWriteMethod() != null).forEach(targetDesc -> {
-         final var aWriteMethod = targetDesc.getWriteMethod();
-         final var aSourceDesc = BeanUtils.getPropertyDescriptor(theSource.getClass(), targetDesc.getName());
-         if (aSourceDesc != null) {
-            final var aReadMethod = aSourceDesc.getReadMethod();
-            if (aReadMethod != null && ClassUtils.isAssignable(aReadMethod.getReturnType(), aWriteMethod.getParameterTypes()[0])) {
-               try {
-                  if (!Modifier.isPublic(aReadMethod.getDeclaringClass().getModifiers())) {
-                     aReadMethod.setAccessible(true);
-                  }
-                  final var aSourceValue = aReadMethod.invoke(theSource);
-                  if (theSkipNulls) {
-                     if (aSourceValue != null) {
-                        if (!Modifier.isPublic(aWriteMethod.getDeclaringClass().getModifiers())) {
-                           aWriteMethod.setAccessible(true);
-                        }
-                        aWriteMethod.invoke(theTarget, aSourceValue);
-                     }
-                  }
-                  else {
-                     if (!Modifier.isPublic(aWriteMethod.getDeclaringClass().getModifiers())) {
-                        aWriteMethod.setAccessible(true);
-                     }
-                     aWriteMethod.invoke(theTarget, aSourceValue);
-                  }
-               }
-               catch (Throwable e) {
-                  throw new RuntimeException(String.format("Could not copy property '%s' from source to target", targetDesc.getName()), e);
-               }
-            }
-         }
-      });
-      return theTarget;
-   }
-
-   /**
-    * Registers a mapping to the provided model class from its superclass (class --&gt; superclass).  The superclass must be a class other than {@link Object}.
+    * Registers a default mapping to the provided model class from its superclass (class --&gt; superclass).  The superclass must be a class other
+    * than {@link Object}.
     * @param theModelClass the model class
     * @param theMapNulls map null values in superclass instance to the subclass instance
     * @param theIgnoredProperties ignored property names while mapping
     * @param <T> type of the subclass (i.e. the model class)
-    * @throws RuntimeException when the superclass is {@link Object}
+    * @throws RuntimeException if the superclass is {@link Object}
     */
    public static <T> void registerMapping (@NonNull final Class<T> theModelClass, final boolean theMapNulls, final String... theIgnoredProperties) {
       final var aSuperclass = theModelClass.getSuperclass();
@@ -189,31 +92,94 @@ public class Beans {
       registerMapping(aSuperclass, theModelClass, theMapNulls, theIgnoredProperties);
    }
 
+   /**
+    * Registers a default mapping between a source class and a target class.
+    * @param theA the source class
+    * @param theB the target class
+    * @param theMapNulls map null values in superclass instance to the subclass instance
+    * @param theExcludedProperties property names excluded from mapping
+    * @param <A> type of the source
+    * @param <B> type of the target
+    */
    public static <A,B> void registerMapping(@NonNull final Class<A> theA, @NonNull final Class<B> theB,
-                                            final boolean theMapNulls, final String... theIgnoredProperties) {
-      final ClassMapBuilder<A, B> aClassMapBuilder = mapperFactory.classMap(theA, theB).mapNulls(theMapNulls).mapNullsInReverse(theMapNulls).byDefault();
-      if (theIgnoredProperties.length > 0) {
-         Stream.of(theIgnoredProperties).forEach(aClassMapBuilder::exclude);
-      }
-      aClassMapBuilder.register();
+                                            final boolean theMapNulls, final String... theExcludedProperties) {
+      final ClassMapBuilder<A, B> aClassMapBuilder = mapperFactory.classMap(theA, theB).mapNulls(theMapNulls).mapNullsInReverse(theMapNulls);
+      Stream.of(theExcludedProperties).forEach(aClassMapBuilder::exclude);
+      aClassMapBuilder.byDefault().register();
    }
 
+   /**
+    * Maps properties from the source object to an instance of the target class that is created.
+    * @param theSource the source object
+    * @param theTargetClass the target class
+    * @param <S> type of the source object
+    * @param <T> type of the target class
+    * @return instance of target class
+    */
    @SuppressWarnings("unchecked")
    public static <S,T> T mapProperties(@NonNull final S theSource, @NonNull final Class<T> theTargetClass) {
-      try {
-         final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSource.getClass(), theTargetClass);
-         return aBoundMapper.map(theSource, theTargetClass.getConstructor().newInstance());
-      }
-      catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-         final var aMessage = String.format("Unable to create new instantce of target class %s", theTargetClass.getName());
-         throw new RuntimeException(aMessage, e);
-      }
+      final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSource.getClass(), theTargetClass);
+      return aBoundMapper.map(theSource);
    }
 
+   /**
+    * Maps properties in reverse, that is from the target object to an instance of the source class that is created.
+    * @param theSourceClass the source class
+    * @param theTarget the target object
+    * @param <S> type of the source object
+    * @param <T> type of the target class
+    * @return instance of source class
+    */
+   @SuppressWarnings("unchecked")
+   public static <S,T> S mapPropertiesReverse(@NonNull final Class<S> theSourceClass, @NonNull final T theTarget) {
+      final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSourceClass, theTarget.getClass());
+      return aBoundMapper.mapReverse(theTarget);
+   }
+
+   /**
+    * Maps properties from a source object to a target object.
+    * @param theSource the source object
+    * @param theTarget the target object
+    * @param <S> type of the source object
+    * @param <T> type of the target object
+    * @return a reference to the target object is passed as parameter
+    */
    @SuppressWarnings("unchecked")
    public static <S,T> T mapProperties(@NonNull final S theSource, @NonNull final T theTarget) {
       final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSource.getClass(), theTarget.getClass());
       return aBoundMapper.map(theSource, theTarget);
+   }
+
+   /**
+    * Maps properties in reverse, that is from the target object to the source object.
+    * @param theSource the source object
+    * @param theTarget the target object
+    * @param <S> type of the source object
+    * @param <T> type of the target object
+    * @return a reference to the source object that is passed as parameter
+    */
+   @SuppressWarnings("unchecked")
+   public static <S,T> S mapPropertiesReverse(@NonNull final S theSource, @NonNull final T theTarget) {
+      final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSource.getClass(), theTarget.getClass());
+      return aBoundMapper.mapReverse(theTarget, theSource);
+   }
+
+   /**
+    * Maps properties from a source object to a target object, but does not used a pre-registered mapping factory.  This method is
+    * <emphasis>quite inefficient</emphasis>, nevertheless provided for cases wherein the excluded properties are only known at runtime (as opposed to at
+    * build time).  Also, this version of the overloaded method does not return a reference to the target object, which implies the target must not be null.
+    * @param theSource the source object
+    * @param theTarget the target object
+    * @param <S> type of the source object
+    * @param <T> type of the target object
+    */
+   public static <S,T> void mapProperties(@NonNull final S theSource, @NonNull final T theTarget, final boolean theMapNulls,
+                                          final String... theExcludedProperties) {
+      final var aMapperFactory = new DefaultMapperFactory.Builder().mapNulls(theMapNulls).build();
+      final var aClassMap = aMapperFactory.classMap(theSource.getClass(), theTarget.getClass());
+      Stream.of(theExcludedProperties).forEach(aClassMap::exclude);
+      aClassMap.byDefault().register();
+      aMapperFactory.getMapperFacade().map(theSource, theTarget);
    }
 
    /**

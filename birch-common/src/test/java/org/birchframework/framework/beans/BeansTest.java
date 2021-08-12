@@ -13,14 +13,14 @@
  ==============================================================*/
 package org.birchframework.framework.beans;
 
-import org.birchframework.framework.spring.SpringContext;
 import org.assertj.core.util.Throwables;
+import org.birchframework.framework.spring.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.birchframework.framework.beans.Status.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.birchframework.framework.beans.Status.*;
 
 /**
  * Tests for {@link Beans}.
@@ -38,7 +38,6 @@ public class BeansTest {
    private static final Status  STATUS     = RETIRED;
 
    private TestBean testBean;
-   private TestDTO testDTO;
 
    /**
     * Setup before each test.
@@ -46,87 +45,61 @@ public class BeansTest {
    @BeforeEach
    public void setUp() {
       this.testBean = new TestBean(FIRST_NAME, LAST_NAME, AGE, IS_ACTIVE, RETIRED);
-      this.testDTO = Beans.copyProperties(this.testBean, new TestDTO());
    }
 
    /**
-    * Tests {@link Beans#copyProperties(Object, Object, String...)}.
+    * Tests {@link Beans#mapProperties(Object, Object)} without pre-registrations of the mapping.
     */
    @Test
-   public void testCopyProperties() {
+   public void testMapProperties() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
       aTestBean.setActive(true);
-      Beans.copyProperties(this.testBean, aTestBean);
+      Beans.mapProperties(this.testBean, aTestBean);
       assertThat(aTestBean.getAge()).isNull();
       assertThat(aTestBean.isActive()).isFalse();
       assertThat(aTestBean.getStatus()).isEqualTo(RETIRED);
    }
 
    /**
-    * Tests {@link Beans#copyProperties(Object, Object, String...)}.
+    * Tests {@link Beans#mapProperties(Object, Object)} with registration of excluded properties and mapping nulls.
     */
    @Test
-   public void testCopyPropertiesIgnoreProperties() {
+   public void testMapPropertiesExcludeProperties() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
       aTestBean.setActive(true);
-      Beans.copyProperties(this.testBean, aTestBean, "active");
+      Beans.mapProperties(this.testBean, aTestBean, true, "active");
       assertThat(aTestBean.getAge()).isNull();
       assertThat(aTestBean.isActive()).isTrue();
    }
 
    /**
-    * Tests {@link Beans#copyProperties(Object, Object, boolean, String...)}.
+    * Tests {@link Beans#mapProperties(Object, Object)} with registration of not mapping nulls.
     */
    @Test
-   public void testCopyPropertiesIgnoreNulls() {
+   public void testMapPropertiesIgnoreNulls() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
       aTestBean.setActive(true);
-      Beans.copyProperties(this.testBean, aTestBean, true);
+      Beans.mapProperties(this.testBean, aTestBean, false);
       assertThat(aTestBean.getAge()).isNotNull();
       assertThat(aTestBean.getAge()).isEqualTo(TEST_AGE);
       assertThat(aTestBean.isActive()).isFalse();
    }
 
    /**
-    * Tests {@link Beans#copyProperties(Object, Object, boolean, String...)}.
+    * Tests {@link Beans#mapProperties(Object, Object)} with registration of excluded properties and not mapping nulls.
     */
    @Test
-   public void testCopyPropertiesIgnoreNullsAndProperties() {
+   public void testMapPropertiesIgnoreNullsAndExcludeProperties() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
       aTestBean.setActive(true);
-      Beans.copyProperties(this.testBean, aTestBean, true, "active");
+      Beans.mapProperties(this.testBean, aTestBean, false, "active");
       assertThat(aTestBean.getAge()).isNotNull();
       assertThat(aTestBean.getAge()).isEqualTo(TEST_AGE);
       assertThat(aTestBean.isActive()).isTrue();
-   }
-
-   /**
-    * Tests {@link Beans#mapProperties(Object, Object)}.
-    */
-   @Test
-   public void testMapProperties() {
-      final var aTestModel = new TestModel();
-      aTestModel.setAge(TEST_AGE);
-      aTestModel.setActive(true);
-      Beans.mapProperties(this.testDTO, aTestModel);
-      assertThat(aTestModel.getAge()).isNull();
-      assertThat(aTestModel.isActive()).isFalse();
-      assertThat(aTestModel.getStatus()).isEqualTo(RETIRED);
-   }
-
-   /**
-    * Tests {@link Beans#mapProperties(Object, Class)}.
-    */
-   @Test
-   public void testMapPropertiesToTargetClass() {
-      final var aTestModel = Beans.mapProperties(this.testDTO, TestModel.class);
-      assertThat(aTestModel.getAge()).isNull();
-      assertThat(aTestModel.isActive()).isFalse();
-      assertThat(aTestModel.getStatus()).isEqualTo(RETIRED);
    }
 
    /**

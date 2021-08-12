@@ -13,12 +13,16 @@
  ==============================================================*/
 package org.birchframework.framework.beans;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Keivan Khalichi
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TestDTO {
    private String  firstName;
    private String  lastName;
