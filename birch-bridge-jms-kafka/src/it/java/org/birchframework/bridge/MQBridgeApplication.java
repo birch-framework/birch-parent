@@ -27,7 +27,8 @@ import org.springframework.context.annotation.Import;
  * Test Spring Boot applications for MQ bridge and message producer.
  * @author Keivan Khalichi
  */
-@EnableAutoConfiguration(excludeName = "org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration")
+@EnableAutoConfiguration(excludeName = {"org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration",
+                                        "org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration"})
 @EnableJMSKafkaBridge
 @Import(MQAutoConfiguration.class)
 public class MQBridgeApplication {
@@ -46,7 +47,8 @@ public class MQBridgeApplication {
       }
    }
 
-   @EnableAutoConfiguration(excludeName = "org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration")
+   @EnableAutoConfiguration(excludeName = {"org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration",
+                                           "org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration"})
    @Import(MQAutoConfiguration.class)
    static class MessageProducerApplication extends BaseMessageProducerApplication {
 
