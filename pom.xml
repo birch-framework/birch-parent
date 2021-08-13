@@ -653,6 +653,8 @@
                         <message>Site for release ${project.version}</message>
                         <server>github</server>
                         <merge>true</merge>
+                        <branch>refs/heads/master</branch>
+                        <repositoryName>${distributionManagement.site.url}</repositoryName>
                      </configuration>
                   </execution>
                </executions>
