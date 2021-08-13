@@ -90,7 +90,7 @@ node {
    stage ('Site Deploy') {
       if (Globals.release) {
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn site-deploy"
+            bat "mvn site-deploy -P ci"
          }
       }
       else {
