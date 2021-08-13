@@ -2,6 +2,7 @@
 
 [comment]: <> ([![Quality Gate]&#40;https://sonar.birchframework.org/api/project_badges/measure?metric=alert_status&project=org.birchframework:birch-parent&#41;]&#40;https://sonar.birchframework.org/dashboard?id=org.birchframework:birch-parent&#41;)
 [![Maven Central](https://img.shields.io/maven-central/v/org.birchframework/birch-parent.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.birchframework%22)
+[![javadoc](https://javadoc.io/badge2/org.birchframework/birch-parent/javadoc.svg)](https://javadoc.io/doc/org.birchframework/birch-parent)
 # Birch Parent: Accelerator for Microservices Development
 Accelerator framework to build Microservices based on Spring Boot
 
@@ -68,8 +69,17 @@ Run the following command to clone the repository for the first time:
 
     git clone https://github.com/birch/birch-parent.git
 
-# Prepare local environment
-## Git
+# Build
+Execute the following from the root of the project (`birch-parent`):
+
+    mvn clean install
+
+# Release
+
+**Releases can only be executed by Release admins.**
+
+## Prepare local environment
+### Git
 
 Create links to the `post-checkout` script so that your new branches get the correct build status badges.
 #### Windows
@@ -83,21 +93,14 @@ Run the following in a shell prompt **from the repository root (`birch-parent`)*
 
     ln -s ${PWD}/scripts/post-checkout -t .git/hooks
 
-# Build
-Execute the following from the root of the project (`birch-parent`):
-
-    mvn clean install
-
-# Release
-**Releases can only be executed by Release Masters.**
-
+## Creating the release
 In order to create a release:
-1. Ensure all local changes are committed before releasing, as not doing so will cause the Maven release to fail.
+1. Ensure all local changes are committed and merged into master before running the release, as not doing so will cause the Maven release to fail.
 2. Run the following script from the root of the project (`birch-parent`):
 ```
    bash scripts/release
 ```
-3. Accept all defaults by presenting `Enter` for each prompt, except if creating a release with a minor and/or major version change, then enter the new version number.
+3. Accept all defaults by pressing `Enter` for each prompt, except if creating a release with a minor and/or major version change, then enter the new version number.
 
    **Do not deviate from default tag naming convention of `birch-parent-<version>` where `<version>` is in the format `<major>.<minor>.<release>`**
 
