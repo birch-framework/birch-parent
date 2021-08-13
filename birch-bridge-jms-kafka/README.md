@@ -1,3 +1,4 @@
+[![javadoc](https://javadoc.io/badge2/org.birchframework/birch-bridge-jms-kafka/javadoc.svg)](https://javadoc.io/doc/org.birchframework/birch-bridge-jms-kafka)
 # Birth Framework JMS/Kafka Bridge
 Provides auto-configurable bridges between the following JMS provides and Kafka:
 
@@ -19,7 +20,7 @@ To include `birch-jms-kafka-bridge` as a dependency to any Maven project or modu
 
 You must also include exactly one of the dependencies in the following sections.
 
-## ActiveMQ
+## Apache ActiveMQ
 
 ```xml
    <dependency>
@@ -34,12 +35,26 @@ You must also include exactly one of the dependencies in the following sections.
    <dependency>
       <groupId>com.ibm.mq</groupId>
       <artifactId>mq-jms-spring-boot-starter</artifactId>
-      <version>2.4.2</version>
+      <version>2.5.3</version>
    </dependency>
 ```
 
 **Replace the contents of the `<version>` element with the version of IBM MQ Spring Boot Starter that matches the version of Spring Boot.**
 
-## EMS
+## Tibco EMS
 
-**TODO**
+Tibco has not publised a Maven project on Maven Central for the EMS client libraries.  You must find other means of adding the following libraries to your
+classpath:
+
+* `tibcrypt.jar`
+* `tibjms.jar`
+
+and add the following dependency for EMS auto-configuration:
+```xml
+<dependency>
+   <groupId>org.birchframework</groupId>
+   <artifactId>birch-ems-support</artifactId>
+</dependency>
+```
+Once the above steps are complete, refer to `org.birchframework.ems.EMSAutoConfiguration` [Javadocs](https://www.javadoc.io/doc/org.birchframework/birch-ems-support/1.0.0/index.html) 
+for auto-configuration of EMS.
