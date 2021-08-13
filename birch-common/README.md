@@ -11,22 +11,3 @@ To include `birch-common` as a dependency to any Maven project or module, add th
    </dependency>
 ```
 **Replace the contents of the `<version>` element with the desired version of Birch Framework.**
-
-# Maven Repository
-
-If not already done so in the parent Maven POM, don't forget to tell Maven where to obtain Birch Framework:
-```xml
-   <repositories>
-      <repository>
-         <id>birch-releases</id>
-         <name>Birch Framework Releases</name>
-         <url>https://repo.maven.org/repo2</url>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-      </repository>
-   </repositories>
-```
