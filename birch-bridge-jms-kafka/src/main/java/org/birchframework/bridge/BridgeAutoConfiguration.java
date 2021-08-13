@@ -137,7 +137,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @EnableConfigurationProperties(BirchProperties.class)
 @AutoConfigureBefore(CamelAutoConfiguration.class)
 @AutoConfigureAfter(name = {"org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration",
-                            "com.ibm.mq.spring.boot.MQAutoConfiguration", "org.birchframework.bridge.EMSAutoConfiguration"
+                            "com.ibm.mq.spring.boot.MQAutoConfiguration", "org.birchframework.ems.EMSAutoConfiguration"
 })
 @Slf4j
 public class BridgeAutoConfiguration {

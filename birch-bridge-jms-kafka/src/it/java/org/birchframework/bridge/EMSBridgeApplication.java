@@ -19,6 +19,7 @@ import com.ibm.mq.spring.boot.MQAutoConfiguration;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spring.boot.SpringBootCamelContext;
 import org.apache.commons.lang3.ArrayUtils;
+import org.birchframework.ems.EMSAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Import;
@@ -32,6 +33,7 @@ import static org.apache.camel.component.jms.JmsMessageType.Bytes;
 @EnableAutoConfiguration(excludeName = "org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration",
                          exclude = MQAutoConfiguration.class)
 @EnableJMSKafkaBridge
+@Import(EMSAutoConfiguration.class)
 public class EMSBridgeApplication {
 
    /**

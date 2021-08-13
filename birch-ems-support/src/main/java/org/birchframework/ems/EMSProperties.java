@@ -12,7 +12,7 @@
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
 
-package org.birchframework.bridge;
+package org.birchframework.ems;
 
 import java.time.Duration;
 import lombok.AllArgsConstructor;
