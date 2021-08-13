@@ -2,7 +2,7 @@
 
 [comment]: <> ([![Quality Gate]&#40;https://sonar.birchframework.org/api/project_badges/measure?metric=alert_status&project=org.birchframework:birch-parent&#41;]&#40;https://sonar.birchframework.org/dashboard?id=org.birchframework:birch-parent&#41;)
 [![Maven Central](https://img.shields.io/maven-central/v/org.birchframework/birch-parent.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.birchframework%22)
-[![javadoc](https://javadoc.io/badge2/org.birchframework/birch-parent/javadoc.svg)](https://javadoc.io/doc/org.birchframework/birch-parent)
+[![javadoc](https://javadoc.io/badge2/org.birchframework/birch-parent/javadoc.svg)](https://javadoc.io/doc/org.birchframework)
 # Birch Parent: Accelerator for Microservices Development
 Accelerator framework to build Microservices based on Spring Boot
 
