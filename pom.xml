@@ -650,6 +650,7 @@
                      </goals>
                      <phase>site-deploy</phase>
                      <configuration>
+                        <message>Site for release ${project.version}</message>
                         <server>github</server>
                         <merge>true</merge>
                      </configuration>
