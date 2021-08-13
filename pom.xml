@@ -23,21 +23,29 @@
    <packaging>pom</packaging>
 
    <name>${project.artifactId}</name>
-   <description>Birch Framework</description>
-   <url>http://www.birchframework.org</url>
+   <description>Birch Framework aggregator project</description>
+   <url>https://www.birchframework.org</url>
    <organization>
       <name>Birch Framework</name>
-      <url>http://www.birchframework.org</url>
+      <url>https://www.birchframework.org</url>
    </organization>
    <inceptionYear>2021</inceptionYear>
    <licenses>
       <license>
          <name>gpl_v3</name>
          <distribution>repo</distribution>
-         <comments>GNU Public License version 3.0</comments>
-         <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+         <comments>GNU Public License version 3</comments>
+         <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
       </license>
    </licenses>
+   <developers>
+      <developer>
+         <name>Keivan Khalichi</name>
+         <email>keivan21@gmail.com</email>
+         <organization>Birch Framework</organization>
+         <organizationUrl>https://www.birchframework.org</organizationUrl>
+      </developer>
+   </developers>
    <contributors>
       <contributor>
          <roles>
@@ -50,8 +58,9 @@
       </contributor>
    </contributors>
    <scm>
-      <url>https://github.com/birch-framework/birch-parent</url>
-      <developerConnection>scm:git:git:https://github.com/birch-framework/birch-parent.git</developerConnection>
+      <url>https://github.com/birch-framework/birch-parent/tree/master</url>
+      <connection>scm:git:git://github.com/birch-framework/birch-parent.git</connection>
+      <developerConnection>scm:git:https://github.com/birch-framework/birch-parent.git</developerConnection>
       <tag>HEAD</tag>
    </scm>
 
