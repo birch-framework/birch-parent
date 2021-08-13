@@ -68,6 +68,7 @@ node {
    }
 
    stage ('Quality Analysis') {
+      echo "SonarQube quality analysis comming soon"
       // TODO
 //      withSonarQubeEnv ('SonarQube server') {
 //         bat 'mvn sonar:sonar'
