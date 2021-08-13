@@ -159,6 +159,10 @@
                   <artifactId>maven-site-plugin</artifactId>
                </plugin>
                <plugin>
+                  <groupId>com.github.github</groupId>
+                  <artifactId>site-maven-plugin</artifactId>
+               </plugin>
+               <plugin>
                   <groupId>org.sonatype.plugins</groupId>
                   <artifactId>nexus-staging-maven-plugin</artifactId>
                </plugin>
