@@ -21,9 +21,6 @@
 
    <name>${project.artifactId}</name>
    <description>Birch Framework Starter</description>
-   <scm>
-      <url>https://github.com/birch-framework/birch-parent/tree/master/birch-starter</url>
-   </scm>
 
    <parent>
       <groupId>org.birchframework</groupId>

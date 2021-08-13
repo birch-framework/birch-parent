@@ -21,9 +21,6 @@
 
    <name>${project.artifactId}</name>
    <description>Birch Framework REST Support via JAX-RS</description>
-   <scm>
-      <url>https://github.com/birch-framework/birch-parent/tree/master/birch-rest-jaxrs</url>
-   </scm>
 
    <parent>
       <groupId>org.birchframework</groupId>

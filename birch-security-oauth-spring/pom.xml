@@ -21,9 +21,6 @@
 
    <name>${project.artifactId}</name>
    <description>Birch Framework Security - OAuth2</description>
-   <scm>
-      <url>https://github.com/birch-framework/birch-parent/tree/master/birch-security-oauth-spring</url>
-   </scm>
 
    <parent>
       <groupId>org.birchframework</groupId>

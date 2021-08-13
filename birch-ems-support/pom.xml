@@ -21,9 +21,6 @@
 
    <name>${project.artifactId}</name>
    <description>Birch Framework Tibco EMS Support</description>
-   <scm>
-      <url>https://github.com/birch-framework/birch-parent/tree/master/birch-ems-support</url>
-   </scm>
 
    <parent>
       <groupId>org.birchframework</groupId>
