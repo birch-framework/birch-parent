@@ -61,7 +61,7 @@ node {
       else {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn install -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci"
+               bat "mvn install -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
             }
          }
       }
@@ -78,7 +78,7 @@ node {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci"
+               bat "mvn deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
             }
          }
       }
