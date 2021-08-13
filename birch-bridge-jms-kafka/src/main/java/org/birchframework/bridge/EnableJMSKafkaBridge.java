@@ -20,6 +20,7 @@ import java.lang.annotation.Target;
 
 import org.apache.camel.spring.boot.CamelAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.metrics.CompositeMeterRegistryAutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -31,6 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(value = RUNTIME)
 @Target(value = TYPE)
 @Documented
+@EnableAutoConfiguration(excludeName = "org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration")
 @Import({BridgeAutoConfiguration.class, CamelAutoConfiguration.class, CompositeMeterRegistryAutoConfiguration.class})
 public @interface EnableJMSKafkaBridge {
 }
