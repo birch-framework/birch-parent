@@ -21,6 +21,9 @@
 
    <name>${project.artifactId}</name>
    <description>Birch Framework Common</description>
+   <scm>
+      <url>https://github.com/birch-framework/birch-parent/tree/master/birch-common</url>
+   </scm>
 
    <parent>
       <groupId>org.birchframework</groupId>
@@ -219,21 +222,4 @@
          <scope>provided</scope>
       </dependency>
    </dependencies>
-
-   <build>
-      <plugins>
-         <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>license-maven-plugin</artifactId>
-            <executions>
-               <execution>
-                  <id>download-licenses</id>
-                  <goals>
-                     <goal>download-licenses</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-      </plugins>
-   </build>
 </project>
