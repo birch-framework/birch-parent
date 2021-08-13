@@ -1,5 +1,5 @@
 [![javadoc](https://javadoc.io/badge2/org.birchframework/birch-bridge-jms-kafka/javadoc.svg)](https://javadoc.io/doc/org.birchframework/birch-bridge-jms-kafka)
-# Birth Framework JMS/Kafka Bridge
+# Birch Framework JMS/Kafka Bridge
 Provides auto-configurable bridges between the following JMS provides and Kafka:
 
 * Apache ActiveMQ
@@ -18,6 +18,11 @@ To include `birch-jms-kafka-bridge` as a dependency to any Maven project or modu
 ```
 **Replace the contents of the `<version>` element with the desired version of Birch Framework.**
 
+# Configuration
+Refer to [`org.birchframework.bridge.BridgeAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-bridge-jms-kafka/latest/org/birchframework/bridge/BridgeAutoConfiguration.html)
+Javadocs for auto-configuration details.
+
+# Other Dependencies
 You must also include exactly one of the dependencies in the following sections.
 
 ## Apache ActiveMQ
@@ -56,5 +61,5 @@ and add the following dependency for EMS auto-configuration:
    <artifactId>birch-ems-support</artifactId>
 </dependency>
 ```
-Once the above steps are complete, refer to `org.birchframework.ems.EMSAutoConfiguration` [Javadocs](https://www.javadoc.io/doc/org.birchframework/birch-ems-support/1.0.0/index.html) 
+Once the above steps are complete, refer to [`org.birchframework.ems.EMSAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-ems-support/latest/org/birchframework/ems/EMSAutoConfiguration.html) Javadocs 
 for auto-configuration of EMS.
