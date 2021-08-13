@@ -21,6 +21,9 @@
 
    <name>${project.artifactId}</name>
    <description>Birch Framework JMS/Kafka Bridge</description>
+   <scm>
+      <url>https://github.com/birch-framework/birch-parent/tree/master/birch-bridge-jms-kafka</url>
+   </scm>
 
    <parent>
       <groupId>org.birchframework</groupId>
