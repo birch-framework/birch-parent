@@ -25,12 +25,12 @@
    <parent>
       <groupId>org.birchframework</groupId>
       <artifactId>birch-parent</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.1.0-SNAPSHOT</version>
    </parent>
 
    <properties>
       <active.profile>native</active.profile>
-      <ibm-mq.version>2.4.2</ibm-mq.version>
+      <ibm-mq.version>2.5.3</ibm-mq.version>
    </properties>
 
    <dependencies>
@@ -180,6 +180,12 @@
          <artifactId>birch-ems-support</artifactId>
          <version>${project.version}</version>
          <scope>provided</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>org.springframework</groupId>
+               <artifactId>spring-jms</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>com.tibco</groupId>
