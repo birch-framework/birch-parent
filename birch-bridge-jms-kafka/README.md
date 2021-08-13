@@ -12,7 +12,7 @@ To include `birch-jms-kafka-bridge` as a dependency to any Maven project or modu
 ```xml
    <dependency>
       <groupId>org.birchframework</groupId>
-      <artifactId>birch-jms-kafka-bridge</artifactId>
+      <artifactId>birch-bridge-jms-kafka</artifactId>
       <version>1.0.0</version>
    </dependency>
 ```
@@ -48,7 +48,7 @@ You must also include exactly one of the dependencies in the following sections.
 
 ## Tibco EMS
 
-Tibco has not publised a Maven project on Maven Central for the EMS client libraries.  You must find other means of adding the following libraries to your
+Tibco has not published a Maven project on Maven Central for the EMS client libraries.  You must find other means of adding the following libraries to your
 classpath:
 
 * `tibcrypt.jar`
