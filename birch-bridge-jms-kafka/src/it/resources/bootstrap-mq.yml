@@ -30,9 +30,9 @@ birch:
         topic: test-topic1-in
     test-1-out:
       source: kafka
+      concurrent-consumers: 10
       kafka:
         topic: test-topic1-out
-        consumers-count: 10
       jms:
         queue: DEV.QUEUE.2
         key-property: key
