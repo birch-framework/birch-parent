@@ -18,20 +18,17 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.birchframework.framework.dto.TestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.birchframework.framework.dto.TestDTO;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.*;
@@ -52,8 +49,6 @@ import static org.assertj.core.api.Assertions.*;
                                   "spring.kafka.listener.missing-topics-fatal: false",
                                   "birch.test.topic: birch-topic",
                                   "birch.test.dto.key: test-dto"})
-@DirtiesContext
-@TestMethodOrder(OrderAnnotation.class)
 @Slf4j
 public class KafkaAdminUtilsTest {
 
