@@ -145,6 +145,7 @@ public class KafkaSender<K extends String, V extends Serializable> {
             aReturnValue.hasError = true;
             aReturnValue.exception = e;
             aResult = new SendResult<>(null, null);
+            Thread.currentThread().interrupt();
          }
          return aResult;
       });

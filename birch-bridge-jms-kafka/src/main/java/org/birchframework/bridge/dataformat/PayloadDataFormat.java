@@ -19,16 +19,15 @@ import java.io.OutputStream;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.Topic;
-import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.birchframework.framework.bridge.Destination;
-import org.birchframework.framework.bridge.Payload;
-import org.birchframework.framework.bridge.PropertyValue;
-import org.birchframework.framework.stub.Stub;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.birchframework.framework.bridge.Destination;
+import org.birchframework.framework.bridge.Payload;
+import org.birchframework.framework.bridge.PropertyValue;
+import org.birchframework.framework.stub.Stub;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -88,7 +87,7 @@ public class PayloadDataFormat implements DataFormat {
       //No-op
    }
 
-   private Destination toDestination(@NotNull final javax.jms.Destination theJMSDestination) {
+   private Destination toDestination(final javax.jms.Destination theJMSDestination) {
       if (theJMSDestination == null) {
          // Null input; return null output
          return null;
