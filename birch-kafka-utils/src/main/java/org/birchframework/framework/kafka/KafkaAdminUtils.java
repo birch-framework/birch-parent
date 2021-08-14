@@ -102,9 +102,12 @@ public class KafkaAdminUtils {
                              try {
                                 aTopicAndOffsetMap.putAll(future.get());
                              }
-                             catch (InterruptedException | ExecutionException e) {
+                             catch (InterruptedException e) {
                                 log.warn("Unable to retrieve topic offsets for a consumer group; error message: {}", Throwables.getRootCause(e).getMessage());
-                                Thread.currentThread().interrupt();
+                                throw new RuntimeException(e);
+                             }
+                             catch (ExecutionException e) {
+                                log.warn("Unable to retrieve topic offsets for a consumer group; error message: {}", Throwables.getRootCause(e).getMessage());
                              }
                           });
          final var aTopicEndOffsets = this.kafkaConsumer.endOffsets(aTopicAndOffsetMap.keySet());
@@ -122,9 +125,12 @@ public class KafkaAdminUtils {
          aTopicPartitionLagMap.forEach((key, value) -> aTopicLags.compute(key.topic(), (k, v) -> v == null ? value : v + value));
          return aTopicLags;
       }
-      catch (InterruptedException | ExecutionException e) {
+      catch (InterruptedException e) {
          log.warn("Unable to retrieve consumer groups; error message: {}", Throwables.getRootCause(e).getMessage());
-         Thread.currentThread().interrupt();
+         throw new RuntimeException(e);
+      }
+      catch (ExecutionException e) {
+         log.warn("Unable to retrieve consumer groups; error message: {}", Throwables.getRootCause(e).getMessage());
          return Collections.emptyMap();
       }
       finally {
