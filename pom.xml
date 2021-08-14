@@ -224,6 +224,8 @@
       <maven.compiler.source>${java.version}</maven.compiler.source>
       <maven.compiler.target>${java.version}</maven.compiler.target>
 
+      <sonar.organization>birch-framework</sonar.organization>
+      <sonar.host.url>https://sonarcloud.io</sonar.host.url>
       <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
       <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
       <sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
@@ -233,7 +235,7 @@
          **/*DTO.java,
          **/*Configuration.java,
          **/LoggingAspect.java,
-         **/CustomSwagger2Feature.java,
+         **/CustomOpenAPIFeature.java,
          **/config/**/*Properties.java,
          **/model/**/*,
          **/dto/**/*,
