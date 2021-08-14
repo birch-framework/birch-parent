@@ -1,7 +1,9 @@
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=bugs)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=security_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.birchframework/birch-parent.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.birchframework%22)
 [![javadoc](https://javadoc.io/badge2/org.birchframework/birch-parent/javadoc.svg)](https://javadoc.io/doc/org.birchframework)
