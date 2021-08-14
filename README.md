@@ -1,4 +1,5 @@
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=bugs)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
