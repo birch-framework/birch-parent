@@ -68,11 +68,12 @@ node {
    }
 
    stage ('Quality Analysis') {
-      echo "SonarQube quality analysis comming soon"
-      // TODO
-//      withSonarQubeEnv ('SonarQube server') {
-//         bat 'mvn sonar:sonar'
-//      }
+      withCredentials([string(credentialsId: 'Sonar-Token', variable: 'TOKEN')]) {
+         env.SONAR_TOKEN = "${TOKEN}"
+         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+            bat "mvn sonar:sonar"
+         }
+      }
    }
 
    stage ('Release') {
