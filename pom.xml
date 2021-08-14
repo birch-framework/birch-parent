@@ -104,8 +104,8 @@
             <activeByDefault>true</activeByDefault>
          </activation>
          <properties>
-            <jvm.memory.min>64</jvm.memory.min>
-            <jvm.memory.max>256</jvm.memory.max>
+            <jvm.memory.min>128</jvm.memory.min>
+            <jvm.memory.max>512</jvm.memory.max>
             <app.log.level>DEBUG</app.log.level>
             <root.log.level>DEBUG</root.log.level>
             <packaging.type>jar</packaging.type>
@@ -129,8 +129,8 @@
       <profile>
          <id>ci</id>
          <properties>
-            <jvm.memory.min>64</jvm.memory.min>
-            <jvm.memory.max>256</jvm.memory.max>
+            <jvm.memory.min>128</jvm.memory.min>
+            <jvm.memory.max>512</jvm.memory.max>
             <app.log.level>DEBUG</app.log.level>
             <root.log.level>DEBUG</root.log.level>
             <packaging.type>jar</packaging.type>
@@ -147,7 +147,6 @@
                      <excludes>
                         <exclude>**/*IT.java</exclude>
                      </excludes>
-                     <!--<forkCount>0</forkCount>-->
                   </configuration>
                </plugin>
                <plugin>
@@ -217,6 +216,7 @@
       <guava.version>30.1.1-jre</guava.version>
       <jettison.version>1.4.0</jettison.version>
       <fabric8.debug.suspend>true</fabric8.debug.suspend>
+      <!--suppress UnresolvedMavenProperty -->
       <docker.daemon.url>${env.DOCKER_HOST}</docker.daemon.url>
       <docker.base.image>docker.io/openjdk:11.0.6-jdk-slim</docker.base.image>
       <tibco-ems.version>8.3.0</tibco-ems.version>
@@ -226,11 +226,10 @@
 
       <sonar.organization>birch-framework</sonar.organization>
       <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+      <sonar.language>java</sonar.language>
       <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
       <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-      <sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
-      <sonar.junit.reportPaths>${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
-      <sonar.language>java</sonar.language>
+      <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
       <sonar.coverage.exclusions>
          **/*DTO.java,
          **/*Configuration.java,
@@ -265,6 +264,11 @@
          <version>${groovy.version}</version>
          <scope>compile</scope>
       </dependency>
+      <dependency>
+         <groupId>io.projectreactor</groupId>
+         <artifactId>reactor-test</artifactId>
+         <scope>test</scope>
+      </dependency>
    </dependencies>
 
    <reporting>
@@ -286,6 +290,7 @@
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <!--suppress MavenModelInspection -->
             <artifactId>maven-jxr-plugin</artifactId>
          </plugin>
          <plugin>
@@ -411,14 +416,26 @@
                <artifactId>jacoco-maven-plugin</artifactId>
                <version>${jacoco.plugin.version}</version>
                <configuration>
-                  <destFile>${sonar.jacoco.reportPaths}</destFile>
+                  <!--suppress MavenModelInspection -->
+                  <skip>${maven.skip.test}</skip>
+                  <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                  <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                  <output>file</output>
                   <append>true</append>
                </configuration>
                <executions>
                   <execution>
-                     <id>agent</id>
+                     <id>jacoco-initialize</id>
+                     <phase>test-compile</phase>
                      <goals>
                         <goal>prepare-agent</goal>
+                     </goals>
+                  </execution>
+                  <execution>
+                     <id>jacoco-site</id>
+                     <phase>verify</phase>
+                     <goals>
+                        <goal>report</goal>
                      </goals>
                   </execution>
                </executions>
@@ -539,8 +556,11 @@
                            </assembly>
                            <entryPoint>
                               <arg>java</arg>
+                              <!--suppress UnresolvedMavenProperty -->
                               <arg>-Xms${jvm.memory.min}m</arg>
+                              <!--suppress UnresolvedMavenProperty -->
                               <arg>-Xmx${jvm.memory.max}m</arg>
+                              <!--suppress UnresolvedMavenProperty -->
                               <arg>-Dspring.profiles.active=${active.profile}</arg>
                               <arg>-jar</arg>
                               <arg>/${project.artifactId}/${project.build.finalName}.${project.packaging}</arg>
