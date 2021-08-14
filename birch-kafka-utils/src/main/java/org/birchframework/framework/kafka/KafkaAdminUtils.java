@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import javax.annotation.PreDestroy;
 import com.google.common.base.Throwables;
-import org.birchframework.configuration.BirchProperties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -33,6 +32,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.birchframework.configuration.BirchProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 
 import static org.apache.kafka.clients.CommonClientConfigs.SECURITY_PROTOCOL_CONFIG;
@@ -104,6 +104,7 @@ public class KafkaAdminUtils {
                              }
                              catch (InterruptedException e) {
                                 log.warn("Unable to retrieve topic offsets for a consumer group; error message: {}", Throwables.getRootCause(e).getMessage());
+                                Thread.currentThread().interrupt();
                                 throw new RuntimeException(e);
                              }
                              catch (ExecutionException e) {
@@ -127,6 +128,7 @@ public class KafkaAdminUtils {
       }
       catch (InterruptedException e) {
          log.warn("Unable to retrieve consumer groups; error message: {}", Throwables.getRootCause(e).getMessage());
+         Thread.currentThread().interrupt();
          throw new RuntimeException(e);
       }
       catch (ExecutionException e) {
