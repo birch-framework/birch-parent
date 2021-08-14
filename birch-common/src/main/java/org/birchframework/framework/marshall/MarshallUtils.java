@@ -59,15 +59,11 @@ public class MarshallUtils {
 
    /** Synchronized cache of {@link JAXBContext} instances */
    private final Map<Class<?>, JAXBContext> jaxbContextCache = new ConcurrentHashMap<>();
-
-   private final ObjectMapper objectMapper;
+   private final ObjectMapper               objectMapper;
 
    public MarshallUtils(final Jackson2ObjectMapperBuilder theObjectMapperBuilder) {
       this.objectMapper = theObjectMapperBuilder.build();
    }
-
-   @SuppressWarnings("InstanceVariableMayNotBeInitialized")
-   private DocumentBuilderFactory documentBuilderFactory;
 
    /**
     * Unmarshall XML data given class and file.
@@ -253,7 +249,8 @@ public class MarshallUtils {
    public Document parse(final InputStream theData, final boolean theIsNamespaceAware, final boolean theIsValidating) throws MarshallingError {
       final Document aReturnValue;
       try {
-         final DocumentBuilderFactory aDocumentBuilderFactory = this.documentBuilderFactory();
+         final DocumentBuilderFactory aDocumentBuilderFactory = DocumentBuilderFactory.newInstance();
+         aDocumentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
          aDocumentBuilderFactory.setNamespaceAware(theIsNamespaceAware);
          aDocumentBuilderFactory.setValidating(theIsValidating);
          final DocumentBuilder aDocumentBuilder = aDocumentBuilderFactory.newDocumentBuilder();
@@ -431,13 +428,6 @@ public class MarshallUtils {
          this.jaxbContextCache.put(theClass, aReturnValue);
       }
       return aReturnValue;
-   }
-
-   private DocumentBuilderFactory documentBuilderFactory() {
-      if (this.documentBuilderFactory == null) {
-         this.documentBuilderFactory = DocumentBuilderFactory.newInstance();
-      }
-      return this.documentBuilderFactory;
    }
 
    private <T> Unmarshaller unmarshaller(Class<T> theTargetClass) throws MarshallingError {
