@@ -77,12 +77,7 @@ public class MarshallUtils {
       final Optional<T> aReturnValue;
       if (theFile != null && theFile.exists()) {
          try (InputStream aFileIS = new FileInputStream(theFile)) {
-            try {
-               aReturnValue = this.fromXML(aFileIS, theClass);
-            }
-            finally {
-               aFileIS.close();
-            }
+            aReturnValue = this.fromXML(aFileIS, theClass);
          }
          catch (IOException e) {
             throw new MarshallingError(B10120, e);
@@ -157,12 +152,7 @@ public class MarshallUtils {
       final Optional<T> aReturnValue;
       if (theFile != null && theFile.exists()) {
          try (InputStream aFileIS = new FileInputStream(theFile)) {
-            try {
-               aReturnValue = this.fromXML(aFileIS, theClass, false, false);
-            }
-            finally {
-               aFileIS.close();
-            }
+            aReturnValue = this.fromXML(aFileIS, theClass, false, false);
          }
          catch (IOException e) {
             throw new MarshallingError(B10120, e);
