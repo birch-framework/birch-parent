@@ -41,7 +41,7 @@ node {
    jdk = tool name: 'GraalVM-JDK11' // Tool name from Jenkins configuration
    env.JAVA_HOME = "${jdk}"
 
-   properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '5'))])
+   properties [[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '5']]]
 
    stage ('Clone') {
       checkout scm
@@ -55,14 +55,11 @@ node {
    }
 
    stage ('Test and Install') {
-      if (Globals.release) {
-         echo "Release branch detected; Test and Install will occur in the Release stage"
-      }
-      else {
-         withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
-            withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn install -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
-            }
+      withCredentials([string(credentialsId: 'GPG-Passphrase',     variable: 'GPG_PASSPHRASE'),
+                       string(credentialsId: 'OAuth2-Test-Secret', variable: 'OAUTH2_SECRET')]) {
+         env.OAUTH2_TEST_SECRET = "${OAUTH2_SECRET}"
+         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+            bat "mvn install -Dgpg.passphrase=\"${GPG_PASSPHRASE}\" -P ci,ossrh"
          }
       }
    }
@@ -80,12 +77,12 @@ node {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
+               bat "mvn deploy:deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
             }
          }
       }
       else {
-         echo "${env.BRANCH_NAME} branch does not publish artifacts"
+         echo "${env.BRANCH_NAME} branch does not publish/release artifacts"
       }
    }
 
