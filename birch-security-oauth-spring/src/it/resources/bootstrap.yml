@@ -39,7 +39,7 @@ birch:
           #jwk-set-uri: https://fs.khalichi.com/adfs/discovery/keys
           client-name: Test Client
           client-id: 22affd0d-d2ba-40ac-a5bc-5a29d4fa2dc7
-          client-secret: Vt2leIcyreL6h8Hz2fsASyHNmsF8rfVqpC5gdP-u
+          client-secret: ${OAUTH2_TEST_SECRET}
           scope: openid email profile
           realm-context-path: /adfs
           disable-ssl-validation: true
@@ -53,7 +53,7 @@ birch:
           groups-claim-name: role
           client-name: Test Client
           client-id: 2775810139299980
-          client-secret: a2f752ca0f89de9eb754c43f4db4696b
+          client-secret: ${FACEBOOK_OAUTH2_TEST_SECRET:}
           scope: openid
           realm-context-path: /fb
           granted-authorities-builder: org.birchframework.test.security.oauth2.TestGrantedAuthsBuilder
