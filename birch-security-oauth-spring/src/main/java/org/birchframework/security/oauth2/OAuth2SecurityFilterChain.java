@@ -92,7 +92,7 @@ import static org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.RS
 
 /**
  * Configures Spring Security as well as JAX-RS resources given an OAuth2 identity provider realm.  Each realm must have a unique
- * base path for each of which a {@link org.springframework.security.authentication.AuthenticationProvider} is configured as well as
+ * base path, which in turn for each a {@link org.springframework.security.authentication.AuthenticationProvider} is configured as well as
  * a CXF server created.
  * @author Keivan Khalichi
  * @see IdPRealm
