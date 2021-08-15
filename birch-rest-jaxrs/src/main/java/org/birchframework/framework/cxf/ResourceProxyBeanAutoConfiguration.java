@@ -14,10 +14,12 @@
 package org.birchframework.framework.cxf;
 
 import java.util.List;
+import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration;
 import org.birchframework.framework.beans.Beans;
@@ -71,10 +73,15 @@ public class ResourceProxyBeanAutoConfiguration implements BeanPostProcessor {
 
    private <T> void registerBean(Class<T> theClass) {
       final var anEnvironment = this.context.getEnvironment();
-      final var aProxiedResource = theClass.getAnnotation(AutoProxy.class);
-      final var aBaseURI = anEnvironment.resolvePlaceholders(aProxiedResource.baseURI());
-      final var aProviders = List.of(this.resourceClientRequestFilter, aProxiedResource.providers());
-      context.registerBean(theClass, () -> JAXRSClientFactory.create(aBaseURI, theClass, aProviders, aProxiedResource.threadSafe()));
+      final var anAutoProxy   = theClass.getAnnotation(AutoProxy.class);
+      final var aBaseURI      = anEnvironment.resolvePlaceholders(anAutoProxy.baseURI());
+      final var aProviders    = List.of(this.resourceClientRequestFilter, anAutoProxy.providers());
+      final var aUserName     = anEnvironment.resolvePlaceholders(anAutoProxy.username());
+      final var aPassword     = anEnvironment.resolvePlaceholders(anAutoProxy.password());
+      final Supplier<T> aProxySupplier = () -> StringUtils.isBlank(aUserName)
+                                             ? JAXRSClientFactory.create(aBaseURI, theClass, aProviders, anAutoProxy.threadSafe())
+                                             : JAXRSClientFactory.create(aBaseURI, theClass, aProviders, aUserName, aPassword, null);
+      context.registerBean(theClass, aProxySupplier);
       log.info("Registered JAX-RS proxy bean of type {}", theClass.getName());
    }
 }

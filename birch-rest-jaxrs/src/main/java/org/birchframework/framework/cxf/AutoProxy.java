@@ -37,4 +37,10 @@ public @interface AutoProxy {
 
    /** Create thread-safe proxy */
    boolean threadSafe() default true;
+
+   /** Optional Username for this resource; some APIs refer to this as Access Key */
+   String username() default "";
+
+   /** Optional Password this resource; some APIs refer to this as Secret */
+   String password() default "";
 }
