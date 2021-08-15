@@ -41,7 +41,7 @@ node {
    jdk = tool name: 'GraalVM-JDK11' // Tool name from Jenkins configuration
    env.JAVA_HOME = "${jdk}"
 
-   properties [buildDiscarder(logRotator(daysToKeepStr: '30', numToKeepStr: '5'))]
+   properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '5'))])
 
    stage ('Clone') {
       checkout scm
