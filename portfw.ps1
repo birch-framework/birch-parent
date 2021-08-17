@@ -10,40 +10,6 @@ function Get-WSLPrimaryIP {
    return $wslIP
 }
 
-function Get-DockerRemoteIP {
-    $hostGatewayIP = (Get-NetIPAddress -InterfaceAlias "*WSL*" -AddressFamily IPv4).IPAddress
-    $hostGatewayIP = $hostGatewayIP -match '^(\d{1,3}\.\d{1,3}\.\d{1,3}\.)(\d{1,3})$'
-    if ($hostGatewayIP) {
-        $hostGatewayIPA = $matches[1]
-        $hostGatewayIPD = $matches[2]
-    }
-
-    $possibleHostIPs = @()
-    for ($i = 1; $i -lt 255; $i++) {
-        if ($i -ne $hostGatewayIPD) {
-            $possibleHostIPs += ($hostGatewayIPA + $i)
-        }
-    }
-    $tasks = $possibleHostIPs | ForEach-Object {
-        [System.Net.NetworkInformation.Ping]::new().SendPingAsync($_)
-    }
-
-    try {
-        [Threading.Tasks.Task]::WaitAll($tasks)
-    }
-    finally {
-        $remoteIP = ($tasks.Result | Where-Object {$_.Status -eq "Success"}).Address.IPAddressToString
-    }
-
-    $found = $remoteIP -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
-    if ($found) {
-        return $remoteIP
-    }
-    else {
-        return $null
-    }
-}
-
 function Set-PortFW([string]$RemoteIP, [string[]]$Ports) {
     if ($RemoteIP) {
         $Ports.ForEach({
