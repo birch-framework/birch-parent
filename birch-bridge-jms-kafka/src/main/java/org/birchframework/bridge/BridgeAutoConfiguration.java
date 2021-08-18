@@ -111,9 +111,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  *     bridge-kafka:                                     # Bridge name; bridge definition defined below is for this bridge
  *       source: kafka                                   # Bridge source type: jms or kafka
  *       strip-newline: true                             # when true, strips newline from the entire payload; defaults to true
- *       after-receive-consumer: io.kafka.AfterReceive   # FQCN of a{@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange after being received by the bridge; optional
- *       before-send-consumer: io.kafka.BeforeSend       # FQCN of a{@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange before being sent by the bridge; optional
- *       error-consumer: io.jms.WhenError                # FQCN of a{@code Consumer<Exchange>} implementation that provides a hook to perform processing of an exchange when an exception occurs within the bridge route; optional
+ *       after-receive-consumer: io.kafka.AfterReceive   # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange after being received by the bridge; optional
+ *       before-send-consumer: io.kafka.BeforeSend       # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange before being sent by the bridge; optional
+ *       error-consumer: io.jms.WhenError                # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform processing of an exchange when an exception occurs within the bridge route; optional
  *       concurrent-consumers: 1                         # Number of Kafka consumers; should match the number of partitions on the Kafka topic; defaults to 1
  *       kafka:                                          # Since source is Kafka, this Kafka definition is for a Kafka consumer
  *         topic: test-topic-out                         # Kafka topic from which this consumer receives messages
