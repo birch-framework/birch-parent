@@ -1,3 +1,16 @@
+<#
+ = Copyright (c) 2021 Birch Framework
+ = This program is free software: you can redistribute it and/or modify
+ = it under the terms of the GNU General Public License as published by
+ = the Free Software Foundation, either version 3 of the License, or
+ = any later version.
+ = This program is distributed in the hope that it will be useful,
+ = but WITHOUT ANY WARRANTY; without even the implied warranty of
+ = MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ = GNU General Public License for more details.
+ = You should have received a copy of the GNU General Public License
+ = along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#>
 param (
    [Parameter(Mandatory=$false)][string]$action
 )
@@ -8,40 +21,6 @@ $ports = [Array]::AsReadOnly(@(2181,9092,8000,8161,61616,1414,9443,7222,7441,999
 function Get-WSLPrimaryIP {
    $wslIP = Invoke-Expression "wsl -- hostname -I | wsl -- cut -d' ' -f1"
    return $wslIP
-}
-
-function Get-DockerRemoteIP {
-    $hostGatewayIP = (Get-NetIPAddress -InterfaceAlias "*WSL*" -AddressFamily IPv4).IPAddress
-    $hostGatewayIP = $hostGatewayIP -match '^(\d{1,3}\.\d{1,3}\.\d{1,3}\.)(\d{1,3})$'
-    if ($hostGatewayIP) {
-        $hostGatewayIPA = $matches[1]
-        $hostGatewayIPD = $matches[2]
-    }
-
-    $possibleHostIPs = @()
-    for ($i = 1; $i -lt 255; $i++) {
-        if ($i -ne $hostGatewayIPD) {
-            $possibleHostIPs += ($hostGatewayIPA + $i)
-        }
-    }
-    $tasks = $possibleHostIPs | ForEach-Object {
-        [System.Net.NetworkInformation.Ping]::new().SendPingAsync($_)
-    }
-
-    try {
-        [Threading.Tasks.Task]::WaitAll($tasks)
-    }
-    finally {
-        $remoteIP = ($tasks.Result | Where-Object {$_.Status -eq "Success"}).Address.IPAddressToString
-    }
-
-    $found = $remoteIP -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
-    if ($found) {
-        return $remoteIP
-    }
-    else {
-        return $null
-    }
 }
 
 function Set-PortFW([string]$RemoteIP, [string[]]$Ports) {
