@@ -24,7 +24,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class PatternLayoutEncoder extends ch.qos.logback.classic.encoder.PatternLayoutEncoder {
 
    static {
-      PatternLayout.defaultConverterMap.replace("d", DateConverter.class.getName());
-      PatternLayout.defaultConverterMap.replace("date", DateConverter.class.getName());
+      PatternLayout.DEFAULT_CONVERTER_MAP.replace("d", DateConverter.class.getName());
+      PatternLayout.DEFAULT_CONVERTER_MAP.replace("date", DateConverter.class.getName());
    }
 }
