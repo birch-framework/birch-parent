@@ -61,9 +61,6 @@ public class JMSToKafkaBridgeFactory extends AbstractBridgeFactory {
    public LambdaRouteBuilder createBridge(final String theName, final BirchProperties.BridgeProperties theProperties, final BirchProperties.BridgesGlobalConfigs theGlobalConfigs)
                              throws Exception {
       // Configure bridge consumer
-      if (theProperties.getJms().destination() == null) {
-         throw new ConfigurationException(B31030);
-      }
       if (StringUtils.isNotBlank(theProperties.getJms().getQueue()) && theProperties.getJms().getQueue().equals(theProperties.getJms().getDeadLetterQueue()))
          throw new ConfigurationException(B31031);
       final var aQueueCF = Arrays.stream(this.context.getApplicationContext().getBeanNamesForType(QueueConnectionFactory.class)).findFirst().orElse(null);
