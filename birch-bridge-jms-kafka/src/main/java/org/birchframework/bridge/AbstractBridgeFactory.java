@@ -110,7 +110,7 @@ public abstract class AbstractBridgeFactory {
    }
 
    protected ErrorHandlerBuilder errorHandlerBuilder(final BridgesGlobalConfigs theGlobalConfigs,
-                                                     final SpringTransactionPolicy theTXPolicy,
+                                                     @Nullable SpringTransactionPolicy theTXPolicy,
                                                      final RateGauge theErrorGauge,
                                                      @Nullable final Consumer<Exchange> theErrorConsumer,
                                                      @Nullable final Supplier<String> theDeadLetterURISupplier) {
