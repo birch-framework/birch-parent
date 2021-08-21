@@ -294,7 +294,7 @@ public class BirchProperties {
       public static final String DEFAULT_USER_NAME_CLAIM_NAME = "email";
       public static final String DEFAULT_GROUPS_CLAIM_NAME    = "role";
 
-      private boolean            enabled              = true;
+      private boolean            enabled                   = true;
       @JsonIgnore
       @Getter(NONE)
       @Setter(NONE)
@@ -305,17 +305,17 @@ public class BirchProperties {
       @Delegate(excludes = ProviderExcludes.class)
       @Getter(NONE)
       @Setter(NONE)
-      private Provider           provider             = new Provider();
-      private String             groupsClaimName      = DEFAULT_GROUPS_CLAIM_NAME;
+      private Provider           provider                  = new Provider();
+      private String             groupsClaimName           = DEFAULT_GROUPS_CLAIM_NAME;
       @Delegate
       @Getter(NONE)
       @Setter(NONE)
-      private Registration       registration         = new Registration();
+      private Registration       registration              = new Registration();
       private String             realmContextPath;
-      private String             logoutUri            = "/logout";
-      private String             logoutRedirectUri    = this.getRedirectUri();
-      private boolean            disableSSLValidation = false;
-      private Class<?>           grantedAuthoritiesBuilder;
+      private String             logoutUri                 = "/logout";
+      private String             logoutRedirectUri         = this.getRedirectUri();
+      private boolean            disableSSLValidation      = false;
+      private Class<?>           grantedAuthoritiesBuilder = null;
 
       IdPRealm() {
          this.provider.setUserNameAttribute(DEFAULT_USER_NAME_CLAIM_NAME);
@@ -340,7 +340,8 @@ public class BirchProperties {
 
       void setIdpType(final String theType) {
          if (StringUtils.isNotBlank(theType)) {
-            this.type = (IdPClassifiable<?>) Beans.findImplementation(IdPClassifiable.class).map(impl -> Beans.valueOf(impl, theType)).orElse(null);
+            this.type = null;
+            Beans.findImplementation(IdPClassifiable.class).map(impl -> Beans.valueOf(impl, theType)).ifPresent(t -> this.type = (IdPClassifiable<?>) t);
          }
       }
 
