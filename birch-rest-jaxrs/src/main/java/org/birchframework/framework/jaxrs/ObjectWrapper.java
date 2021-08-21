@@ -30,8 +30,8 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-@SuppressWarnings({"unused", "InstanceVariableMayNotBeInitialized"})
-public class ObjectWrapper<T> implements Serializable {
+@SuppressWarnings("unused")
+public class ObjectWrapper<T extends Serializable> implements Serializable {
 
    @XmlElement(name = "value")
    private T value;
