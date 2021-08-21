@@ -188,6 +188,7 @@
       <pmd.plugin.version>3.12.0</pmd.plugin.version>
       <spotbugs.plugin.version>3.1.12.2</spotbugs.plugin.version>
       <spotbugs.version>3.1.12</spotbugs.version>
+      <checker.version>3.17.0</checker.version>
       <fabric8.plugin.version>4.3.1</fabric8.plugin.version>
       <groovy.plugin.version>2.1.1</groovy.plugin.version>
       <license.plugin.version>2.0.0</license.plugin.version>
@@ -206,8 +207,8 @@
       <groovy.version>3.0.7</groovy.version>
       <commons-cli.version>1.4</commons-cli.version>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <cucumber.version>5.0.0</cucumber.version>
       <cxf.version>3.4.4</cxf.version>
+      <javax-servlet.version>2.5</javax-servlet.version>
       <camel.version>3.9.0</camel.version>
       <spring-jms.version>5.2.6.RELEASE</spring-jms.version>
       <pooled-jms.version>1.1.1</pooled-jms.version>
@@ -221,8 +222,12 @@
       <docker.base.image>docker.io/openjdk:11.0.6-jdk-slim</docker.base.image>
       <tibco-ems.version>8.3.0</tibco-ems.version>
 
+      <cucumber.version>5.0.0</cucumber.version>
+      <wiremock.version>2.30.1</wiremock.version>
+
       <maven.compiler.source>${java.version}</maven.compiler.source>
       <maven.compiler.target>${java.version}</maven.compiler.target>
+      <animal.sniffer.skip>true</animal.sniffer.skip>
 
       <sonar.organization>birch-framework</sonar.organization>
       <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -354,6 +359,23 @@
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-compiler-plugin</artifactId>
+               <configuration>
+                  <fork>true</fork>
+                  <compilerArguments>
+                     <Xmaxerrs>10000</Xmaxerrs>
+                     <Xmaxwarns>10000</Xmaxwarns>
+                  </compilerArguments>
+                  <annotationProcessors>
+                     <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
+                     <!-- Add all the checkers you want to enable here -->
+                     <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+                  </annotationProcessors>
+                  <compilerArgs combine.children="append">
+                     <!-- -Awarns turns type-checking errors into warnings. -->
+                     <arg>-Awarns</arg>
+                     <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+                  </compilerArgs>
+               </configuration>
                <dependencies>
                   <dependency>
                      <groupId>org.ow2.asm</groupId>
