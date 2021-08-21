@@ -63,6 +63,24 @@
          <version>${lombok.version}</version>
       </dependency>
       <dependency>
+         <groupId>org.checkerframework</groupId>
+         <artifactId>checker</artifactId>
+         <version>${checker.version}</version>
+         <scope>compile</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>org.checkerframework</groupId>
+               <artifactId>checker-qual</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.checkerframework</groupId>
+         <artifactId>checker-qual</artifactId>
+         <version>${checker.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
          <groupId>ma.glasnost.orika</groupId>
          <artifactId>orika-core</artifactId>
          <version>${orika.version}</version>
@@ -126,6 +144,12 @@
          <groupId>com.google.guava</groupId>
          <artifactId>guava</artifactId>
          <version>${guava.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.checkerframework</groupId>
+               <artifactId>checker-qual</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>ch.qos.logback</groupId>
