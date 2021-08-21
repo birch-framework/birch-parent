@@ -114,6 +114,11 @@
          <scope>${servlet.container.scope}</scope>
       </dependency>
       <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>servlet-api</artifactId>
+         <version>${javax-servlet.version}</version>
+      </dependency>
+      <dependency>
          <groupId>org.apache.cxf</groupId>
          <artifactId>cxf-rt-rs-service-description-openapi-v3</artifactId>
          <version>${cxf.version}</version>
