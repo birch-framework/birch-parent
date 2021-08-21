@@ -3,6 +3,7 @@
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=bugs)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=security_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 
