@@ -6,6 +6,7 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=security_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Maven Central](https://img.shields.io/maven-central/v/org.birchframework/birch-parent.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.birchframework%22)
 [![javadoc](https://javadoc.io/badge2/org.birchframework/birch-parent/javadoc.svg)](https://javadoc.io/doc/org.birchframework)
 # Birch Framework: An Accelerator for Microservices Development
