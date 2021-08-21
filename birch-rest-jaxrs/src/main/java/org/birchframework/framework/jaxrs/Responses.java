@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import javax.annotation.Nonnull;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -33,7 +34,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES;
@@ -101,7 +101,7 @@ public class Responses {
     * @param theResponse the object to be wrapped
     * @return an instance of this class
     */
-   public static Responses of(@NonNull final Response theResponse) {
+   public static Responses of(@Nonnull final Response theResponse) {
       return new Responses(theResponse);
    }
 
@@ -635,7 +635,7 @@ public class Responses {
     * @param <O> the type of the return object
     * @return the transformed object instance
     */
-   public <T,O> O map(final Class<T> theClass, @NonNull final Function<T, O> theMapper) {
+   public <T,O> O map(final Class<T> theClass, @Nonnull final Function<T, O> theMapper) {
       if (this.response.hasEntity() && this.ok()) {
          return theMapper.apply(this.entity(theClass).orElse(null));
       }
@@ -652,7 +652,7 @@ public class Responses {
     * @param <O> the type of the return object
     * @return the transformed object instance
     */
-   public <T,O> O map(final GenericType<T> theType, @NonNull final Function<T, O> theMapper) {
+   public <T,O> O map(final GenericType<T> theType, @Nonnull final Function<T, O> theMapper) {
       if (this.response.hasEntity() && this.ok()) {
          return theMapper.apply(this.entity(theType).orElse(null));
       }
@@ -669,7 +669,7 @@ public class Responses {
     * @param <O> the type of the return object
     * @return the transformed object instance
     */
-   public <T,O> O map(final TypeReference<T> theType, @NonNull final Function<T, O> theMapper) {
+   public <T,O> O map(final TypeReference<T> theType, @Nonnull final Function<T, O> theMapper) {
       if (this.response.hasEntity() && this.ok()) {
          return theMapper.apply(this.entity(theType).orElse(null));
       }
