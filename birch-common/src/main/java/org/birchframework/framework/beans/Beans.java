@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.BoundMapperFacade;
@@ -33,8 +35,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.birchframework.dto.ErrorCode;
 import org.birchframework.framework.spring.SpringContext;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.reflections.Configuration;
 import org.reflections.Reflections;
@@ -80,7 +80,7 @@ public class Beans {
     * @param <T> type of the subclass (i.e. the model class)
     * @throws RuntimeException if the superclass is {@link Object}
     */
-   public static <T> void registerMapping (@NonNull final Class<T> theModelClass, final boolean theMapNulls, final String... theIgnoredProperties) {
+   public static <T> void registerMapping (@Nonnull final Class<T> theModelClass, final boolean theMapNulls, final String... theIgnoredProperties) {
       final var aSuperclass = theModelClass.getSuperclass();
       if (aSuperclass == Object.class) {
          throw new RuntimeException(String.format(
@@ -101,7 +101,7 @@ public class Beans {
     * @param <A> type of the source
     * @param <B> type of the target
     */
-   public static <A,B> void registerMapping(@NonNull final Class<A> theA, @NonNull final Class<B> theB,
+   public static <A,B> void registerMapping(@Nonnull final Class<A> theA, @Nonnull final Class<B> theB,
                                             final boolean theMapNulls, final String... theExcludedProperties) {
       final ClassMapBuilder<A, B> aClassMapBuilder = mapperFactory.classMap(theA, theB).mapNulls(theMapNulls).mapNullsInReverse(theMapNulls);
       Stream.of(theExcludedProperties).forEach(aClassMapBuilder::exclude);
@@ -117,7 +117,7 @@ public class Beans {
     * @return instance of target class
     */
    @SuppressWarnings("unchecked")
-   public static <S,T> T mapProperties(@NonNull final S theSource, @NonNull final Class<T> theTargetClass) {
+   public static <S,T> T mapProperties(@Nonnull final S theSource, @Nonnull final Class<T> theTargetClass) {
       final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSource.getClass(), theTargetClass);
       return aBoundMapper.map(theSource);
    }
@@ -131,7 +131,7 @@ public class Beans {
     * @return instance of source class
     */
    @SuppressWarnings("unchecked")
-   public static <S,T> S mapPropertiesReverse(@NonNull final Class<S> theSourceClass, @NonNull final T theTarget) {
+   public static <S,T> S mapPropertiesReverse(@Nonnull final Class<S> theSourceClass, @Nonnull final T theTarget) {
       final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSourceClass, theTarget.getClass());
       return aBoundMapper.mapReverse(theTarget);
    }
@@ -145,7 +145,7 @@ public class Beans {
     * @return a reference to the target object is passed as parameter
     */
    @SuppressWarnings("unchecked")
-   public static <S,T> T mapProperties(@NonNull final S theSource, @NonNull final T theTarget) {
+   public static <S,T> T mapProperties(@Nonnull final S theSource, @Nonnull final T theTarget) {
       final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSource.getClass(), theTarget.getClass());
       return aBoundMapper.map(theSource, theTarget);
    }
@@ -159,7 +159,7 @@ public class Beans {
     * @return a reference to the source object that is passed as parameter
     */
    @SuppressWarnings("unchecked")
-   public static <S,T> S mapPropertiesReverse(@NonNull final S theSource, @NonNull final T theTarget) {
+   public static <S,T> S mapPropertiesReverse(@Nonnull final S theSource, @Nonnull final T theTarget) {
       final var aBoundMapper = (BoundMapperFacade<S, T>) mapperFactory.getMapperFacade(theSource.getClass(), theTarget.getClass());
       return aBoundMapper.mapReverse(theTarget, theSource);
    }
@@ -173,7 +173,7 @@ public class Beans {
     * @param <S> type of the source object
     * @param <T> type of the target object
     */
-   public static <S,T> void mapProperties(@NonNull final S theSource, @NonNull final T theTarget, final boolean theMapNulls,
+   public static <S,T> void mapProperties(@Nonnull final S theSource, @Nonnull final T theTarget, final boolean theMapNulls,
                                           final String... theExcludedProperties) {
       final var aMapperFactory = new DefaultMapperFactory.Builder().mapNulls(theMapNulls).build();
       final var aClassMap = aMapperFactory.classMap(theSource.getClass(), theTarget.getClass());
@@ -190,7 +190,7 @@ public class Beans {
     * @return the wrapped object equivalent of the scalar, a String, or Enum value
     */
    @SuppressWarnings("unchecked")
-   public static <T> Object valueOf(@NonNull final Class<T> theTargetType, @NonNull final String theStringValue) {
+   public static <T> Object valueOf(@Nonnull final Class<T> theTargetType, @Nonnull final String theStringValue) {
       if (String.class.isAssignableFrom(theTargetType)) {
          return theStringValue;
       }
@@ -235,7 +235,7 @@ public class Beans {
    }
 
    @SuppressWarnings("unchecked")
-   public static <T> Optional<Class<? extends T>> findImplementation(@Nullable final StackWalker theStackWalker, @NonNull final Class<T> theInterface,
+   public static <T> Optional<Class<? extends T>> findImplementation(@Nullable final StackWalker theStackWalker, @Nonnull final Class<T> theInterface,
                                                                      final int theBasePackageDepth, final Class<?>... theExcludeClasses) {
       final var aCallerClass = findCallerClass(theStackWalker, DEFAULT_IGNORED_BASE_PACKAGES);
       final Class<T> anImplementation;
@@ -296,16 +296,16 @@ public class Beans {
       }
    }
 
-   public static Set<Class<?>> classesAnnotatedWith(final Class<? extends Annotation> theAnnotationClass, final String... theBasePackages) {
+   public static Set<Class<?>> classesAnnotatedWith(final Class<? extends Annotation> theAnnotationClass, @Nullable String... theBasePackages) {
       final var aReflections = new Reflections((Object[]) theBasePackages);
       return aReflections.getTypesAnnotatedWith(theAnnotationClass);
    }
 
-   public static String computeBasePackageName(@NonNull final Class<?> theClass) {
+   public static String computeBasePackageName(@Nonnull final Class<?> theClass) {
       return computeBasePackageName(theClass, DEFAULT_BASE_PACKAGE_DEPTH);
    }
 
-   public static String computeBasePackageName(@NonNull final Class<?> theClass, final int theDepth) {
+   public static String computeBasePackageName(@Nonnull final Class<?> theClass, final int theDepth) {
       if (theDepth <= 0) {
          throw new AssertionError("Depth must be greater than 0");
       }
