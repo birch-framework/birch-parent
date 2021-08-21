@@ -33,7 +33,7 @@ import org.birchframework.framework.stub.Stub;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.checkerframework.checker.regex.RegexUtil;
+import org.checkerframework.org.plumelib.util.RegexUtil;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import static org.birchframework.dto.BirchErrorCode.*;
