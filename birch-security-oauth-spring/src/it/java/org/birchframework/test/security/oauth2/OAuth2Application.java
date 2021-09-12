@@ -23,7 +23,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
  * @author Keivan Khalichi
  */
 @SpringBootApplication(scanBasePackages = {"org.birchframework.framework.spring",
-                                           "org.birchframework.test.security.oauth2"})
+                                           "org.birchframework.test.security.oauth2"},
+                       excludeName = "org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration")
 @EnableOAuth2ResourceServerSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class OAuth2Application {
