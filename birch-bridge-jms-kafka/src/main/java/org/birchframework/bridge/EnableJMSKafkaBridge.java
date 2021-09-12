@@ -28,6 +28,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Marker annotation decorating configurations to signal auto-configuration of JMS/Kafka bridges.
+ * @author Keivan Khalichi
  */
 @Retention(value = RUNTIME)
 @Target(value = TYPE)
