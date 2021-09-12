@@ -8,19 +8,18 @@ Provides auto-configurable bridges between the following JMS provides and Kafka:
 
 
 # Usage
-To include `birch-jms-kafka-bridge` as a dependency to any Maven project or module, add the following as a dependency in its Maven POM file:
-```xml
-   <dependency>
-      <groupId>org.birchframework</groupId>
-      <artifactId>birch-bridge-jms-kafka</artifactId>
-      <version>1.0.0</version>
-   </dependency>
-```
-**Replace the contents of the `<version>` element with the desired version of Birch Framework.**
+1. To include `birch-jms-kafka-bridge` as a dependency to any Maven project or module, add the following as a dependency in its Maven POM file:
+    ```xml
+       <dependency>
+          <groupId>org.birchframework</groupId>
+          <artifactId>birch-bridge-jms-kafka</artifactId>
+          <version>1.0.0</version>
+       </dependency>
+    ``` 
+    **Replace the contents of the `<version>` element with the desired version of Birch Framework.**
 
-# Configuration
-Refer to [`org.birchframework.bridge.BridgeAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-bridge-jms-kafka/latest/org/birchframework/bridge/BridgeAutoConfiguration.html)
-Javadocs for auto-configuration details.
+2. Annotate your Spring Boot application main class with `EnableJMSKafkaBridge`
+3. Apply the configurations as stated in [`BridgeAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-bridge-jms-kafka/latest/org/birchframework/bridge/BridgeAutoConfiguration.html) 
 
 # Other Dependencies
 You must also include exactly one of the dependencies in the following sections.
@@ -61,5 +60,5 @@ and add the following dependency for EMS auto-configuration:
    <artifactId>birch-ems-support</artifactId>
 </dependency>
 ```
-Once the above steps are complete, refer to [`org.birchframework.ems.EMSAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-ems-support/latest/org/birchframework/ems/EMSAutoConfiguration.html) Javadocs 
+Once the above steps are complete, refer to [`EMSAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-ems-support/latest/org/birchframework/ems/EMSAutoConfiguration.html) Javadocs 
 for auto-configuration of EMS.
