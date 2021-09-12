@@ -15,7 +15,7 @@
 package org.birchframework.framework.kafka;
 
 import java.io.IOException;
-import org.birchframework.framework.bridge.Payload;
+import org.birchframework.dto.payload.Payload;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.kafka.common.serialization.Deserializer;
