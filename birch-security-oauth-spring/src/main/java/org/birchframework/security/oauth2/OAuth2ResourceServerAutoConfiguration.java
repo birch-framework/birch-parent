@@ -45,21 +45,53 @@ import org.springframework.security.oauth2.server.resource.web.DefaultBearerToke
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Spring resources security auto-configuration of CXF JAX-RS resources, in OAuth2 mode.  Since this configuration will create endpoints for
- * all {@link org.springframework.stereotype.Service} annotated classes, it is important that the CXF auto-scanning of components, beans,
+ * Spring resources security auto-configuration of CXF JAX-RS resources, in OpenID Connect-compliant OAuth2 mode.  Since this configuration will create
+ * endpoints for all {@link org.springframework.stereotype.Service} annotated classes, it is important that the CXF auto-scanning of components, beans,
  * and classes be turned off by setting the following values in the application configuration:
  * <pre>
  * cxf.jaxrs.component-scan=false
  * cxf.jaxrs.classes-scan=false
  * </pre>
  * Not turning off scanning will have unpredictable and likely undesirable consequences such as service/endpoint creation error at CXF Bus bootstrap time.
+ * <p/>
+ * Available configuration options are:
+ * <pre>
+ * birch:
+ *   security:
+ *     unsecure-context-paths: /config                                   # Comma seperated set of paths that are excluded from Spring security, and therefore unprotected
+ *     oauth2:                                                           # OAuth2 configurations
+ *       enabled: true                                                   # Enables OAuth2 security; must be enabled for this security realm to be active; defaults to false
+ *       realms:                                                         # Definition of OAuth2 realms
+ *         my-primary-realm:                                             # Realm key
+ *           name: My realm                                              # Realm user-frienly name; optional
+ *           description: My Federated Identity Provider                 # Realm description; optional
+ *           idp-type: primary-idp                                       # IdP type; must be one of the values of an enum that implements the IdPClassifiable interface
+ *           authorization-uri: https://idp.example.com/oauth2/authorize # IdP Authorization URL
+ *           token-uri: https://idp.example.com/oauth2/token             # IdP Access Token URL
+ *           user-info-uri: https://idp.example.com/userinfo             # IdP User Info URL
+ *           issuer-uri: https://idp.example.com/adfs                    # IdP's URL for Key Issuer
+ *           jwk-set-uri: https://idp.example.com/adfs/discovery/keys    # IdP's URL for JWT Web Key (JWK) Set; optional
+ *           user-name-claim-name: email                                 # OAuth2 claim key that contains the username
+ *           groups-claim-name: role                                     # OAuth2 claim key that contains the user's groups (i.e. roles)
+ *           logout-redirect-uri: https://home.example.com               # URL to which the application will send a redirect after logout; can be a relative path
+ *           client-name: Test Client                                    # OAuth2 Client Name provided by the IdP
+ *           client-id: b40cfe91-369b-4df7-9e0b-49fb9515eb15             # OAuth2 Client ID provided by the IdP
+ *           client-secret: a-secret-type-12345                          # OAuth2 Client Secret proivded by the IdP
+ *           scope: openid email profile                                 # Scopes being requested from the IdP; space seperated
+ *           realm-context-path: /adfs                                   # This realm's context path
+ *           disable-ssl-validation: true                                # Disable SSL validation for 'jwk-set-uri'; defaults to false
+ *           granted-authorities-builder: com.example.oidc.MyGAB         # FQCN of a {@link GrantedAuthoritiesBuilder} implementation; optional
+ *         my-alternate-realm:                                           # Realm name for another realm
+ *           ...                                                         # Realm configurations; see above
+ * </pre>
+ * @see EnableOAuth2ResourceServerSecurity
  * @author Keivan Khalichi
  */
 @Configuration(proxyBeanMethods = false)
 @EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration.class,
                                     ManagementWebSecurityAutoConfiguration.class, ReactiveManagementWebSecurityAutoConfiguration.class})
 @EnableConfigurationProperties(BirchProperties.class)
-@ConditionalOnExpression("${birch.security.oauth2.enabled} and '${birch.security.oauth2.mode:STANDARD}'.toUpperCase() == 'STANDARD'  ")
+@ConditionalOnExpression("${birch.security.oauth2.enabled} and '${birch.security.oauth2.mode:STANDARD}'.toUpperCase() == 'STANDARD'")
 @AutoConfigureAfter(CxfAutoConfiguration.class)
 @AutoConfigureBefore({SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
 @RequiredArgsConstructor
