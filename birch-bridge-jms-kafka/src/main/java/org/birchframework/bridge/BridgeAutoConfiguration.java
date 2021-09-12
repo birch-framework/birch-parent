@@ -75,24 +75,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  *   kafka:
  *     admin:
  *       zookeeper-servers: zk1.aws.com:2181             # Comma separated set of Zookeeper server address:port(s); when defined, active affinity is persisted in Zookeeper
- *   bridges:
- *     bridges-global-configs:                           # Global configs for bridges
- *       max-redeliveries: 0                             # Maximum number of redelivery attempts when the bridge route encounters an error; defaults to 0, which means no redelivery attempt; has no effect if DLQ/T is not specified in bridge
- *       redelivery-delay: 1s                            # Fixed interval of time between redelivery retries when the bridge route encounters an error; defaults to 1 second; has no effect if DLQ/T is not specified in bridge
- *       max-redelivery-delay: 1m                        # Max interval of time between redelivery retries when exponential-backoff is true; defaults to 1 minute; has no effect if DLQ/T is not specified in bridge
- *       exponential-backoff: false                      # Exponentially increase delay interval of time between retries by factor of 2.0 up to max-redelivery-delay; defaults to false
- *       affinity: region-1                              # Specifies an affinity to which the bridges defined by this microservice are associated, which dictates that bridges react to service actions for this affinity, only
- *       service-topic: common-service-topic             # Topic for sending and receiving service actions, such as bridge start/stop
- *       auto-start: true                                # Determines whether or not bridges are to be started upon Spring Boot application startup; default to true
- *       zookeeper-base-path: /birch/bridges             # Base path under which the 'active-affinity` znode will be stored within Zookeeper; defaults to '/birch/bridges'
- *     bridge-jms:                                       # Bridge name; bridge definition defined below is for this bridge
+ *   bridges-global-configs:                             # Global configs for bridges
+ *     max-redeliveries: 0                               # Maximum number of redelivery attempts when the bridge route encounters an error; defaults to 0, which means no redelivery attempt; has no effect if DLQ/T is not specified in bridge
+ *     redelivery-delay: 1s                              # Fixed interval of time between redelivery retries when the bridge route encounters an error; defaults to 1 second; has no effect if DLQ/T is not specified in bridge
+ *     max-redelivery-delay: 1m                          # Max interval of time between redelivery retries when exponential-backoff is true; defaults to 1 minute; has no effect if DLQ/T is not specified in bridge
+ *     exponential-backoff: false                        # Exponentially increase delay interval of time between retries by factor of 2.0 up to max-redelivery-delay; defaults to false
+ *     affinity: region-1                                # Specifies an affinity to which the bridges defined by this microservice are associated, which dictates that bridges react to service actions for this affinity, only
+ *     service-topic: common-service-topic               # Topic for sending and receiving service actions, such as bridge start/stop
+ *     auto-start: true                                  # Determines whether or not bridges are to be started upon Spring Boot application startup; default to true
+ *     zookeeper-base-path: /birch/bridges               # Base path under which the 'active-affinity' znode will be stored within Zookeeper; defaults to '/birch/bridges'
+ *   bridges:                                            # Definition of bridges
+ *     my-jms-bridge:                                    # Bridge name; bridge definition defined below is for this bridge
  *       enabled: true                                   # When true, bridge is created by the service, when false, bridge is not created; defaults to true
  *       source: jms                                     # Bridge source type: jms or kafka
  *       strip-newline: true                             # when true, strips newline from the entire payload; defaults to true
  *       filter-properties: prop1,prop2                  # Comma separated set of header properties of the incoming JMS message to forward to the target; all other properties are removed; optional
- *       after-receive-consumer: io.jms.AfterReceive     # FQCN of a{@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange after being received by the bridge; optional
- *       before-send-consumer: io.jms.BeforeSend         # FQCN of a{@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange before being sent by the bridge; optional
- *       error-consumer: io.jms.WhenError                # FQCN of a{@code Consumer<Exchange>} implementation that provides a hook to perform processing of an exchange when an exception occurs within the bridge route; optional
+ *       after-receive-consumer: io.jms.AfterReceive     # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange after being received by the bridge; optional
+ *       before-send-consumer: io.jms.BeforeSend         # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange before being sent by the bridge; optional
+ *       error-consumer: io.jms.WhenError                # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform processing of an exchange when an exception occurs within the bridge route; optional
  *       concurrent-consumers: 1                         # Number of concurrent JMS listeners; defaults to 1 (note, min value is always 1)
  *       transacted: true                                # When true, the bridge operates in a transactional fashion; default to true
  *       jms:                                            # Since source is JMS, this JMS definition is for a JMS consumer
@@ -108,7 +108,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  *         dead-letter-queue: dlq-1                      # When specified, messages that produce exceptions will be sent to this JMS queue; optional
  *       kafka:                                          # Since source is JMS, this Kafka definition is for a Kafka producer
  *         topic: test-topic-in                          # Kafka topic
- *     bridge-kafka:                                     # Bridge name; bridge definition defined below is for this bridge
+ *     my-kafka-bridge:                                  # Bridge name; bridge definition defined below is for this bridge
  *       source: kafka                                   # Bridge source type: jms or kafka
  *       strip-newline: true                             # when true, strips newline from the entire payload; defaults to true
  *       after-receive-consumer: io.kafka.AfterReceive   # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange after being received by the bridge; optional
