@@ -13,47 +13,41 @@
  ==============================================================*/
 package org.birchframework.framework.kafka;
 
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.ConcurrentHashMap;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.CollectionUtils;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * {@link KafkaAdminUtils} metrics bean that obtains and publishes Kafka metrics supplied by the utility class, to Micrometer.  Registers metrics upon startup
  * and re-registers them at configurable intervals.  Samples metrics upon startup and at configurable intervals.
  * @author Keivan Khalichi
  */
+@RequiredArgsConstructor(access = PACKAGE)
 @Slf4j
 public class KafkaAdminUtilsMetrics {
 
-   private final KafkaAdminUtils                    kafkaAdminUtils;
-   private final MeterRegistry                      meterRegistry;
-   private final Map<String, AtomicReference<Long>> topicLags = new HashMap<>();
-   private final Map<String, Gauge>                 gauges    = new Hashtable<>();
+   private final KafkaAdminUtils    kafkaAdminUtils;
+   private final MeterRegistry      meterRegistry;
+   private final Map<String, Long>  topicLags = new ConcurrentHashMap<>();
+   private final Map<String, Gauge> gauges    = new ConcurrentHashMap<>();
 
-   KafkaAdminUtilsMetrics(final KafkaAdminUtils theKafkaAdminUtils, final MeterRegistry theMeterRegistry) {
-      this.kafkaAdminUtils = theKafkaAdminUtils;
-      this.meterRegistry   = theMeterRegistry;
-   }
-
+   /**
+    * Updated topic consumer lags on schedule.
+    */
    @Scheduled(fixedRateString = "#{${birch.kafka.admin.sample-interval-ms:} ?: T(java.time.Duration).ofSeconds(5).toMillis()}")
    void sampleGauges() {
-      final var aTopicLags = this.kafkaAdminUtils.topicLags();
-      aTopicLags.forEach((topic, lag) -> {
-         if (this.topicLags.containsKey(topic)) {
-            this.topicLags.get(topic).set(lag);
-         }
-         else {
-            this.topicLags.put(topic, new AtomicReference<>(lag));
-         }
-      });
+      this.kafkaAdminUtils.topicLags().entrySet().stream()
+                                                 .filter(e -> !e.getKey().startsWith("_"))
+                                                 .forEach(e -> this.topicLags.put(e.getKey(), e.getValue()));
       if (log.isDebugEnabled()) {
-         log.debug("Sampled gauges from data: {}", this.topicLags.toString());
+         log.debug("Sampled gauges from data: {}", this.topicLags);
       }
    }
 
@@ -66,13 +60,13 @@ public class KafkaAdminUtilsMetrics {
          this.gauges.forEach((topic, gauge) -> this.meterRegistry.remove(gauge.getId()));
          this.gauges.clear();
       }
-      this.topicLags.forEach((topic, atomicLag) -> {
-                       final var aGauge = Gauge.builder("birch.kafka.consumer.lag", atomicLag::get)
-                                               .description(String.format("%s consumer lag", topic))
-                                               .tag("topic", topic)
-                                               .register(this.meterRegistry);
-                       log.info("Registered consumer lag gauge: {}", aGauge.getId());
-                       this.gauges.put(topic, aGauge);
-                    });
+      this.topicLags.forEach((topic, lag) -> {
+         final var aGauge = Gauge.builder("birch.kafka.consumer.lag", () -> this.topicLags.get(topic))
+                                 .description(String.format("%s consumer lag", topic))
+                                 .tag("topic", topic)
+                                 .register(this.meterRegistry);
+         log.info("Registered consumer lag gauge: {}", aGauge.getId());
+         this.gauges.put(topic, aGauge);
+      });
    }
 }
