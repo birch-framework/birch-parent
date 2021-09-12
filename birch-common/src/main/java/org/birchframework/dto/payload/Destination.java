@@ -12,7 +12,7 @@
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
 
-package org.birchframework.framework.bridge;
+package org.birchframework.dto.payload;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import static org.birchframework.framework.bridge.DestinationType.*;
+import static org.birchframework.dto.payload.DestinationType.*;
 
 @Getter
 @Setter

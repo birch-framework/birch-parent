@@ -12,7 +12,7 @@
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
 
-package org.birchframework.framework.bridge;
+package org.birchframework.dto.payload;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -34,8 +34,8 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.*;
 import static org.birchframework.dto.BirchErrorCode.B20150;
 
 /**
- * Abstraction of Confluent Connector payloads.  Must be specialized in subclass implementations specific to incoming message payloads.
- * Subclasses will be the container for source message payloads.
+ * Abstraction of bridge payloads.  This class has inspiration from Avro, but it is not 100% Avro compliant. Must be specialized in subclass implementations
+ * specific to incoming message payloads.  Subclasses will be the container for source message payloads.
  * @author Keivan Khalichi
  */
 @JsonInclude(value = NON_EMPTY, content = NON_NULL)
@@ -43,7 +43,7 @@ import static org.birchframework.dto.BirchErrorCode.B20150;
 @Getter
 @SuppressWarnings("unused")
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-public class Payload<T> implements Serializable {
+public class Payload<T extends Serializable> implements Serializable {
 
    private static final ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json().build();
 

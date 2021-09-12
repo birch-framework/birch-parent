@@ -25,7 +25,7 @@ import javax.annotation.PostConstruct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.birchframework.dto.DisplayableOption;
 import org.birchframework.framework.beans.Beans;
-import org.birchframework.framework.bridge.Destination;
+import org.birchframework.dto.payload.Destination;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -38,7 +38,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import static org.birchframework.configuration.BirchProperties.OAuth2Mode.STANDARD;
 import static org.birchframework.dto.BirchErrorCode.*;
 import static lombok.AccessLevel.NONE;
-import static org.birchframework.framework.bridge.DestinationType.*;
+import static org.birchframework.dto.payload.DestinationType.*;
 
 /**
  * Birch Framework properties.

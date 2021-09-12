@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.birchframework.configuration.BirchProperties.BridgeProperties.BridgeSource.JMS;
-import static org.birchframework.framework.bridge.DestinationType.TOPIC;
+import static org.birchframework.dto.payload.DestinationType.TOPIC;
 
 /**
  * Utility class for JMS bridge tests.

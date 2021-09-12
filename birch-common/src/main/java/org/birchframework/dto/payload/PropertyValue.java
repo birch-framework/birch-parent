@@ -12,7 +12,7 @@
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
 
-package org.birchframework.framework.bridge;
+package org.birchframework.dto.payload;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -32,7 +32,7 @@ import lombok.ToString.Include;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static org.birchframework.framework.bridge.PropertyValue.PropertyType.*;
+import static org.birchframework.dto.payload.PropertyValue.PropertyType.*;
 
 /**
  * Generic property value.

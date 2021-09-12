@@ -31,7 +31,7 @@ import org.birchframework.bridge.dataformat.PayloadDataFormat;
 import org.birchframework.configuration.BirchProperties;
 import org.birchframework.configuration.ConfigurationException;
 import org.birchframework.framework.beans.Beans;
-import org.birchframework.framework.bridge.DestinationType;
+import org.birchframework.dto.payload.DestinationType;
 
 import static org.apache.camel.LoggingLevel.INFO;
 import static org.birchframework.bridge.TransactedPolicyType.*;

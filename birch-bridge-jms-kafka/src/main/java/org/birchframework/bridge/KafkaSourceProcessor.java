@@ -16,7 +16,7 @@ package org.birchframework.bridge;
 import java.util.UUID;
 import java.util.function.Consumer;
 import org.birchframework.dto.ContextMapKeys;
-import org.birchframework.framework.bridge.Payload;
+import org.birchframework.dto.payload.Payload;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.commons.lang3.StringUtils;

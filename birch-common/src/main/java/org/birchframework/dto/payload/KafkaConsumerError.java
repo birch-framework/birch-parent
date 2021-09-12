@@ -11,24 +11,31 @@
  = You should have received a copy of the GNU General Public License
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
+package org.birchframework.dto.payload;
 
-package org.birchframework.framework.bridge;
+import org.birchframework.dto.BirchErrorCode;
+import org.birchframework.dto.ErrorResponse;
+import org.birchframework.framework.exception.BaseRuntimeException;
 
 /**
- * JMS destination types
+ * Kafka send error.
  * @author Keivan Khalichi
  */
-public enum DestinationType {
-   QUEUE("queue"),
-   TOPIC("topic");
+public class KafkaConsumerError extends BaseRuntimeException {
 
-   private String stringValue;
-
-   DestinationType(final String theStringValue) {
-      this.stringValue = theStringValue;
+   public KafkaConsumerError(final ErrorResponse theErrorResponse, final Throwable theCause) {
+      super(theErrorResponse, theCause);
    }
 
-   public String asString() {
-      return this.stringValue;
+   public KafkaConsumerError(final ErrorResponse theErrorResponse) {
+      super(theErrorResponse);
+   }
+
+   public KafkaConsumerError(final BirchErrorCode theErrorCode) {
+      super(theErrorCode);
+   }
+
+   public KafkaConsumerError(final BirchErrorCode theErrorCode, final Throwable theCause) {
+      super(theErrorCode, theCause);
    }
 }
