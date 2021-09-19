@@ -15,7 +15,7 @@
 #================================================================
 
 #
-# Do not deviate from default tag naming convention of birch-common-<version>
+# Do not deviate from default tag naming convention of <artifactId>-<version>
 # where <version> is in the format <major>.<minor>.<release>
 #
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -46,6 +46,10 @@ git tag -a ${TAG} -m "release ${VERSION}"
 mvn versions:set -q -DnewVersion=${NEXT_VERSION} -DgenerateBackupPoms=false
 [ $? -ne 0 ] && exit 8
 
+sed -e "s|<birch.version>.*</birch.version>|<birch.version>${NEXT_VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new
+mv birch-starter/pom.xml.new birch-starter/pom.xml
+[ $? -ne 0 ] && exit 8
+
 find . -name pom.xml -exec git add {} +
 [ $? -ne 0 ] && exit 9
 
@@ -68,6 +72,6 @@ git commit -m "New release"
 [ $? -ne 0 ] && exit 15
 
 git push --set-upstream origin release/${VERSION}
-[[ $? -ne 0 ]] && exit 16
+[ $? -ne 0 ] && exit 16
 
 git checkout ${CURRENT_BRANCH}
