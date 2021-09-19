@@ -28,42 +28,46 @@
       <version>1.1.1-SNAPSHOT</version>
    </parent>
 
+   <properties>
+      <birch.version>1.1.1-SNAPSHOT</birch.version>
+   </properties>
+
    <dependencyManagement>
       <dependencies>
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-common</artifactId>
-            <version>${project.version}</version>
+            <version>${birch.version}</version>
          </dependency>
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-rest-jaxrs</artifactId>
-            <version>${project.version}</version>
+            <version>${birch.version}</version>
          </dependency>
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-spring-kafka</artifactId>
-            <version>${project.version}</version>
+            <version>${birch.version}</version>
          </dependency>
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-kafka-utils</artifactId>
-            <version>${project.version}</version>
+            <version>${birch.version}</version>
          </dependency>
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-jms-kafka-bridge</artifactId>
-            <version>${project.version}</version>
+            <version>${birch.version}</version>
          </dependency>
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-security-oauth-spring</artifactId>
-            <version>${project.version}</version>
+            <version>${birch.version}</version>
          </dependency>
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-ems-support</artifactId>
-            <version>${project.version}</version>
+            <version>${birch.version}</version>
          </dependency>
       </dependencies>
    </dependencyManagement>
