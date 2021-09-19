@@ -26,9 +26,6 @@ git checkout master
 git pull
 [ $? -ne 0 ] && exit 3
 
-mvn clean install
-[ $? -ne 0 ] && exit 4
-
 ARTIFACT_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
 ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.artifactId -q -DforceStdout)
 [ $? -ne 0 ] && exit 5
@@ -39,6 +36,9 @@ NEXT_VERSION=`echo "${VERSION%.*}.$((${VERSION##*.}+1))"`
 read -e -p "Next development version: " -i ${NEXT_VERSION}-SNAPSHOT NEXT_VERSION
 [ $? -ne 0 ] && exit 6
 
+mvn clean install
+[ $? -ne 0 ] && exit 4
+
 TAG=${ARTIFACT_ID}-${VERSION}
 git tag -a ${TAG} -m "release ${VERSION}"
 [ $? -ne 0 ] && exit 7
@@ -47,6 +47,7 @@ mvn versions:set -q -DnewVersion=${NEXT_VERSION} -DgenerateBackupPoms=false
 [ $? -ne 0 ] && exit 8
 
 sed -e "s|<birch.version>.*</birch.version>|<birch.version>${NEXT_VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new
+[ $? -ne 0 ] && exit 8
 mv birch-starter/pom.xml.new birch-starter/pom.xml
 [ $? -ne 0 ] && exit 8
 
