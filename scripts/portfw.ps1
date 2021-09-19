@@ -19,8 +19,7 @@ param (
 $ports = [Array]::AsReadOnly(@(2181,9092,8000,8161,61616,1414,9443,7222,7441,9999))
 
 function Get-WSLPrimaryIP {
-   $wslIP = Invoke-Expression "wsl -- hostname -I | wsl -- cut -d' ' -f1"
-   return $wslIP
+    return wsl -- hostname -I | Select-Object -Index 0 | ForEach-Object { $_.split(" ")[0] }
 }
 
 function Set-PortFW([string]$RemoteIP, [string[]]$Ports) {
@@ -61,8 +60,8 @@ function Save-DockerHost([string]$RemoteIP) {
 switch ($action) {
     "set" {
         $remoteIP = Get-WSLPrimaryIP
-        "Docker remote IP: $remoteIP"
         Set-PortFW -Ports $PORTS -RemoteIP $remoteIP
+        Show-PortFW
         Save-DockerHost -RemoteIP $remoteIP
         continue
     }
