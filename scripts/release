@@ -46,7 +46,7 @@ git tag -a ${TAG} -m "release ${VERSION}"
 mvn versions:set -q -DnewVersion=${NEXT_VERSION} -DgenerateBackupPoms=false
 [ $? -ne 0 ] && exit 8
 
-sed -e "s|<birch.version>.*</birch.version>|<birch.version>${NEXT_VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new
+sed -e "s|<birch.version>.*</birch.version>|<birch.version>${VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new
 [ $? -ne 0 ] && exit 8
 mv birch-starter/pom.xml.new birch-starter/pom.xml
 [ $? -ne 0 ] && exit 8
