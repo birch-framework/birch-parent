@@ -111,7 +111,10 @@ public class KafkaAdminUtils {
                                 log.warn("Unable to retrieve topic offsets for a consumer group; error message: {}", Throwables.getRootCause(e).getMessage());
                              }
                           });
-         final var aTopicEndOffsets = this.kafkaConsumer.endOffsets(aTopicAndOffsetMap.keySet());
+         final Map<TopicPartition, Long> aTopicEndOffsets;
+         synchronized(this.kafkaConsumer) {
+            aTopicEndOffsets = this.kafkaConsumer.endOffsets(aTopicAndOffsetMap.keySet());
+         }
          final var aTopicPartitionLagMap = aTopicAndOffsetMap.entrySet()
                                                              .stream()
                                                              .collect(Collectors.toMap(
