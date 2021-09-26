@@ -11,7 +11,6 @@
  = You should have received a copy of the GNU General Public License
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
-
 package org.birchframework.framework.i18n;
 
 import java.net.URI;
@@ -19,6 +18,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.birchframework.configuration.BirchProperties;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -38,6 +38,11 @@ import org.springframework.context.annotation.ComponentScan;
                 "org.springframework.boot.autoconfigure.jackson"})
 @EnableConfigurationProperties(BirchProperties.class)
 public class TestApplication {
+
+   @SuppressWarnings("VariableArgumentMethod")
+   public static void main(String... theArgs) {
+      SpringApplication.run(TestApplication.class);
+   }
 
    @Bean
    @ConditionalOnMissingBean(ClientRequestFilter.class)
