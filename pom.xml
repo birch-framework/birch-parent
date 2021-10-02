@@ -140,6 +140,7 @@
             <packaging.type>jar</packaging.type>
             <servlet.container.scope>runtime</servlet.container.scope>
             <active.profile>ci</active.profile>
+            <project.scm.id>github</project.scm.id>
             <skipITs>true</skipITs>
          </properties>
          <build>
