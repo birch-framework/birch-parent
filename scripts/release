@@ -46,17 +46,15 @@ git tag -a ${TAG} -m "release ${VERSION}"
 mvn versions:set -q -DnewVersion=${NEXT_VERSION} -DgenerateBackupPoms=false
 [ $? -ne 0 ] && exit 8
 
-sed -e "s|<birch.version>.*</birch.version>|<birch.version>${VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new
-[ $? -ne 0 ] && exit 8
+sed -e "s|<birch.version>.*</birch.version>|<birch.version>${NEXT_VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new && \
 mv birch-starter/pom.xml.new birch-starter/pom.xml
 [ $? -ne 0 ] && exit 8
 
-sed -e "s|<version>.*</version>|<version>${VERSION}</version>|g" README.md > README.md.new
-[ $? -ne 0 ] && exit 8
+sed -e "s|<version>.*</version>|<version>${VERSION}</version>|g" README.md > README.md.new && \
 mv README.md.new README.md
 [ $? -ne 0 ] && exit 8
 
-git add .
+find . -name pom.xml -exec git add {} + && git add README.md
 [ $? -ne 0 ] && exit 9
 
 git commit -m "release ${VERSION}"
@@ -69,6 +67,10 @@ git checkout ${TAG} -b release/${VERSION}
 [ $? -ne 0 ] && exit 12
 
 mvn versions:set -q -DnewVersion=${VERSION} -DgenerateBackupPoms=false
+[ $? -ne 0 ] && exit 13
+
+sed -e "s|<birch.version>.*</birch.version>|<birch.version>${VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new && \
+mv birch-starter/pom.xml.new birch-starter/pom.xml
 [ $? -ne 0 ] && exit 13
 
 find . -name pom.xml -exec git add {} +
