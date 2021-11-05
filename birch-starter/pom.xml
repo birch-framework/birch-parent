@@ -71,11 +71,4 @@
          </dependency>
       </dependencies>
    </dependencyManagement>
-
-   <dependencies>
-      <dependency>
-         <groupId>org.birchframework</groupId>
-         <artifactId>birch-common</artifactId>
-      </dependency>
-   </dependencies>
 </project>
