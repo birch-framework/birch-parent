@@ -25,11 +25,11 @@
    <parent>
       <groupId>org.birchframework</groupId>
       <artifactId>birch-parent</artifactId>
-      <version>1.1.2-SNAPSHOT</version>
+      <version>1.1.2</version>
    </parent>
 
    <properties>
-      <birch.version>1.1.2-SNAPSHOT</birch.version>
+      <birch.version>1.1.2</birch.version>
    </properties>
 
    <dependencyManagement>
