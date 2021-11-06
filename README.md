@@ -64,6 +64,7 @@ Another way of using Birch Framework is to include it as a module dependency in 
             <artifactId>birch-starter</artifactId>
             <version>1.1.2</version>
             <scope>import</scope>
+            <type>pom</type>
          </dependency>
       </dependencies>
    </dependencyManagement>
