@@ -86,14 +86,4 @@ node {
       }
    }
 
-   stage ('Site Deploy') {
-      if (Globals.release) {
-         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn site site:stage scm-publish:publish-scm -P ci"
-         }
-      }
-      else {
-         echo "${env.BRANCH_NAME} branch does not deploy site"
-      }
-   }
 }
