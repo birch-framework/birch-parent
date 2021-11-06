@@ -163,6 +163,10 @@
                   <artifactId>maven-site-plugin</artifactId>
                </plugin>
                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-scm-publish-plugin</artifactId>
+               </plugin>
+               <plugin>
                   <groupId>org.sonatype.plugins</groupId>
                   <artifactId>nexus-staging-maven-plugin</artifactId>
                </plugin>
@@ -200,8 +204,7 @@
       <jxr.plugin.version>3.1.1</jxr.plugin.version>
       <site.plugin.version>3.8.2</site.plugin.version>
       <project-info.plugin.version>3.1.2</project-info.plugin.version>
-      <maven-scm-git.provider.version>1.11.2</maven-scm-git.provider.version>
-      <wagon-scm.extension.version>3.4.3</wagon-scm.extension.version>
+      <maven-scm-publish.plugin.version>3.1.0</maven-scm-publish.plugin.version>
       <nexus-staging.plugin.version>1.6.8</nexus-staging.plugin.version>
       <maven-gpg.plugin.vesrion>3.0.1</maven-gpg.plugin.vesrion>
 
@@ -209,7 +212,7 @@
 
       <doxia.version>1.9</doxia.version>
       <doxia.site-renderer.version>1.9.1</doxia.site-renderer.version>
-      <groovy.version>3.0.7</groovy.version>
+      <groovy.version>3.0.8</groovy.version>
       <commons-cli.version>1.4</commons-cli.version>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <cxf.version>3.4.4</cxf.version>
@@ -614,7 +617,6 @@
                <executions>
                   <execution>
                      <id>attach-descriptor</id>
-                     <!--<phase>site</phase>-->
                      <goals>
                         <goal>attach-descriptor</goal>
                      </goals>
@@ -622,7 +624,7 @@
                </executions>
                <configuration>
                   <skip>false</skip>
-                  <skipDeploy>false</skipDeploy>
+                  <skipDeploy>true</skipDeploy>
                   <reporting>
                      <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -644,23 +646,23 @@
                      </plugin>
                   </reporting>
                </configuration>
-               <dependencies>
-                  <dependency>
-                     <groupId>org.apache.maven.scm</groupId>
-                     <artifactId>maven-scm-provider-gitexe</artifactId>
-                     <version>${maven-scm-git.provider.version}</version>
-                  </dependency>
-                  <dependency>
-                     <groupId>org.apache.maven.scm</groupId>
-                     <artifactId>maven-scm-manager-plexus</artifactId>
-                     <version>${maven-scm-git.provider.version}</version>
-                  </dependency>
-                  <dependency>
-                     <groupId>org.apache.maven.wagon</groupId>
-                     <artifactId>wagon-scm</artifactId>
-                     <version>${wagon-scm.extension.version}</version>
-                  </dependency>
-               </dependencies>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-scm-publish-plugin</artifactId>
+               <version>${maven-scm-publish.plugin.version}</version>
+               <executions>
+                  <execution>
+                     <id>site-deploy</id>
+                     <phase>site-deploy</phase>
+                     <goals>
+                        <goal>publish-scm</goal>
+                     </goals>
+                  </execution>
+               </executions>
+               <configuration>
+                  <scmBranch>master</scmBranch>
+               </configuration>
             </plugin>
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
@@ -743,19 +745,5 @@
          </plugin>
       </plugins>
 
-      <extensions>
-         <extension>
-            <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon-scm</artifactId>
-         </extension>
-         <extension>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-manager-plexus</artifactId>
-         </extension>
-         <extension>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-provider-gitexe</artifactId>
-         </extension>
-      </extensions>
    </build>
 </project>
