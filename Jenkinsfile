@@ -59,7 +59,7 @@ node {
                        string(credentialsId: 'OAuth2-Test-Secret', variable: 'OAUTH2_SECRET')]) {
          env.OAUTH2_TEST_SECRET = "${OAUTH2_SECRET}"
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn install -Dgpg.passphrase=\"${GPG_PASSPHRASE}\" -P ci,ossrh"
+            bat "mvn install -P ci,ossrh -Dmaven.javadoc.skip=true -Dgpg.passphrase=\"${GPG_PASSPHRASE}\""
          }
       }
    }
@@ -77,7 +77,7 @@ node {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn jar:jar deploy:deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
+               bat "mvn -P ci,ossrh deploy -Dpmd.skip=true -Dcpd.skip=true -Dfindbugs.skip=true -DskipTests=true -Djacoco.skip=true -Dsonar.skip=true -Dgpg.passphrase=\"${PASSPHRASE}\""
             }
          }
       }
