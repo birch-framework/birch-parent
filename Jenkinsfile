@@ -77,7 +77,7 @@ node {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn deploy:deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
+               bat "mvn jar:jar deploy:deploy -Dgpg.passphrase=\"${PASSPHRASE}\" -P ci,ossrh"
             }
          }
       }
@@ -87,10 +87,12 @@ node {
    }
 
    stage ('Site Deploy') {
+      echo "${env.BRANCH_NAME} branch does not deploy site"
       if (Globals.release) {
-         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn site site:stage scm-publish:publish-scm -P ci"
-         }
+         echo "Site Deploy is temporarily disabled"
+         //withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+         //   bat "mvn site site:stage scm-publish:publish-scm -P ci"
+         //}
       }
       else {
          echo "${env.BRANCH_NAME} branch does not deploy site"
