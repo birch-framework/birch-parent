@@ -608,6 +608,7 @@
                <artifactId>maven-deploy-plugin</artifactId>
                <configuration>
                   <skip>true</skip>
+                  <deployAtEnd>true</deployAtEnd>
                </configuration>
             </plugin>
             <plugin>
