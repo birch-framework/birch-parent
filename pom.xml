@@ -659,10 +659,7 @@
                <configuration>
                   <pubScmUrl>${project.distributionManagement.site.url}</pubScmUrl>
                   <scmBranch>master</scmBranch>
-                  <!--suppress MavenModelInspection -->
-                  <username>${env.GIT_USERNAME}</username>
-                  <!--suppress MavenModelInspection -->
-                  <password>${env.GIT_PASSWORD}</password>
+                  <serverId>github</serverId>
                </configuration>
             </plugin>
             <plugin>
