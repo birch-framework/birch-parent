@@ -90,12 +90,8 @@ node('ubuntu-node') {
       echo "${env.BRANCH_NAME} branch does not deploy site"
       if (Globals.release) {
          echo "Site Deploy is temporarily disabled"
-         withCredentials([usernamePassword (credentialsId: 'GitHub-CICD-Automation', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            env.GIT_USERNAME = "${USERNAME}"
-            env.GIT_PASSWORD = "${PASSWORD}"
-            withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               sh "mvn -P bci site site:stage scm-publish:publish-scm"
-            }
+         withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+            sh "mvn -P bci site site:stage scm-publish:publish-scm"
          }
       }
       else {
