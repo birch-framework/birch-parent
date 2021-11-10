@@ -14,6 +14,7 @@
 
 package org.birchframework.framework.regex;
 
+import lombok.Getter;
 import org.checkerframework.checker.regex.qual.Regex;
 
 /**
@@ -22,6 +23,8 @@ import org.checkerframework.checker.regex.qual.Regex;
  */
 @Regex
 @RegexBinding("Age:\\s+(\\d+)\\s+\\|\\s+Last Name:\\s+(\\w*)\\s+\\|\\s+First Name:(\\s+)(\\w*)\\s+\\|\\s+Alive:\\s+(y|n|Y|N|t|f|T|F)\\s+\\|\\s+(.*)")
+@Getter
+@SuppressWarnings({"unused", "InstanceVariableMayNotBeInitialized"})
 public class TestParseClass {
 
    @CaptureGroup(1)
@@ -38,38 +41,6 @@ public class TestParseClass {
 
    @CaptureGroup(6)
    private Type type;
-
-   /**
-    * Getter for {@link #age}
-    * @returns Value of {@link #age}
-    */
-   public int getAge() {
-      return age;
-   }
-
-   /**
-    * Getter for {@link #lastName}
-    * @returns Value of {@link #lastName}
-    */
-   public String getLastName() {
-      return lastName;
-   }
-
-   /**
-    * Getter for {@link #firstName}
-    * @returns Value of {@link #firstName}
-    */
-   public String getFirstName() {
-      return firstName;
-   }
-
-   /**
-    * Getter for {@link #type}
-    * @returns Value of {@link #type}
-    */
-   public Type getType() {
-      return type;
-   }
 
    public enum Type {
       ROCK_STAR,
