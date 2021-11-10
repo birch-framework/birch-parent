@@ -45,6 +45,7 @@ public enum BirchErrorCode implements ErrorCode<BirchErrorCode> {
    B12000(PARSER, "Parser not configured properly"),
    B12010(PARSER, "Parse types list is empty"),
    B12020(PARSER, "Input is null or blank"),
+   B12025(PARSER, "The stream of input values must not be a parallel stream"),
    B12030(PARSER, "Error setting value of capture group"),
    B12040(PARSER, "Duplicate capture groups defined in the target class"),
    B12045(PARSER, "Invalid regular expression definition and/or number of capture groups"),
