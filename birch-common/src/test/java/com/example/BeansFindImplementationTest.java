@@ -31,7 +31,7 @@ public class BeansFindImplementationTest {
    public void testFindImplementation() {
       Beans.findImplementation(ErrorCode.class, BirchErrorCode.class).ifPresentOrElse(
          c -> assertThat(TestErrorCode.class.isAssignableFrom(c)).isTrue(),
-         () -> fail("Expected the class {}", TestErrorCode.class.getName())
+         () -> fail("Expected the class %s", TestErrorCode.class.getName())
       );
    }
 }

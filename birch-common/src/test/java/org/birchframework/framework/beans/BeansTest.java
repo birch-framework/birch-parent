@@ -135,7 +135,7 @@ public class BeansTest {
          assertThat(aTestBeanBean).isEqualTo(anOtherTestBean);
       }
       catch (Exception e) {
-         fail("Expected a bean of type {}, but received exception: {}: {}", TestBean.class.getName(), e, e.getMessage());
+         fail("Expected a bean of type %s, but received exception: %s: %s", TestBean.class.getName(), e.getClass().getName(), e.getMessage());
       }
    }
 }
