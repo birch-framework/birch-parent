@@ -13,10 +13,11 @@
  ==============================================================*/
 package org.birchframework.framework.beans;
 
-import org.birchframework.framework.spring.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.support.GenericApplicationContext;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.birchframework.framework.beans.Status.*;
@@ -35,6 +36,9 @@ public class BeansTest {
    private static final Integer TEST_AGE   = 29;
    private static final boolean IS_ACTIVE  = false;
    private static final Status  STATUS     = RETIRED;
+
+   @Autowired
+   private GenericApplicationContext context;
 
    private TestBean testBean;
 
@@ -128,7 +132,7 @@ public class BeansTest {
          assertThat(aTestBeanInitialized).isNotNull();
          assertThat(aTestBeanInitialized).isEqualTo(this.testBean);
          final var anOtherTestBean = new TestBean("Farnaz", "Mehdavi", 41, true, WORKING);
-         SpringContext.registerBean(TestBean.class, () -> anOtherTestBean);
+         this.context.registerBean(TestBean.class, () -> anOtherTestBean);
          final var aTestBeanBean = Beans.findBeanOrCreateInstance(TestBean.class);
          assertThat(aTestBeanBean).isNotNull();
          assertThat(aTestBeanBean).isNotEqualTo(this.testBean);
