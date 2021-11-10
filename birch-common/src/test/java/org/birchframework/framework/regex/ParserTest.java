@@ -35,6 +35,7 @@ public class ParserTest {
       final var aParser = Parser.of(TestParseClass.class);
       assertThat(aParser).isNotNull();
       final var anInput = Files.readString(Paths.get("src/test/resources/parser-test-file.txt"));
+      assertThat(anInput).isNotBlank();
       final var anObjectsList = aParser.parse(anInput);
       assertThat(anObjectsList).isNotNull();
       assertThat(anObjectsList).isNotEmpty();
