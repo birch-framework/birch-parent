@@ -11,7 +11,6 @@
  = You should have received a copy of the GNU General Public License
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
-
 package org.birchframework.framework.regex;
 
 import java.lang.reflect.Field;
@@ -27,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import org.birchframework.framework.beans.Beans;
 import org.birchframework.framework.stub.Stub;
@@ -55,7 +55,7 @@ public class Parser {
     * Constructor that prepares the parser given the class types.
     * @param theTypes
     */
-   Parser(final Class<?>[] theTypes) {
+   Parser(@Nonnull Class<?>[] theTypes) {
       this.types = Arrays.stream(theTypes).collect(Collectors.toMap(
          clazz -> clazz,
          clazz -> {
@@ -95,7 +95,7 @@ public class Parser {
     * @return a parser instance
     */
    @SuppressWarnings("VariableArgumentMethod")
-   public static Parser of(final Class<?>... theTypes) {
+   public static Parser of(@Nonnull Class<?>... theTypes) {
       if (ArrayUtils.isEmpty(theTypes)) {
          throw new ParseException(B12010);
       }
@@ -104,25 +104,29 @@ public class Parser {
 
    /**
     * Parses the input against the class types provided in the {@link #of(Class[])} method.  This method is thread-safe.
-    * @param theInput the input to be parsed
+    * @param theInput the input to be parsed 1 line at a time
     * @return instances of types provided, with one instance per match within the input
     */
-   public List<?> parse(final String theInput) {
-      return this.parseStream(theInput).collect(Collectors.toList());
-   }
-
-   /**
-    * Parses the input against the class types provided in the {@link #of(Class[])} method, in a stream.  This method is thread-safe.
-    * @param theInput the input to be parsed
-    * @return stream of instances of types provided, with one instance per match within the input
-    */
-   public Stream<?> parseStream(final String theInput) {
+   public List<?> parse(@Nonnull String theInput) {
       if (StringUtils.isBlank(theInput)) {
          throw new ParseException(B12020);
       }
+      return this.parse(theInput.lines()).collect(Collectors.toList());
+   }
+
+   /**
+    * Parses the input stream of strings against the class types provided in the {@link #of(Class[])} method, in a stream.  Though this method is thread-safe,
+    * the provided parameter stream must not be a parrallel stream.
+    * @param theInput the input to be parsed as a stream of strings wherein 1 string is parsed against library of possible {@link RegexBinding} POJOs
+    * @return stream of instances of types provided, with one instance per match within the input
+    * @throws ParseException if the provided stream is a parallel stream
+    */
+   public Stream<?> parse(@Nonnull Stream<String> theInput) {
+      if (theInput.isParallel()) {
+         throw new ParseException(B12025);
+      }
       final var aMatcherRef = new AtomicReference<Matcher>();
-      return theInput.lines()
-                     .flatMap(line ->
+      return theInput.flatMap(line ->
                         this.types.entrySet()
                             .stream()      // cannot be a parallel stream
                             .filter(entry -> {
