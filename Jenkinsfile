@@ -36,12 +36,12 @@ class Globals {
    }
 }
 
-node {
+node('ubuntu-node') {
    // Configure GraalVM JDK 11
    jdk = tool name: 'GraalVM-JDK11' // Tool name from Jenkins configuration
    env.JAVA_HOME = "${jdk}"
 
-   properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '5'))])
+   properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', numToKeepStr: '5'))])
 
    stage ('Clone') {
       checkout scm
@@ -50,7 +50,7 @@ node {
    stage ('Configuration') {
       Globals.setVersionInfo(env.BRANCH_NAME as String)
       withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-         bat "mvn clean -version"
+         sh "mvn clean -version"
       }
    }
 
@@ -59,7 +59,7 @@ node {
                        string(credentialsId: 'OAuth2-Test-Secret', variable: 'OAUTH2_SECRET')]) {
          env.OAUTH2_TEST_SECRET = "${OAUTH2_SECRET}"
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn install -P ci,ossrh -Dmaven.javadoc.skip=true -Dgpg.passphrase=\"${GPG_PASSPHRASE}\""
+            sh "mvn install -P bci,ossrh -Dmaven.javadoc.skip=true -Dgpg.passphrase=\"${GPG_PASSPHRASE}\""
          }
       }
    }
@@ -68,7 +68,7 @@ node {
       withCredentials([string(credentialsId: 'Sonar-Token', variable: 'TOKEN')]) {
          env.SONAR_TOKEN = "${TOKEN}"
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            bat "mvn sonar:sonar"
+            sh "mvn sonar:sonar"
          }
       }
    }
@@ -77,7 +77,7 @@ node {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               bat "mvn -P ci,ossrh deploy -Dpmd.skip=true -Dcpd.skip=true -Dfindbugs.skip=true -DskipTests=true -Djacoco.skip=true -Dsonar.skip=true -Dgpg.passphrase=\"${PASSPHRASE}\""
+               sh "mvn -P bci,ossrh deploy -Dpmd.skip=true -Dcpd.skip=true -Dfindbugs.skip=true -DskipTests=true -Djacoco.skip=true -Dsonar.skip=true -Dgpg.passphrase=\"${PASSPHRASE}\""
             }
          }
       }
@@ -90,9 +90,13 @@ node {
       echo "${env.BRANCH_NAME} branch does not deploy site"
       if (Globals.release) {
          echo "Site Deploy is temporarily disabled"
-         //withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-         //   bat "mvn site site:stage scm-publish:publish-scm -P ci"
-         //}
+         withCredentials([usernamePassword (credentialsId: 'GitHub-CICD-Automation', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            env.GIT_USERNAME = "${USERNAME}"
+            env.GIT_PASSWORD = "${PASSWORD}"
+            withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
+               sh "mvn -P bci site site:stage scm-publish:publish-scm"
+            }
+         }
       }
       else {
          echo "${env.BRANCH_NAME} branch does not deploy site"
