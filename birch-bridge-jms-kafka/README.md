@@ -13,11 +13,10 @@ Provides auto-configurable bridges between the following JMS provides and Kafka:
        <dependency>
           <groupId>org.birchframework</groupId>
           <artifactId>birch-bridge-jms-kafka</artifactId>
-          <version>1.0.0</version>
+          <version>${birch.version}</version>
        </dependency>
     ``` 
-    **Replace the contents of the `<version>` element with the desired version of Birch Framework.**
-
+ 
 2. Annotate your Spring Boot application main class with `EnableJMSKafkaBridge`
 3. Apply the configurations as stated in [`BridgeAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-bridge-jms-kafka/latest/org/birchframework/bridge/BridgeAutoConfiguration.html) 
 
