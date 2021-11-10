@@ -13,7 +13,6 @@
  ==============================================================*/
 package org.birchframework.framework.beans;
 
-import org.assertj.core.util.Throwables;
 import org.birchframework.framework.spring.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -136,7 +135,7 @@ public class BeansTest {
          assertThat(aTestBeanBean).isEqualTo(anOtherTestBean);
       }
       catch (Exception e) {
-         fail("Expected a bean of type {}, but received exception: {}", TestBean.class.getName(), Throwables.getRootCause(e).getMessage());
+         fail("Expected a bean of type {}, but received exception: {}", TestBean.class.getName(), e.getMessage());
       }
    }
 }
