@@ -116,22 +116,9 @@
             <servlet.container.scope>runtime</servlet.container.scope>
             <active.profile>native</active.profile>
          </properties>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                     <excludes>
-                        <exclude>**/*IT.java</exclude>
-                     </excludes>
-                  </configuration>
-               </plugin>
-            </plugins>
-         </build>
       </profile>
       <profile>
-         <id>ci</id>
+         <id>bci</id>
          <properties>
             <jvm.memory.min>128</jvm.memory.min>
             <jvm.memory.max>512</jvm.memory.max>
@@ -146,17 +133,12 @@
          <build>
             <plugins>
                <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                     <excludes>
-                        <exclude>**/*IT.java</exclude>
-                     </excludes>
-                  </configuration>
-               </plugin>
-               <plugin>
                   <groupId>org.jacoco</groupId>
                   <artifactId>jacoco-maven-plugin</artifactId>
+               </plugin>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-antrun-plugin</artifactId>
                </plugin>
                <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
@@ -329,6 +311,20 @@
    <build>
       <pluginManagement>
          <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-clean-plugin</artifactId>
+               <configuration>
+                  <filesets>
+                     <fileset>
+                        <directory>src/site/markdown</directory>
+                        <includes>
+                           <include>*.md</include>
+                        </includes>
+                     </fileset>
+                  </filesets>
+               </configuration>
+            </plugin>
             <plugin>
                <groupId>org.codehaus.mojo</groupId>
                <artifactId>license-maven-plugin</artifactId>
@@ -661,8 +657,31 @@
                   </execution>
                </executions>
                <configuration>
+                  <pubScmUrl>${project.distributionManagement.site.url}</pubScmUrl>
                   <scmBranch>master</scmBranch>
+                  <!--suppress MavenModelInspection -->
+                  <username>${env.GIT_USERNAME}</username>
+                  <!--suppress MavenModelInspection -->
+                  <password>${env.GIT_PASSWORD}</password>
                </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-antrun-plugin</artifactId>
+               <executions>
+                  <execution>
+                     <id>copy-markdowns</id>
+                     <phase>pre-site</phase>
+                     <goals>
+                        <goal>run</goal>
+                     </goals>
+                     <configuration>
+                        <target>
+                           <copy file="README.md" tofile="src/site/markdown/index.md" failonerror="false" quiet="true"/>
+                        </target>
+                     </configuration>
+                  </execution>
+               </executions>
             </plugin>
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
@@ -742,6 +761,10 @@
          <plugin>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-maven-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
          </plugin>
       </plugins>
 
