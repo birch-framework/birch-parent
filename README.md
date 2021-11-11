@@ -16,6 +16,7 @@ Accelerator framework to build Microservices based on Spring Boot
 # Overview
 The Birch Framework can be used as a parent module in any Maven project to provide a quick solution to build microservices.  The stack is based on the
 following dependencies (defined in module):
+
 * Spring Boot (birch-parent)
 * Spring Actuator (birch-common)
 * Spring Cloud Config (birch-common)
@@ -37,10 +38,12 @@ Birch Framework also provides support for messaging bridges between the followin
 NOTE: the aforementioned product dependencies must be included when using the bridge module.  They are not included by the Birch Framework.
 
 Bridge stack uses the following dependencies:
+
 * Apache Camel (birch-bridge-jms-kafka)
 
 # Usage
 There are 2 ways of using Birch Framework:
+
 * Parent POM
 * Import
 
