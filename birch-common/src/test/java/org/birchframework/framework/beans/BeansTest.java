@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.birchframework.framework.beans.Status.*;
@@ -27,6 +28,7 @@ import static org.birchframework.framework.beans.Status.*;
  * @author Keivan Khalichi
  */
 @SpringBootTest(classes = TestConfiguration.class)
+@DirtiesContext
 @SuppressWarnings("AutoBoxing")
 public class BeansTest {
 

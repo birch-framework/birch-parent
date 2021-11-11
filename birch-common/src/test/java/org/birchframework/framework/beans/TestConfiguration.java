@@ -14,8 +14,12 @@
 
 package org.birchframework.framework.beans;
 
+import org.birchframework.framework.spring.CustomScopesAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
+
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 /**
  * Test configuration for {@link BeansTest}.
@@ -23,6 +27,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackages = {"org.birchframework.framework.spring",
-                               "org.birchframework.framework.beans"})
+                               "org.birchframework.framework.beans"},
+               excludeFilters = {@Filter(classes = MappingAutoConfiguration.class, type = ASSIGNABLE_TYPE),
+                                 @Filter(classes = CustomScopesAutoConfiguration.class, type = ASSIGNABLE_TYPE)})
 public class TestConfiguration {
 }
