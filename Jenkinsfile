@@ -77,7 +77,7 @@ node('ubuntu-node') {
       if (Globals.release) {
          withCredentials([string(credentialsId: 'GPG-Passphrase', variable: 'PASSPHRASE')]) {
             withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-               sh "mvn -P bci,ossrh deploy -Dpmd.skip=true -Dcpd.skip=true -Dfindbugs.skip=true -DskipTests=true -Djacoco.skip=true -Dsonar.skip=true -Dgpg.passphrase=\"${PASSPHRASE}\""
+               sh "mvn -P bci,ossrh deploy -Dmaven.main.skip=true -Dpmd.skip=true -Dcpd.skip=true -Dfindbugs.skip=true -DskipTests=true -Djacoco.skip=true -Dsonar.skip=true -Dgpg.passphrase=\"${PASSPHRASE}\""
             }
          }
       }
