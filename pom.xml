@@ -129,7 +129,6 @@
             <active.profile>ci</active.profile>
             <project.scm.id>github</project.scm.id>
             <skipITs>true</skipITs>
-            <forkCount>0</forkCount>
          </properties>
          <build>
             <plugins>
