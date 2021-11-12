@@ -14,23 +14,20 @@
 package org.birchframework.framework.beans;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.GenericApplicationContext;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.birchframework.framework.beans.Status.*;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 /**
  * Tests for {@link Beans}.
  * @author Keivan Khalichi
  */
-@SpringBootTest(classes = TestConfiguration.class)
-@TestMethodOrder(OrderAnnotation.class)
+@SpringBootTest(classes = TestConfiguration.class, webEnvironment = RANDOM_PORT)
 @SuppressWarnings("AutoBoxing")
 public class BeansTest {
 
@@ -58,7 +55,6 @@ public class BeansTest {
     * Tests {@link Beans#mapProperties(Object, Object)} without pre-registrations of the mapping.
     */
    @Test
-   @Order(2)
    public void testMapProperties() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
@@ -73,7 +69,6 @@ public class BeansTest {
     * Tests {@link Beans#mapProperties(Object, Object)} with registration of excluded properties and mapping nulls.
     */
    @Test
-   @Order(3)
    public void testMapPropertiesExcludeProperties() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
@@ -87,7 +82,6 @@ public class BeansTest {
     * Tests {@link Beans#mapProperties(Object, Object)} with registration of not mapping nulls.
     */
    @Test
-   @Order(4)
    public void testMapPropertiesIgnoreNulls() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
@@ -102,7 +96,6 @@ public class BeansTest {
     * Tests {@link Beans#mapProperties(Object, Object)} with registration of excluded properties and not mapping nulls.
     */
    @Test
-   @Order(5)
    public void testMapPropertiesIgnoreNullsAndExcludeProperties() {
       final var aTestBean = new TestBean();
       aTestBean.setAge(TEST_AGE);
@@ -132,7 +125,7 @@ public class BeansTest {
     * Tests {@link Beans#findBeanOrCreateInstance(Class)} and {@link Beans#findBeanOrCreateInstance(Class, Object...)}.
     */
    @Test
-   @Order(1)
+   @SuppressWarnings("CatchMayIgnoreException")
    void testFindBeanOrCreateInstance() {
       try {
          final var aTestBean = Beans.findBeanOrCreateInstance(TestBean.class);
