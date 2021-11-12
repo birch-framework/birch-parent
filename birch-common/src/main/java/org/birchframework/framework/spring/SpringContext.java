@@ -71,11 +71,10 @@ public class SpringContext implements ApplicationContextAware {
 
    /** {@inheritDoc} */
    @Override
-   public void setApplicationContext(@Nonnull final ApplicationContext theApplicationContext) throws BeansException {
-      synchronized(SpringContext.class) {
-         if (context == null) {
-            context = (GenericApplicationContext) theApplicationContext;
-         }
+   @SuppressWarnings("NonThreadSafeLazyInitialization")
+   public synchronized void setApplicationContext(@Nonnull final ApplicationContext theApplicationContext) throws BeansException {
+      if (context == null) {
+         context = (GenericApplicationContext) theApplicationContext;
       }
    }
 }
