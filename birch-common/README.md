@@ -1,3 +1,4 @@
+[![javadoc](https://javadoc.io/badge2/org.birchframework/birch-common/javadoc.svg)](https://javadoc.io/doc/org.birchframework/birch-common)
 # Birch Common
 Common components of the Birch Framework that accelerate Spring Boot based microservices development
 
@@ -85,5 +86,5 @@ final var rateGauge = RateGauge.builder()
 ```
 where `meterRegistry` is a reference to a Spring Actuator bean.  Then call the [`rateGauge.increment()`](https://javadoc.io/static/org.birchframework/birch-common/1.1.2/org/birchframework/framework/metric/RateGauge.html#increment()) 
 method in your process to demonstrate one unit of processing. When the APM that consumes Actuator-exported metrics requests a sampling of this metric, this
-RateGauge instance calculates units per second is returns it to the APM.  A custom value `builder().valueFunction(BiFunction<Long, Long, Double>`) can be provided
-in order to override the default `count / second` calculation.
+RateGauge instance calculates units per second and returns the value to the APM.  A custom value can be provided by calling `builder().valueFunction(BiFunction<Long, Long, Double>` 
+on the buidler, in order to override the default `count / second` calculation.
