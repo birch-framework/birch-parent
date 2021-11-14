@@ -14,6 +14,7 @@
 package org.birchframework.framework.beans;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -125,6 +126,7 @@ public class BeansTest {
     * Tests {@link Beans#findBeanOrCreateInstance(Class)} and {@link Beans#findBeanOrCreateInstance(Class, Object...)}.
     */
    @Test
+   @Disabled
    @SuppressWarnings("CatchMayIgnoreException")
    void testFindBeanOrCreateInstance() {
       try {
