@@ -61,3 +61,23 @@ and add the following dependency for EMS auto-configuration:
 ```
 Once the above steps are complete, refer to [`EMSAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-ems-support/latest/org/birchframework/ems/EMSAutoConfiguration.html) Javadocs 
 for auto-configuration of EMS.
+
+# Running Local Kafka Instance
+
+Use the provided `birch-parent/scripts/docker-compose-kafka.yml` file to setup a local Kafka instances.
+From **within** the `birch-parent/scripts` directory:
+1. Edit the `.env` file in the same folder
+   * Replace the value of `KAFKA_ADVERTISED_HOST_NAME` with the hostname or IP address of the Docker host
+2. Run:
+    ```shell
+    sudo addgroup --uid 1001 kafka
+    sudo adduser --uid 1001 --ingroup kafka --home /home/kafka kafka
+    sudo chown kafka:kafka ~kafka
+    docker-compose -f docker-compose-kafka.yml --env-file .env -d up
+    ```
+3. Install Kafka CLI by following [these instructions](https://dzone.com/articles/apache-kafka-basic-setup-and-usage-with-command-li)
+4. Test this Kafka instance by running
+    ```shell
+    kafka-topics.sh --bootstrap-server localhost:9092 --list
+    ```
+    If there are no errors and only a newline is printed, then the Kafka instance is successfully started.
