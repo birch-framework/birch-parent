@@ -102,10 +102,10 @@ public abstract class AbstractBridgeFactory {
       }
 
       return RateGauge.builder()
-                      .name(theMetricName)
-                      .description(theMetricDescription)
-                      .tags(aTags)
-                      .registry(theMeterRegistry)
+                      .withName(theMetricName)
+                      .withDescription(theMetricDescription)
+                      .withTags(aTags)
+                      .withRegistry(theMeterRegistry)
                       .register();
    }
 

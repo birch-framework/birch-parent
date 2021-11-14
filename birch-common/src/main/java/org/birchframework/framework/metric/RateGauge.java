@@ -32,13 +32,13 @@ import org.springframework.util.CollectionUtils;
  * Rate calculating gauge.  Registers a {@link Gauge} given the configurable parameters of the builder.  At the very least, the following
  * configurations are needed:
  * <ul>
- *    <li>{@link RateGaugeBuilder#name(String)}</li>
+ *    <li>{@link RateGaugeBuilder#withName(String)}</li>
  *    <li>{@link RateGaugeBuilder#register()}</li>
  * </ul>
  * Call the {@link RateGaugeBuilder#register()} method to obtain an immutable instance.  The instance internally builds and delegates to a {@link Gauge}.
  * Must call the {@link #increment()} method in order to update the internal counter of the gauge. During each sampling, number of internal counter
  * increments per second is calculated and reported to the {@link MeterRegistry}.  In order to override this default calculation, provide a
- * {@link BiFunction} using {@link RateGaugeBuilder#valueFunction(BiFunction)}.  For example:
+ * {@link BiFunction} using {@link RateGaugeBuilder#withValueFunction(BiFunction)}.  For example:
  * <br/><br/>
  * <pre>
  * final var rateGauge = RateGauge.builder()
@@ -61,18 +61,18 @@ public class RateGauge {
    private final BiFunction<Long, Long, Double> valueFunction;
 
    @Builder(buildMethodName = "register")
-   protected RateGauge(@NonNull final String name, final String description, @NonNull final MeterRegistry registry,
-                       final BiFunction<Long, Long, Double> valueFunction, final List<Tag> tags) {
+   protected RateGauge(@NonNull final String withName, final String withDescription, @NonNull final MeterRegistry withRegistry,
+                       final BiFunction<Long, Long, Double> withValueFunction, final List<Tag> withTags) {
       this.counter       = new AtomicLong(0);
-      this.valueFunction = valueFunction;
-      final var aBuilder = Gauge.builder(name, this::sample);
-      if (!CollectionUtils.isEmpty(tags)) {
-         aBuilder.tags(tags);
+      this.valueFunction = withValueFunction;
+      final var aBuilder = Gauge.builder(withName, this::sample);
+      if (!CollectionUtils.isEmpty(withTags)) {
+         aBuilder.tags(withTags);
       }
-      if (StringUtils.isNotBlank(description)) {
-         aBuilder.description(description);
+      if (StringUtils.isNotBlank(withDescription)) {
+         aBuilder.description(withDescription);
       }
-      this.delegate  = aBuilder.register(registry);
+      this.delegate  = aBuilder.register(withRegistry);
       this.stopWatch = StopWatch.createStarted();
    }
 

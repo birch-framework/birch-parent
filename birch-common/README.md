@@ -78,10 +78,10 @@ calculate a rate via the Micrometer framework.  A rate is defined as a count in 
 To create a `RateGauge`, use its builder as in the following example:
 ```java
 final var rateGauge = RateGauge.builder()
-                               .name("message-rate")
-                               .description("Incoming message rate")
-                               .tags(Tag.of("inbound-queue", "in-request-queue"), Tag.of("outbound-queue", "out-request-queue"))
-                               .registry(meterRegistry)
+                               .withName("message-rate")
+                               .withDescription("Incoming message rate")
+                               .withTags(Tag.of("inbound-queue", "in-request-queue"))
+                               .withRegistry(meterRegistry)
                                .register();
 ```
 where `meterRegistry` is a reference to a Spring Actuator bean.  Then call the [`rateGauge.increment()`](https://javadoc.io/static/org.birchframework/birch-common/1.1.2/org/birchframework/framework/metric/RateGauge.html#increment()) 
