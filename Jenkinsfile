@@ -38,8 +38,7 @@ class Globals {
 
 node('ubuntu-node') {
    // Configure GraalVM JDK 11
-   jdk = tool name: 'GraalVM-JDK11' // Tool name from Jenkins configuration
-   env.JAVA_HOME = "${jdk}"
+   env.JAVA_HOME = tool name: 'GraalVM-JDK11' // Tool name from Jenkins configuration
 
    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', numToKeepStr: '5'))])
 
@@ -57,7 +56,7 @@ node('ubuntu-node') {
    stage ('Test and Install') {
       withCredentials([string(credentialsId: 'GPG-Passphrase',     variable: 'GPG_PASSPHRASE'),
                        string(credentialsId: 'OAuth2-Test-Secret', variable: 'OAUTH2_SECRET')]) {
-         env.OAUTH2_TEST_SECRET = "${OAUTH2_SECRET}"
+         env.OAUTH2_TEST_SECRET = OAUTH2_SECRET
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
             sh "mvn install -P bci,ossrh -Dmaven.javadoc.skip=true -Dgpg.passphrase=\"${GPG_PASSPHRASE}\""
          }
@@ -66,9 +65,9 @@ node('ubuntu-node') {
 
    stage ('Quality Analysis') {
       withCredentials([string(credentialsId: 'Sonar-Token', variable: 'TOKEN')]) {
-         env.SONAR_TOKEN = "${TOKEN}"
+         env.SONAR_TOKEN = TOKEN
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
-            sh "mvn sonar:sonar"
+            sh "mvn sonar:sonar -Dsonar.branch.name=${env.BRANCH_NAME}"
          }
       }
    }
@@ -87,7 +86,6 @@ node('ubuntu-node') {
    }
 
    stage ('Site Deploy') {
-      echo "${env.BRANCH_NAME} branch does not deploy site"
       if (Globals.release) {
          echo "Site Deploy is temporarily disabled"
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
