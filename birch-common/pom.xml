@@ -214,33 +214,5 @@
          <version>${cucumber.version}</version>
          <scope>test</scope>
       </dependency>
-      <dependency>
-         <groupId>com.github.spotbugs</groupId>
-         <artifactId>spotbugs</artifactId>
-         <version>${spotbugs.version}</version>
-         <exclusions>
-            <exclusion>
-               <groupId>org.ow2.asm</groupId>
-               <artifactId>asm</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.ow2.asm</groupId>
-               <artifactId>asm-commons</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.ow2.asm</groupId>
-               <artifactId>asm-analysis</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.ow2.asm</groupId>
-               <artifactId>asm-tree</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>commons-lang</groupId>
-               <artifactId>commons-lang</artifactId>
-            </exclusion>
-         </exclusions>
-         <scope>provided</scope>
-      </dependency>
    </dependencies>
 </project>
