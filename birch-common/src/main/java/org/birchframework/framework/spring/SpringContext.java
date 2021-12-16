@@ -15,7 +15,6 @@ package org.birchframework.framework.spring;
 
 import java.util.function.Supplier;
 import javax.annotation.Nonnull;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
 import org.springframework.context.ApplicationContext;
@@ -28,7 +27,6 @@ import org.springframework.stereotype.Component;
  * @author Keivan Khalichi
  */
 @Component
-@SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 public class SpringContext implements ApplicationContextAware {
 
    private static GenericApplicationContext context = null;

@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,7 @@ import static org.birchframework.dto.payload.PropertyValue.PropertyType.*;
 @JsonInclude(NON_NULL)
 @Getter
 @NoArgsConstructor
-@SuppressWarnings({"InstanceVariableMayNotBeInitialized", "unused"})
+@SuppressWarnings({"unused"})
 public class PropertyValue implements Serializable {
 
    public static final String BOOLEAN_TYPE_NAME = "boolean";
@@ -211,7 +210,6 @@ public class PropertyValue implements Serializable {
     * @return string representation of the value of this property; null if {@link #value()} returns null
     */
    @Override
-   @SuppressFBWarnings("NP_TOSTRING_COULD_RETURN_NULL")
    public String toString() {
       return this.value() == null ? null : this.value().toString();
    }

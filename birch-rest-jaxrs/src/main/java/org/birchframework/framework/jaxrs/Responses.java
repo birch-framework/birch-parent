@@ -30,7 +30,6 @@ import com.google.common.base.Throwables;
 import org.birchframework.dto.BirchErrorCode;
 import org.birchframework.dto.ErrorCode;
 import org.birchframework.framework.beans.Beans;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -56,7 +55,6 @@ import static javax.ws.rs.core.Response.Status.*;
  */
 @Slf4j
 @SuppressWarnings({"unchecked", "unused"})
-@SuppressFBWarnings("LI_LAZY_INIT_STATIC")
 public class Responses {
 
    public static final int HTTP_OK                    = OK.getStatusCode();

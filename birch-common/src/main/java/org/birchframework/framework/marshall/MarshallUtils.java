@@ -34,7 +34,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
@@ -54,7 +53,6 @@ import static org.birchframework.dto.BirchErrorCode.*;
 @Component
 @Slf4j
 @SuppressWarnings({"unused", "unchecked", "AutoBoxing"})
-@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 public class MarshallUtils {
 
    /** Synchronized cache of {@link JAXBContext} instances */

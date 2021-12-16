@@ -15,7 +15,6 @@ package org.birchframework.security.oauth2;
 
 import java.util.Collection;
 import org.birchframework.configuration.IdPClassifiable;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Delegate;
@@ -34,7 +33,6 @@ import static lombok.AccessLevel.PACKAGE;
  * {@link DefaultOAuth2AuthenticatedPrincipal} and also includes the {@link BirchProperties.IdPRealm} configuration.
  * @author Keivan Khalichi
  */
-@SuppressFBWarnings("SE_NO_SERIALVERSIONID")
 public class BearerTokenOAuth2Authentication extends BearerTokenAuthentication {
 
    @Getter

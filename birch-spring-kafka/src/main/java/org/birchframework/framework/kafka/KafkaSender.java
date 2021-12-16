@@ -20,7 +20,6 @@ import java.util.concurrent.TimeoutException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.birchframework.configuration.BirchProperties;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -106,7 +105,6 @@ public class KafkaSender<K extends String, V extends Serializable> {
     * @throws InterruptedException rethrow when waiting to get results throws the exception
     * @return result, if there are no exceptions
     */
-   @SuppressFBWarnings("NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE")
    public Optional<KafkaSendResult<K,V>> send(@Nonnull final String topic, @Nullable final Integer partition, @Nullable final K key, @Nonnull final V data)
           throws InterruptedException {
       final var aResult = new KafkaSendResult<K,V>();
@@ -201,7 +199,6 @@ public class KafkaSender<K extends String, V extends Serializable> {
     * @param data a message payload implementing {@link Serializable}
     * @param successCallback the callback to call upon success
     */
-   @SuppressFBWarnings("NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE")
    public void sendAsync(@Nonnull final String topic, @Nullable final Integer partition, @Nullable final K key, @Nonnull final V data,
                          @Nonnull final SuccessCallback<SendResult<K,V>> successCallback, final FailureCallback failureCallback) {
       final var aFuture = this.kafkaTemplate.send(topic, partition, key, data);

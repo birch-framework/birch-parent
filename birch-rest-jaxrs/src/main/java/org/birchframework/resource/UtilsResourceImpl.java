@@ -15,7 +15,6 @@
 package org.birchframework.resource;
 
 import javax.ws.rs.core.Response;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -35,7 +34,6 @@ import org.springframework.stereotype.Service;
 @ConditionalOnClass({Response.class, OpenApiFeature.class})
 @OpenAPIDefinition(info = @Info(title = "Utility endpoints", version = "1", description = "APIs for microservice utilities"))
 @Slf4j
-@SuppressFBWarnings("DM_GC")
 public class UtilsResourceImpl implements UtilsResource {
 
    @Operation(summary = "Force system garbage collection for this microservice", responses = {

@@ -16,7 +16,6 @@ package org.birchframework.framework.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.birchframework.dto.payload.Payload;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.kafka.common.serialization.Serializer;
 import org.slf4j.Logger;
@@ -29,7 +28,6 @@ import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
  * Payload serializer.
  * @author Keivan Khalichi
  */
-@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 public class PayloadSerializer implements Serializer<Payload<?>> {
 
    private static final Logger log = LoggerFactory.getLogger(PayloadSerializer.class);

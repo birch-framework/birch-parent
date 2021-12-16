@@ -14,13 +14,11 @@
 package org.birchframework.framework.logging.logback;
 
 import ch.qos.logback.classic.PatternLayout;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Replaces {@link ch.qos.logback.classic.pattern.DateConverter} with {@link DateConverter} within the Logback global converters configuration.
  * @author Keivan Khalichi
  */
-@SuppressFBWarnings("NM_SAME_SIMPLE_NAME_AS_SUPERCLASS")
 public class PatternLayoutEncoder extends ch.qos.logback.classic.encoder.PatternLayoutEncoder {
 
    static {

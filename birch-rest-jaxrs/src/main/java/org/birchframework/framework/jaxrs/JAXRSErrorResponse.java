@@ -17,13 +17,11 @@ import java.net.URI;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessorType;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
 @XmlAccessorType(FIELD)
 @SuppressWarnings({"unused", "InstanceVariableMayNotBeInitialized", "WeakerAccess"})
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class JAXRSErrorResponse {
 
     private String error;
