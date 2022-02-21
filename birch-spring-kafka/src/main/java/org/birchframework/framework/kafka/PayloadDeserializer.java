@@ -15,11 +15,10 @@
 package org.birchframework.framework.kafka;
 
 import java.io.IOException;
-import org.birchframework.dto.payload.Payload;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.kafka.common.serialization.Deserializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.birchframework.dto.payload.Payload;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
@@ -28,9 +27,9 @@ import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
  * Payload deserializer.
  * @author Keivan Khalichi
  */
+@Log4j2
 public class PayloadDeserializer implements Deserializer<Payload<?>> {
 
-   private static final Logger log = LoggerFactory.getLogger(PayloadDeserializer.class);
    private static final Jackson2ObjectMapperBuilder objectMapperBuilder = Jackson2ObjectMapperBuilder.json();
 
    @Override
