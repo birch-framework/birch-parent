@@ -27,13 +27,11 @@ import javax.annotation.PostConstruct;
 import javax.jms.ConnectionFactory;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.TopicConnectionFactory;
-import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.LambdaRouteBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.zookeeper.ZooKeeperMessage;
-import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.spring.boot.CamelAutoConfiguration;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -49,7 +47,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -82,7 +79,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  *     exponential-backoff: false                        # Exponentially increase delay interval of time between retries by factor of 2.0 up to max-redelivery-delay; defaults to false
  *     affinity: region-1                                # Specifies an affinity to which the bridges defined by this microservice are associated, which dictates that bridges react to service actions for this affinity, only
  *     service-topic: common-service-topic               # Topic for sending and receiving service actions, such as bridge start/stop
- *     auto-start: true                                  # Determines whether or not bridges are to be started upon Spring Boot application startup; default to true
+ *     auto-start: true                                  # Determines whether or not bridges are to be started upon Spring Boot application startup; defaults to true
  *     zookeeper-base-path: /birch/bridges               # Base path under which the 'active-affinity' znode will be stored within Zookeeper; defaults to '/birch/bridges'
  *   bridges:                                            # Definition of bridges
  *     my-jms-bridge:                                    # Bridge name; bridge definition defined below is for this bridge
@@ -94,23 +91,23 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  *       before-send-consumer: io.jms.BeforeSend         # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange before being sent by the bridge; optional
  *       error-consumer: io.jms.WhenError                # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform processing of an exchange when an exception occurs within the bridge route; optional
  *       concurrent-consumers: 1                         # Number of concurrent JMS listeners; defaults to 1 (note, min value is always 1)
- *       transacted: true                                # When true, the bridge operates in a transactional fashion; default to true
+ *       transacted: true                                # When true, the bridge operates in a transactional fashion; defaults to true
  *       jms:                                            # Since source is JMS, this JMS definition is for a JMS consumer
  *         queue: test-queue-in                          # Queue name from which this consumer receives messages; also specifying topic will throw an exception
  *         topic: test-topic-in                          # Topic name from which this consumer receives messages; also specifying queue will throw an exception
- *         key-property: key                             # JMS property to use for the Kafka topic key; also specifying key-regex will throw an exception
- *         key-regex: .*((World)!)$                      # Extracts Kafka topic key value from payload via regular expression; also specifying key-property will throw an exception
+ *         key-property: key                             # JMS property to use for the Kafka topic key; also specifying key-regex will throw an exception; optional
+ *         key-regex: .*((World)!)$                      # Extracts Kafka topic key value from payload via regular expression; also specifying key-property will throw an exception; optional
  *         key-regex-capture: 2                          # Extracts value in key-regex from the specified capture group; defaults to 0, which returns the entire matched regex
  *         correlation-id-property:                      # JMS property from which to obtain the correlation ID
  *         override-correlation-id: true                 # When true, overrides JMS correlation ID with a UUID generated at the time of message consumption; defaults to true
- *         selector: someProperty IS NOT NULL            # JMS message selector; see this <a href="https://timjansen.github.io/jarfiller/guide/jms/selectors.xhtml">documentation<a/> on how to work with message selectors
+ *         selector: someProperty IS NOT NULL            # JMS message selector; see this <a href="https://timjansen.github.io/jarfiller/guide/jms/selectors.xhtml">documentation<a/> on how to work with message selectors; optional
  *         message-type: text                            # Type of the incoming JMS message body; supported values are: text, bytes, object, map; defaults to text
  *         dead-letter-queue: dlq-1                      # When specified, messages that produce exceptions will be sent to this JMS queue; optional
  *       kafka:                                          # Since source is JMS, this Kafka definition is for a Kafka producer
  *         topic: test-topic-in                          # Kafka topic
  *     my-kafka-bridge:                                  # Bridge name; bridge definition defined below is for this bridge
  *       source: kafka                                   # Bridge source type: jms or kafka
- *       strip-newline: true                             # when true, strips newline from the entire payload; defaults to true
+ *       strip-newline: true                             # When true, strips newline from the entire payload; defaults to true
  *       after-receive-consumer: io.kafka.AfterReceive   # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange after being received by the bridge; optional
  *       before-send-consumer: io.kafka.BeforeSend       # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform pre-processing of an exchange before being sent by the bridge; optional
  *       error-consumer: io.jms.WhenError                # FQCN of a {@code Consumer<Exchange>} implementation that provides a hook to perform processing of an exchange when an exception occurs within the bridge route; optional
@@ -118,12 +115,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  *       kafka:                                          # Since source is Kafka, this Kafka definition is for a Kafka consumer
  *         topic: test-topic-out                         # Kafka topic from which this consumer receives messages
  *         listener-id: bridge1Consumer                  # Optionally sets listener ID of this Kafka consumer; optional; providing this value in a multi-consumer configuration can be problematic
- *         group-id: bridge-kafka                        # Optionally sets the group ID, default to the listener-id (e.g. bridge1Consumer in this example)
+ *         group-id: bridge-kafka                        # Optionally sets the group ID, defaults to the listener-id (e.g. bridge1Consumer in this example)
  *         dead-letter-topic: dlt-1                      # When specified, messages that produce exceptions will be sent to this Kafka topic; optional
  *       jms:                                            # Since source is Kafka, this JMS definition is for a JMS producer
  *         queue: test-queue-out                         # Queue name to which this produces sends messages; also specifying topic will throw an exception
  *         topic: test-topic-in                          # Topic name to which this producer sends messages; also specifying queue will throw an exception
- *         key-property: key                             # Optionally sets the Kafka topic key, when not null, to the outgoing JMS property as a String
+ *         key-property: key                             # Optionally sets the Kafka topic key to the outgoing JMS property as a String, when the key value is not null
  *         override-correlation-id: true                 # When true, overrides JMS correlation ID with a UUID generated at the time of message production; defaults to true
  * </pre>
  * @author Keivan Khalichi
@@ -147,12 +144,12 @@ public class BridgeAutoConfiguration {
    protected static final String START_ACTION = "start";
    protected static final String STOP_ACTION  = "stop";
 
-   private final Map<String, BridgeProperties>    bridges;
+   private final Map<String, BridgeProperties>            bridges;
    private final Set<String>                              zookeeperEndpoints;
    private final Map<BridgeSource, AbstractBridgeFactory> bridgeFactories = new HashMap<>(2);
    private final BridgesGlobalConfigs                     bridgesGlobalConfigs;
-   private final GenericApplicationContext        context;
-   private final CamelContext                     camelContext;
+   private final GenericApplicationContext                context;
+   private final CamelContext                             camelContext;
 
    public BridgeAutoConfiguration(final BirchProperties theProperties, final GenericApplicationContext theContext, final CamelContext theCamelContext) {
       this.bridges              = theProperties.getBridges();
@@ -199,20 +196,6 @@ public class BridgeAutoConfiguration {
             }
          });
       }
-   }
-
-   @Bean
-   @ConditionalOnMissingBean(JMSToKafkaBridgeFactory.class)
-   JMSToKafkaBridgeFactory jmsToKafkaBridgeFactory(final CamelContext theCamelContext,
-                                                   final MeterRegistry theMeterRegistry) {
-      return new JMSToKafkaBridgeFactory((SpringCamelContext) theCamelContext, theMeterRegistry);
-   }
-
-   @Bean
-   @ConditionalOnMissingBean(KafkaToJMSBridgeFactory.class)
-   KafkaToJMSBridgeFactory kafkaToJMSBridgeFactory(final CamelContext theCamelContext,
-                                                   final MeterRegistry theMeterRegistry) {
-      return new KafkaToJMSBridgeFactory((SpringCamelContext) theCamelContext, theMeterRegistry);
    }
 
    @Bean
@@ -288,7 +271,7 @@ public class BridgeAutoConfiguration {
                                 throws UnknownHostException {
       final var aBridgeNamesList = new ArrayList<>(this.bridges.keySet());
       final var aGroupID = String.format("%s-%s", InetAddress.getLocalHost().getHostName(), RandomStringUtils.random(5, true, false).toLowerCase());
-      return rb -> rb.fromF("kafka:%s?consumersCount=1&consumerStreams=1&groupId=%s", theProperties.getBridgesGlobalConfigs().getServiceTopic(), aGroupID)
+      return rb -> rb.fromF("kafka:%s?consumersCount=1&groupId=%s", theProperties.getBridgesGlobalConfigs().getServiceTopic(), aGroupID)
                      .routeId("service-message-consumer")
                      .autoStartup(true)
                      .unmarshal().custom(ServiceMessageDataFormat.BEAN_NAME)
