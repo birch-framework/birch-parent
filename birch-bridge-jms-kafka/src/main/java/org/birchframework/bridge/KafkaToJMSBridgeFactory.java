@@ -36,6 +36,7 @@ import org.birchframework.dto.payload.DestinationType;
 
 import static org.apache.camel.LoggingLevel.INFO;
 import static org.birchframework.bridge.TransactedPolicyType.*;
+import static org.birchframework.configuration.BirchProperties.BridgeProperties.BridgeSource.KAFKA;
 import static org.birchframework.dto.BirchErrorCode.*;
 
 /**
@@ -50,7 +51,7 @@ public class KafkaToJMSBridgeFactory extends AbstractBridgeFactory {
    private final MeterRegistry      meterRegistry;
 
    public KafkaToJMSBridgeFactory(final SpringCamelContext theContext, final MeterRegistry theMeterRegistry) {
-      super(BridgeProperties.BridgeSource.KAFKA);
+      super(KAFKA);
       this.context       = theContext;
       this.meterRegistry = theMeterRegistry;
    }
@@ -103,7 +104,7 @@ public class KafkaToJMSBridgeFactory extends AbstractBridgeFactory {
       final var aSourceProcessor = this.createSourceProcessor(theName, theProperties);
 
       final Supplier<String> aFromURI = () -> {
-         var aURI = String.format("kafka:%1$s?groupId=%2$s&consumersCount=%3$d&consumerStreams=%3$d",
+         var aURI = String.format("kafka:%1$s?groupId=%2$s&consumersCount=%3$d",
                                   theProperties.getKafka().getTopic(), StringUtils.defaultIfBlank(theProperties.getKafka().getGroupId(), theName),
                                   theProperties.getConcurrentConsumers());
          if (StringUtils.isNotBlank(theProperties.getKafka().getListenerId())) {
