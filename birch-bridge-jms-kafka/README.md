@@ -52,18 +52,30 @@ classpath:
 * `tibcrypt.jar`
 * `tibjms.jar`
 
-and add the following dependency for EMS auto-configuration:
+# Configuration
+
+## Apache ActiveMQ
+Refer to the [Apache Camel ActiveMQ component](https://camel.apache.org/components/3.15.x/activemq-component.html#_spring_boot_auto_configuration) configuration documentation to configure bridges that use ActiveMQ as source or sink.
+
+## IBM MQ
+Refer to the [IBM MQ Spring support](https://github.com/ibm-messaging/mq-jms-spring#configuration-options) documentation to configure bridges that use IBM MQ as source or sink.
+
+## Tibco EMS
+Add the following dependency for EMS Spring auto-configuration:
 ```xml
 <dependency>
    <groupId>org.birchframework</groupId>
    <artifactId>birch-ems-support</artifactId>
 </dependency>
 ```
-Once the above steps are complete, refer to [`EMSAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-ems-support/latest/org/birchframework/ems/EMSAutoConfiguration.html) Javadocs 
-for auto-configuration of EMS.
+
+Refer to [`EMSAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-ems-support/latest/org/birchframework/ems/EMSAutoConfiguration.html) Javadocs 
+to auto-conffigure EMS bridges that use it as source or sink.
+
+## Apache Kafka
+Refer to the [Apache Kafka component](https://camel.apache.org/components/3.15.x/kafka-component.html#_spring_boot_auto_configuration) documentation to configure Kafka for bridges.
 
 # Running Local Kafka Instance
-
 Use the provided `birch-parent/scripts/docker-compose-kafka.yml` file to setup a local Kafka instances.
 From **within** the `birch-parent/scripts` directory:
 1. Edit the `.env` file in the same folder
