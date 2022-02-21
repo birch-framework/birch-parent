@@ -27,6 +27,15 @@ import static lombok.AccessLevel.PACKAGE;
 /**
  * {@link KafkaAdminUtils} metrics bean that obtains and publishes Kafka metrics supplied by the utility class, to Micrometer.  Registers metrics upon startup
  * and re-registers them at configurable intervals.  Samples metrics upon startup and at configurable intervals.
+ * <p/>
+ * Configurations are as follows:
+ * <pre>
+ * birch:
+ *   kafka:
+ *     admin:
+ *       sample-interval-ms: 5_000              # Scheduled milliseconds interval of sampling consumer lags; defaults to every 5 seconds
+ *       re-register-interval-ms: 21_600_000    # Scheduled milliseconds interval of gauge re-registration in order to tag any new topics; defaults to every 6 hours
+ * </pre>
  * @author Keivan Khalichi
  */
 @RequiredArgsConstructor(access = PACKAGE)

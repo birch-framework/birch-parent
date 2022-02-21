@@ -31,6 +31,20 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Auto-configuration for {@link KafkaAdminUtils} and its Micrometer registry metrics.
+ * <p/>
+ * Configurations are as follows:
+ * <pre>
+ * birch:
+ *   kafka:
+ *     admin:
+ *       bootstrap-servers: broker-1:9092,broker-2:9092      # Comma separated list of Kafka broker hosts and ports; required
+ *       zookeeper-servers: zk-1:2181,zk-2:2181              # Comma separated list of Zookeeper hosts and ports; optional
+ *       ssl-protocol:                                       # SSL protocol: TLSv1.3 (default), TLSv1.2, TLSv1.1, SSLv3, SSLv2, or SSL; defaults to TLSv1.3
+ *       security-protocol:                                  # Security protocol: SSL, PLAINT_TEXT, SASL_SSL, or SASL_PLAINTEXT: defaults to PLAINTEXT
+ *       sasl:                                               # SASL configuration
+ *         jaas-config:                                      # SASL JAAS configuration
+ *         mechanism:                                        # SASL mechanism: PLAIN, SCRAM, GSSAPI, LDAP, or OAUTHBEARER; defaults to GSSAPI
+ * </pre>
  * @author Keivan Khalichi
  */
 @Configuration
