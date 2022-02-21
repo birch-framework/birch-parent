@@ -15,7 +15,7 @@ camel:
     routes-enabled: false
   component:
     kafka:
-      brokers: localhost:9092
+      brokers: 127.0.0.1:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       ssl-protocol: TLSv1.2
@@ -48,8 +48,8 @@ logging:
 birch:
   kafka:
     admin:
-      zookeeper-servers: localhost:2181
+      zookeeper-servers: 127.0.0.1:2181
   bridges-global-configs:
     affinity: us-east-1
     service-topic: common-service-topic
-    auto-start: false
+    auto-start: true
