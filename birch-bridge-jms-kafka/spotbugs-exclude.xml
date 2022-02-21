@@ -10,6 +10,13 @@
          <Bug pattern="NP_NONNULL_RETURN_VIOLATION"/>
          <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
          <Bug pattern="NP_NULL_PARAM_DEREF"/>
+         <And>
+            <Or>
+               <Class name="org.birchframework.bridge.JMSToKafkaBridgeFactory"/>
+               <Class name="org.birchframework.bridge.KafkaToJMSBridgeFactory"/>
+            </Or>
+            <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+         </And>
       </Or>
    </Match>
 </FindBugsFilter>
