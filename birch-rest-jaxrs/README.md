@@ -11,12 +11,11 @@ Include `birch-rest-jaxrs` as a dependency to a microservice's Maven project by 
 <dependency>
    <groupId>org.birchframework</groupId>
    <artifactId>birch-rest-jaxrs</artifactId>
-   <version>${birch.version}</version>
 </dependency>
 ```
-If `birch.version` is not specified within the Maven project hierarchy, then replace it with the desired version.
 
-# Error Reporting Framework
+# Framework
+## Error Reporting
 To create a streamlined error reporting experience that standardizes RESTful APIs error reporting for microserives across the microservices ecosystem, create
 exactly one `enum` that implements the `ErrorCode` interface.  For example:
 ```java
@@ -97,6 +96,44 @@ public class OrderAPIImpl implements OrderAPI {
    }
 }
 ```
+
+## JAX-RS Resource Auto-proxy
+The annotation [`AutoProxy`](https://javadoc.io/doc/org.birchframework/birch-rest-jaxrs/latest/org/birchframework/framework/cxf/AutoProxy.html) can be 
+applied to any JAX-RS resource interface in order to auto-create a CXF REST client proxy bean at application boot time,
+but only if another bean of the same type is not already created in the Spring application context.  Consider the following use case:
+```yaml
+# application.yml
+api:
+  coindesk:
+    base-url: https://api.coindesk.com/v1
+```
+```java
+@Path("/bpi")
+@Produces(APPLICATION_JSON)
+@AutoProxy(baseURI = "${api.coindesk.base-url}")
+public interface CoinDeskResource {
+
+   @Path("/currentprice.json")
+   @GET
+   Response currentPrice();
+}
+
+@SpringBootApplication
+@EnableREST
+public class Application {
+
+   public static void main(final String... theArgs) {
+      SpringApplication.run(Application.class, theArgs);
+   }
+}
+```
+The `@AutoProxy` annotation is provided with a `baseURI` which is read from the Spring configuration.  At application boot time, the a proxy bean of
+type `CoinDeskResource` is created and made available in the Spring Application context to be
+auto-wired into any other bean that depends on it.  Now no meanual `@Bean` annotated methods are needed to create the JAX-RS proxy for `CoinDeskResource`.
+
+[`@EnableREST`](https://javadoc.io/doc/org.birchframework/birch-rest-jaxrs/latest/org/birchframework/framework/cxf/EnableREST.html) is a marker annotation 
+that imports several JAX-RS related auto-configurations.  It is a convenient way of auto-configuring CXF to seek JAX-RS annotated resources and Spring
+configurations, associating them the the [`SpringBus`](https://cxf.apache.org/javadoc/latest/org/apache/cxf/bus/spring/SpringBus.html).
 
 # Utilities
 ## `Responses`
