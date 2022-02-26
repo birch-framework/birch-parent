@@ -18,7 +18,7 @@ To include `birch-common` as a dependency to any Maven project or module, add th
 The [`Parser`](https://javadoc.io/doc/org.birchframework/birch-common/latest/org/birchframework/framework/regex/Parser.html) class provides a mechanism for 
 parse a regular expression producing a POJO as a result of binding Regex capture groups to POJO properties. The following is an example of such binding:
 ```java
-@RegexBinding("Age:\\s+(\\d+)\\s+\\|\\s+Last Name:\\s+(\\w*)\\s+\\|\\s+First Name:(\\s+)(\\w*)\\s+\\|\\s+Alive:\\s+(y|n|Y|N|t|f|T|F)\\s+\\|\\s+(.*)")
+@RegexBinding("Age:\\s+(\\d+)\\s+\\|\\s+Last Name:\\s+(\\w*)\\s+\\|\\s+First Name:(\\s+)(\\w*)\\s+\\|\\s+Deceased:\\s+(y|n|Y|N|t|f|T|F)\\s+\\|\\s+(.*)")
 @Getter
 public class DemographicInfo {
 
@@ -29,7 +29,7 @@ public class DemographicInfo {
    private String lastName;
 
    @CaptureGroup(5)
-   private boolean alive;
+   private boolean deceased;
 
    @CaptureGroup(4)
    private String firstName;
@@ -51,7 +51,7 @@ properties annotated with [`@CaptureGroup`](https://javadoc.io/doc/org.birchfram
 The following code initializes the Parser for the above class:
 ```java
 final var parser = Parser.of(DemographicInfo.class);
-final var objects = parser.parse("Age: 27 | Last Name: Stardust  | First Name: Ziggy    | Alive: N | ROCK_STAR");
+final var objects = parser.parse("Age: 27 | Last Name: Stardust  | First Name: Ziggy    | Deceased: Y | ROCK_STAR");
 ```
 In the above example, `objects` is a `List<?>` containing one instance of `DemographicInfo`.
 
@@ -87,4 +87,4 @@ final var rateGauge = RateGauge.builder()
 where `meterRegistry` is a reference to a Spring Actuator bean.  Then call the [`rateGauge.increment()`](https://javadoc.io/static/org.birchframework/birch-common/1.1.2/org/birchframework/framework/metric/RateGauge.html#increment()) 
 method in your process to demonstrate one unit of processing. When the APM that consumes Actuator-exported metrics requests a sampling of this metric, this
 RateGauge instance calculates units per second and returns the value to the APM.  A custom value can be provided by calling `builder().valueFunction(BiFunction<Long, Long, Double>` 
-on the buidler, in order to override the default `count / second` calculation.
+in order to override the default `count / second` calculation.
