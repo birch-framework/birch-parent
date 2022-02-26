@@ -129,7 +129,8 @@ public class Application {
 ```
 The `@AutoProxy` annotation is provided with a `baseURI` which is read from the Spring configuration.  At application boot time, the a proxy bean of
 type `CoinDeskResource` is created and made available in the Spring Application context to be
-auto-wired into any other bean that depends on it.  Now no meanual `@Bean` annotated methods are needed to create the JAX-RS proxy for `CoinDeskResource`.
+auto-wired into any other bean that depends on it.  As demonstrated above, with this mechanism no manual `@Bean` annotated methods are needed 
+within the `@SpringBootApplication` annotated class to create the JAX-RS proxy for `CoinDeskResource`.
 
 [`@EnableREST`](https://javadoc.io/doc/org.birchframework/birch-rest-jaxrs/latest/org/birchframework/framework/cxf/EnableREST.html) is a marker annotation 
 that imports several JAX-RS related auto-configurations.  It is a convenient way of auto-configuring CXF to seek JAX-RS annotated resources and Spring
@@ -148,7 +149,7 @@ public class Application {
       SpringApplication.run(Application.class, theArgs);
    }
 
-   @Bean
+   @Bean          // Here we could have used @AutoProxy instead of this method, but in this example we are explicitly creating the bean
    OrderAPI orderAPI(@Value("${logistics.servers.order.base-uri:http://localhost:8080/api}") final String theBaseURI) {
       return JAXRSClientFactory.create(theBaseURI, OrderAPI.class);
    }
