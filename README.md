@@ -44,43 +44,9 @@ Bridge stack uses the following dependencies:
 * Apache Camel (birch-bridge-jms-kafka)
 
 # Usage
-There are 2 ways of using Birch Framework:
+Refer to [`birch-starter`](birch-starter/README.md) documentation on how to include aggregator dependency of Birch Framework.
 
-* Parent POM
-* Import
-
-**In the examples below, replace the contents of the `<version>` element with the desired version of Birch Framework.**
-## Parent POM
-The easiest way to use Birch Framework is to use it as a starter parent project in the project top level Maven POM, as follows:
-```xml
-   <parent>
-      <groupId>org.birchframework</groupId>
-      <artifactId>birch-starter</artifactId>
-      <version>1.2.0</version>
-   </parent>
-```
-## Import
-Another way of using Birch Framework is to include it as a module dependency in the top level Maven POM, as follows:
-```xml
-   <dependencyManagement>
-      <dependencies>
-         <dependency>
-            <groupId>org.birchframework</groupId>
-            <artifactId>birch-starter</artifactId>
-            <version>1.2.0</version>
-            <scope>import</scope>
-            <type>pom</type>
-         </dependency>
-      </dependencies>
-   </dependencyManagement>
-```
 # Developer's Guide
-
-# Git Repository
-## Cloning the full repository
-Run the following command to clone the repository for the first time:
-
-    git clone https://github.com/birch/birch-parent.git
 
 # Build
 Execute the following from the root of the project (`birch-parent`):
