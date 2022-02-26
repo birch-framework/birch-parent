@@ -36,9 +36,6 @@ NEXT_VERSION=`echo "${VERSION%.*}.$((${VERSION##*.}+1))"`
 read -e -p "Next development version: " -i ${NEXT_VERSION}-SNAPSHOT NEXT_VERSION
 [ $? -ne 0 ] && exit 6
 
-mvn clean install
-[ $? -ne 0 ] && exit 4
-
 TAG=${ARTIFACT_ID}-${VERSION}
 git tag -a ${TAG} -m "release ${VERSION}"
 [ $? -ne 0 ] && exit 7
@@ -48,38 +45,38 @@ mvn versions:set -q -DnewVersion=${NEXT_VERSION} -DgenerateBackupPoms=false
 
 sed -e "s|<birch.version>.*</birch.version>|<birch.version>${NEXT_VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new && \
 mv birch-starter/pom.xml.new birch-starter/pom.xml
-[ $? -ne 0 ] && exit 8
+[ $? -ne 0 ] && exit 9
 
 sed -e "s|<version>.*</version>|<version>${VERSION}</version>|g" README.md > README.md.new && \
 mv README.md.new README.md
-[ $? -ne 0 ] && exit 8
-
-find . -name pom.xml -exec git add {} + && git add README.md
-[ $? -ne 0 ] && exit 9
-
-git commit -m "release ${VERSION}"
 [ $? -ne 0 ] && exit 10
 
-git push && git push --tags
+find . -name pom.xml -exec git add {} + && git add README.md
 [ $? -ne 0 ] && exit 11
 
-git checkout ${TAG} -b release/${VERSION}
+git commit -m "release ${VERSION}"
 [ $? -ne 0 ] && exit 12
 
-mvn versions:set -q -DnewVersion=${VERSION} -DgenerateBackupPoms=false
+git push && git push --tags
 [ $? -ne 0 ] && exit 13
+
+git checkout ${TAG} -b release/${VERSION}
+[ $? -ne 0 ] && exit 14
+
+mvn versions:set -q -DnewVersion=${VERSION} -DgenerateBackupPoms=false
+[ $? -ne 0 ] && exit 15
 
 sed -e "s|<birch.version>.*</birch.version>|<birch.version>${VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new && \
 mv birch-starter/pom.xml.new birch-starter/pom.xml
-[ $? -ne 0 ] && exit 13
+[ $? -ne 0 ] && exit 16
 
 find . -name pom.xml -exec git add {} +
-[ $? -ne 0 ] && exit 14
+[ $? -ne 0 ] && exit 17
 
 git commit -m "New release"
-[ $? -ne 0 ] && exit 15
+[ $? -ne 0 ] && exit 18
 
 git push --set-upstream origin release/${VERSION}
-[ $? -ne 0 ] && exit 16
+[ $? -ne 0 ] && exit 19
 
 git checkout ${CURRENT_BRANCH}
