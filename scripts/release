@@ -47,11 +47,11 @@ sed -e "s|<birch.version>.*</birch.version>|<birch.version>${NEXT_VERSION}</birc
 mv birch-starter/pom.xml.new birch-starter/pom.xml
 [ $? -ne 0 ] && exit 9
 
-sed -e "s|<version>.*</version>|<version>${VERSION}</version>|g" README.md > README.md.new && \
-mv README.md.new README.md
+sed -e "s|<version>.*</version>|<version>${VERSION}</version>|g" birch-starter/README.md > birch-starter/README.md.new && \
+mv birch-starter/README.md.new birch-starter/README.md
 [ $? -ne 0 ] && exit 10
 
-find . -name pom.xml -exec git add {} + && git add README.md
+find . -name pom.xml -exec git add {} + && git add birch-starter/README.md
 [ $? -ne 0 ] && exit 11
 
 git commit -m "release ${VERSION}"
