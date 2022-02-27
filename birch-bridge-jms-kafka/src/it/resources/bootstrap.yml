@@ -48,7 +48,7 @@ logging:
 birch:
   kafka:
     admin:
-      zookeeper-servers: 127.0.0.1:2181
+      zookeeper-servers: ubuntu:2181
   bridges-global-configs:
     affinity: us-east-1
     service-topic: common-service-topic
