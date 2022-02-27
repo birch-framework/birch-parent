@@ -10,8 +10,8 @@ tibco:
       protocol: ${tibco.ems.factory.protocol}
       #authentication: simple
     factory:
-      #url: tcp://localhost:7222
-      url: ssl://localhost:7441
+      #url: tcp://devbox:7222
+      url: ssl://devbox:7441
       username: admin
       protocol: ssl
     ssl:

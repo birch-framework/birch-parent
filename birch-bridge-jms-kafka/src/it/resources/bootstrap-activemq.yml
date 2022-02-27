@@ -4,7 +4,7 @@ server:
 # ActiveMQ Configuration
 spring:
   activemq:
-    broker-url: tcp://localhost:61616?jms.prefetchPolicy.queuePrefetch=10&wireFormat.tightEncodingEnabled=false
+    broker-url: tcp://devbox:61616?jms.prefetchPolicy.queuePrefetch=10&wireFormat.tightEncodingEnabled=false
     pool:
       enabled: true
       max-connections: 4
