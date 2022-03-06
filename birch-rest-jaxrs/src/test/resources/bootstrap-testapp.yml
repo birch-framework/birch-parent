@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+
+server:
+  port: 8080
+
+cxf:
+  path: /api
+  jaxrs:
+    component-scan: true
+    classes-scan-packages: org.birchframework, com.fasterxml.jackson.jaxrs.json, org.apache.cxf.metrics
+    client:
+      address: http://localhost:8080${cxf.path}
+
+birch:
+  i18n:
+    enabled: true
+    resource-bundle-base-name: messages
