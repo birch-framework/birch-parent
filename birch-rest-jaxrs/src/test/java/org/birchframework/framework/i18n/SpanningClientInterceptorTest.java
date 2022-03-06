@@ -17,13 +17,15 @@ import java.util.List;
 import java.util.UUID;
 import org.apache.cxf.jaxrs.impl.MetadataMap;
 import org.apache.cxf.message.Message;
+import org.birchframework.framework.cxf.SpanHeadersContainerBean;
+import org.birchframework.framework.cxf.SpanningClientInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.birchframework.framework.i18n.SpanHeadersContainer.*;
+import static org.birchframework.framework.cxf.SpanHeadersContainerBean.*;
 import static java.lang.Boolean.*;
 import static org.apache.cxf.message.Message.PROTOCOL_HEADERS;
 import static org.assertj.core.api.Assertions.*;
