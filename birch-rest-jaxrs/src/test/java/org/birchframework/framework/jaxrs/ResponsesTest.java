@@ -24,13 +24,12 @@ import java.util.function.Function;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.birchframework.dto.BirchErrorCode;
 import org.birchframework.dto.ErrorCode;
 import org.junit.jupiter.api.Test;
 
-import static org.birchframework.dto.BirchErrorCode.B10120;
 import static javax.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.birchframework.dto.BirchErrorCode.B10120;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -50,7 +49,7 @@ public class ResponsesTest {
    public void testErrorCodeClass() {
       var aClass = Responses.getErrorCodeClass();
       assertThat(aClass).isNotNull();
-      assertThat(aClass).isAssignableFrom(BirchErrorCode.class);
+      assertThat(ErrorCode.class).isAssignableFrom(aClass);
    }
 
    /**

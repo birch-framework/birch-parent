@@ -73,7 +73,7 @@ public class Responses {
    private static final Class<? extends Enum<?>> errorCodeClass;
 
    static {
-      errorCodeClass = (Class<? extends Enum<?>>) Beans.findImplementation(ErrorCode.class, BirchErrorCode.class)
+      errorCodeClass = (Class<? extends Enum<?>>) Beans.findImplementation(ErrorCode.class, false, BirchErrorCode.class)
                                                        .filter(Enum.class::isAssignableFrom)
                                                        .orElse(BirchErrorCode.class);
       if (errorCodeClass == BirchErrorCode.class) {
