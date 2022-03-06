@@ -38,7 +38,7 @@ import org.birchframework.framework.spring.SpringContext;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.reflections.Configuration;
 import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
@@ -67,7 +67,7 @@ public class Beans {
    private static final MapperFactory mapperFactory                       = new DefaultMapperFactory.Builder().build();
 
    static {
-      final var aFilterBuilder = new FilterBuilder().exclude(DEFAULT_IGNORED_BASE_PACKAGES);
+      final var aFilterBuilder = new FilterBuilder().excludePattern(DEFAULT_IGNORED_BASE_PACKAGES);
       defaultExcludedBasePackagesConfig = new ConfigurationBuilder().filterInputsBy(aFilterBuilder);
    }
 
@@ -226,40 +226,49 @@ public class Beans {
    }
 
    public static <T> Optional<Class<? extends T>> findImplementation(final Class<T> theInterface, final Class<?>... theExcludeClasses) {
-      return findImplementation(null, theInterface, DEFAULT_BASE_PACKAGE_DEPTH, theExcludeClasses);
+      return findImplementation(null, theInterface, DEFAULT_BASE_PACKAGE_DEPTH, true, theExcludeClasses);
+   }
+
+   public static <T> Optional<Class<? extends T>> findImplementation(final Class<T> theInterface, final boolean theIsGlobalFlag,
+                                                                     final Class<?>... theExcludeClasses) {
+      return findImplementation(null, theInterface, DEFAULT_BASE_PACKAGE_DEPTH, theIsGlobalFlag, theExcludeClasses);
    }
 
    public static <T> Optional<Class<? extends T>> findImplementation(final StackWalker theStackWalker, final Class<T> theInterface,
                                                                      final Class<?>... theExcludeClasses) {
-      return findImplementation(theStackWalker, theInterface, DEFAULT_BASE_PACKAGE_DEPTH, theExcludeClasses);
+      return findImplementation(theStackWalker, theInterface, DEFAULT_BASE_PACKAGE_DEPTH, false, theExcludeClasses);
    }
 
    @SuppressWarnings("unchecked")
    public static <T> Optional<Class<? extends T>> findImplementation(@Nullable final StackWalker theStackWalker, @Nonnull final Class<T> theInterface,
-                                                                     final int theBasePackageDepth, final Class<?>... theExcludeClasses) {
-      final var aCallerClass = findCallerClass(theStackWalker, DEFAULT_IGNORED_BASE_PACKAGES);
-      final Class<T> anImplementation;
-      if (aCallerClass.isEmpty()) {
-         anImplementation = null;
+                                                                     final int theBasePackageDepth, final boolean theIsGlobalFlag,
+                                                                     final Class<?>... theExcludeClasses) {
+      final FilterBuilder aFilterBuilder;
+      final String aBasePackage;
+      if (theIsGlobalFlag) {
+         aFilterBuilder = new FilterBuilder().excludePattern(DEFAULT_IGNORED_BASE_PACKAGES);
+         aBasePackage = "";
       }
       else {
-         final var aBasePackage = computeBasePackageName(aCallerClass.get(), theBasePackageDepth);
-         if (StringUtils.isBlank(aBasePackage)) {
-            anImplementation = null;
+         final var aCallerClass = findCallerClass(theStackWalker, DEFAULT_IGNORED_BASE_PACKAGES);
+         if (aCallerClass.isEmpty()) {
+            aFilterBuilder = new FilterBuilder().excludePattern(DEFAULT_IGNORED_BASE_PACKAGES);
+            aBasePackage = "";
          }
          else {
-            final var anExcludeClasses = theExcludeClasses == null ? Collections.<Class<?>>emptyList() : Arrays.asList(theExcludeClasses);
-            final var aFilterBuilder = new FilterBuilder().includePackage(aBasePackage).exclude(DEFAULT_IGNORED_BASE_PACKAGES);
-            final var aConfigBuilder = new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(aBasePackage))
-                                                                 .filterInputsBy(aFilterBuilder)
-                                                                 .setScanners(new SubTypesScanner());
-            anImplementation = (Class<T>) new Reflections(aConfigBuilder).getSubTypesOf(theInterface)
-                                                                         .stream()
-                                                                         .filter(c -> anExcludeClasses.stream().noneMatch(ec -> ec.isAssignableFrom(c)))
-                                                                         .findFirst()
-                                                                         .orElse(null);
+            aBasePackage = computeBasePackageName(aCallerClass.get(), theBasePackageDepth);
+            aFilterBuilder = new FilterBuilder().includePackage(aBasePackage).excludePattern(DEFAULT_IGNORED_BASE_PACKAGES);
          }
       }
+      final var aConfigBuilder = new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(aBasePackage))
+                                                           .filterInputsBy(aFilterBuilder)
+                                                           .setScanners(Scanners.SubTypes);
+      final var anExcludeClasses = theExcludeClasses == null ? Collections.<Class<?>>emptyList() : Arrays.asList(theExcludeClasses);
+      final var anImplementation = (Class<T>) new Reflections(aConfigBuilder).getSubTypesOf(theInterface)
+                                                                             .stream()
+                                                                             .filter(c -> anExcludeClasses.stream().noneMatch(ec -> ec.isAssignableFrom(c)))
+                                                                             .findFirst()
+                                                                             .orElse(null);
       return Optional.ofNullable(anImplementation);
    }
 
@@ -274,7 +283,7 @@ public class Beans {
    public static Optional<Class<?>> findCallerClass(@Nullable final StackWalker theStackWalker, @Regex final String theIgnoredBasePackages) {
       final var aStackWalker = theStackWalker == null ? StackWalker.getInstance(RETAIN_CLASS_REFERENCE) : theStackWalker;
       final var anIgnoredBasePackages = StringUtils.isBlank(theIgnoredBasePackages) ? DEFAULT_IGNORED_BASE_PACKAGES : theIgnoredBasePackages;
-      return aStackWalker.walk(frames -> frames.filter(e -> !e.getClassName().matches(anIgnoredBasePackages)).findFirst().map(StackFrame::getDeclaringClass));
+      return aStackWalker.walk(frames -> frames.dropWhile(e -> e.getClassName().matches(anIgnoredBasePackages)).findFirst().map(StackFrame::getDeclaringClass));
    }
 
    public static Set<Class<?>> classesAnnotatedWith(final Class<? extends Annotation> theAnnotationClass) {
@@ -289,7 +298,7 @@ public class Beans {
          }
          else {
             final var aConfigBuilder = new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(aBasePackage))
-                                                                 .filterInputsBy(new FilterBuilder().exclude(DEFAULT_IGNORED_BASE_PACKAGES));
+                                                                 .filterInputsBy(new FilterBuilder().excludePattern(DEFAULT_IGNORED_BASE_PACKAGES));
             final var aReflections = new Reflections(aConfigBuilder);
             return aReflections.getTypesAnnotatedWith(theAnnotationClass);
          }
