@@ -1,5 +1,5 @@
 /*===============================================================
- = Copyright (c) 2021 Birch Framework
+ = Copyright (c) 2022 Birch Framework
  = This program is free software: you can redistribute it and/or modify
  = it under the terms of the GNU General Public License as published by
  = the Free Software Foundation, either version 3 of the License, or
@@ -11,7 +11,7 @@
  = You should have received a copy of the GNU General Public License
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
-package org.birchframework.framework.i18n;
+package org.birchfw.test.i18n;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +25,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.birchframework.framework.cxf.SpanHeadersContainerBean;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import static org.birchframework.framework.i18n.SpanHeadersContainer.*;
+import static org.birchframework.framework.cxf.SpanHeadersContainerBean.*;
 
 /**
  * Implements {@link TestResource}.
@@ -41,8 +42,8 @@ import static org.birchframework.framework.i18n.SpanHeadersContainer.*;
 @Slf4j
 public class TestResourceImpl implements TestResource {
 
-   private final ApplicationContext context;
-   private SpanHeadersContainerBean spanHeadersContainer;
+   private final ApplicationContext       context;
+   private       SpanHeadersContainerBean spanHeadersContainer;
 
 
    @PostConstruct
@@ -50,8 +51,8 @@ public class TestResourceImpl implements TestResource {
       try {
          this.spanHeadersContainer = this.context.getBean(SpanHeadersContainerBean.class);
       }
-      catch (BeansException theE) {
-         log.info("Did not find {}", SpanHeadersContainer.class.getSimpleName());
+      catch (BeansException e) {
+         log.warn("Did not find SpanHeadersContainer");
       }
    }
    /**

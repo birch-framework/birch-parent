@@ -1,5 +1,5 @@
 /*===============================================================
- = Copyright (c) 2021 Birch Framework
+ = Copyright (c) 2022 Birch Framework
  = This program is free software: you can redistribute it and/or modify
  = it under the terms of the GNU General Public License as published by
  = the Free Software Foundation, either version 3 of the License, or
@@ -11,7 +11,7 @@
  = You should have received a copy of the GNU General Public License
  = along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ==============================================================*/
-package org.birchframework.framework.i18n;
+package org.birchframework.framework.cxf;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -31,11 +31,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import static org.birchframework.framework.i18n.SpanHeadersContainer.*;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_LANGUAGE;
+import static org.birchframework.framework.cxf.SpanHeadersContainerBean.*;
 
 /**
- * CXF filter that pulls {@link SpanHeadersContainer} from the request on the service side and makes it available to the thread.
+ * CXF filter that pulls {@link SpanHeadersContainerBean.SpanHeadersContainer} from the request on the service side and makes it available to the thread.
  * @author Keivan Khalichi
  */
 @Provider
@@ -58,7 +58,7 @@ public class SpanningContainerRequestFilter implements ContainerRequestFilter {
          this.spanHeadersContainer = this.context.getBean(SpanHeadersContainerBean.class);
       }
       catch (NoSuchBeanDefinitionException e) {
-         log.info("Span headers container bean was not found");
+         log.warn("Span headers container bean was not found");
       }
    }
 

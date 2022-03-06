@@ -1,5 +1,5 @@
 /*===============================================================
- = Copyright (c) 2021 Birch Framework
+ = Copyright (c) 2022 Birch Framework
  = This program is free software: you can redistribute it and/or modify
  = it under the terms of the GNU General Public License as published by
  = the Free Software Foundation, either version 3 of the License, or
@@ -15,9 +15,12 @@
 package org.birchframework.framework.i18n;
 
 import java.net.URI;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.birchframework.framework.cxf.EnableREST;
+import org.birchframework.framework.cxf.ResourceClientRequestFilter;
+import org.birchfw.test.i18n.TestApplication;
+import org.birchfw.test.i18n.TestResource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,12 +33,14 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
  * @author Keivan Khalichi
  */
 @EnableREST
-@ComponentScan(excludeFilters = @Filter(value = TestApplication.class, type = ASSIGNABLE_TYPE))
-@RequiredArgsConstructor
+@EnableI18N
+@ComponentScan(basePackages = "org.birchframework.framework.cxf",
+               excludeFilters = @Filter(value = TestApplication.class, type = ASSIGNABLE_TYPE))
 public class TestConfiguration {
 
    @Bean
-   TestResource testResource(@Value("${cxf.jaxrs.client.address}") final URI theBaseURI) {
-      return JAXRSClientFactory.create(theBaseURI, TestResource.class);
+   TestResource testResource(@Value("${cxf.jaxrs.client.address}") final URI theBaseURI,
+                             final ResourceClientRequestFilter theResourceClientRequestFilter) {
+      return JAXRSClientFactory.create(theBaseURI.toString(), TestResource.class, List.of(theResourceClientRequestFilter), true);
    }
 }
