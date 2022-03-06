@@ -15,7 +15,7 @@ camel:
     routes-enabled: false
   component:
     kafka:
-      brokers: ubuntu:9092
+      brokers: devbox:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       ssl-protocol: TLSv1.2
