@@ -17,10 +17,12 @@ import java.io.IOException;
 import java.util.List;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.birchframework.dto.Spannable;
 import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
+
+import static org.birchframework.framework.cxf.SpanHeadersContainerBean.*;
 
 /**
  * Intercepts all client requests where it is defined and adds all {@link Spannable} values that are defined within the current {@link MDC} context to the
@@ -29,8 +31,10 @@ import org.springframework.stereotype.Component;
  * @see ResourceImplContainerRequestFilter
  * @author Keivan Khalichi
  */
-@Component
+@RequiredArgsConstructor
 public class ResourceClientRequestFilter implements ClientRequestFilter {
+
+   private final SpanHeadersContainerBean spanHeadersContainerBean;
 
    @Override
    public void filter(final ClientRequestContext theRequestContext) throws IOException {
@@ -41,5 +45,13 @@ public class ResourceClientRequestFilter implements ClientRequestFilter {
             aHeaders.put(key, List.of(anMDCValue));
          }
       });
+      if (this.spanHeadersContainerBean.hasData()) {
+         if (!aHeaders.containsKey(LOCALE_HEADER)) {
+            aHeaders.put(LOCALE_HEADER, List.of(this.spanHeadersContainerBean.getLocale()));
+         }
+         if (!aHeaders.containsKey(CORRELATION_ID_HEADER)) {
+            aHeaders.put(CORRELATION_ID_HEADER, List.of(this.spanHeadersContainerBean.getCorrelationID().toString()));
+         }
+      }
    }
 }
