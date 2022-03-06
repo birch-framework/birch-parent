@@ -17,6 +17,8 @@ import java.util.UUID;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MultivaluedHashMap;
 import org.apache.commons.lang3.ArrayUtils;
+import org.birchframework.framework.cxf.SpanHeadersContainerBean;
+import org.birchframework.framework.cxf.SpanningContainerRequestFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 
-import static org.birchframework.framework.i18n.SpanHeadersContainer.*;
+import static org.birchframework.framework.cxf.SpanHeadersContainerBean.*;
 import static org.mockito.Mockito.*;
 
 /**
