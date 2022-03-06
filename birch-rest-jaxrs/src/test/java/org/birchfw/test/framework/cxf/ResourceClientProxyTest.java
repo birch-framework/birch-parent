@@ -43,7 +43,10 @@ public class ResourceClientProxyTest {
     */
    @BeforeAll
    static void beforeAll() {
-      context = SpringApplication.run(TestConfiguration.class);
+      context = SpringApplication.run(TestConfiguration.class,
+                                      "--spring.cloud.config.enabled=false",
+                                      "--server.port=18080",
+                                      "--services.coindesk.address=https://api.coindesk.com/v1");
    }
 
    @AfterAll
