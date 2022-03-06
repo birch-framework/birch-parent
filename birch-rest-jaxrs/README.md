@@ -136,6 +136,48 @@ within the `@SpringBootApplication` annotated class to create the JAX-RS proxy f
 that imports several JAX-RS related auto-configurations.  It is a convenient way of auto-configuring CXF to seek JAX-RS annotated resources and Spring
 configurations, associating them the the [`SpringBus`](https://cxf.apache.org/javadoc/latest/org/apache/cxf/bus/spring/SpringBus.html).
 
+
+## Span
+The span portion of the `birch-rest-jarx` provides the means to propogate correlation ID and client locale from JAX-RS clients to servers and beyond.  This is
+made possible by default via [`@EnableREST`](https://javadoc.io/doc/org.birchframework/birch-rest-jaxrs/latest/org/birchframework/framework/cxf/EnableREST.html) 
+annotation when placed on a Spring Boot application class.  In the previous examples, the auto-configurations imported by
+`@EnableREST` will ensure proper client filters and interceptors are configured for REST endpoint clients.  However, if 
+[`@AutoProxy`](https://javadoc.io/doc/org.birchframework/birch-rest-jaxrs/latest/org/birchframework/framework/cxf/AutoProxy.html) is not being utilized and
+JAX-RS client proxies are being manually created, then the client filter must be injected into the proxy as follows:
+```java
+@SpringBootApplication
+@EnableREST
+public class Application {
+
+   public static void main(final String... theArgs) {
+      SpringApplication.run(Application.class, theArgs);
+   }
+
+   @Bean
+   OrderAPI orderAPI(@Value("${logistics.servers.order.base-uri:http://localhost:8080/api}") final String theBaseURI,
+                     final ResourceClientRequestFilter theResourceClientRequestFilter) {
+      return JAXRSClientFactory.create(theBaseURI.toString(), OrderAPI.class, List.of(theResourceClientRequestFilter));
+   }
+}
+```
+In the above example, the [`create`](https://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html#create-java.lang.String-java.lang.Class-java.util.List-) 
+method adds the auto-configured client filter to the client proxy's list of providers.  On subsequent method
+calls to the proxy client, the filter will inject the span information into the request header.  On the server side, a filter picks up the headers transmitted by
+this client's request, and injects them into a thread-local that is accessible via `SpanHeadersContainerBean`.
+
+Exactly one [`Spannable`](https://javadoc.io/doc/org.birchframework/birch-common/latest/org/birchframework/dto/Spannable.html)
+implementation is required in order to inform the Span farmework which request headers it must propogate throughout the REST API call chain.
+```java
+public enum LogisticsSpannable implements Spannable<LogisticsSpannable> {
+   correlationID,
+   locale;
+}
+```
+If a UI client is transmitting the headers given the same keys as defined by the `Spannable` implementation, then they too will be injected into the server's thread
+that is processing the request.
+
+An added benefit of the Span framework is the injection of `Spannable` implementation's request header keys' values into SLF4J's 
+[`MDC`](https://www.slf4j.org/api/org/slf4j/MDC.html) facility.
 # Utilities
 ## `Responses`
 The [`Responses`](https://javadoc.io/doc/org.birchframework/birch-rest-jaxrs/latest/org/birchframework/framework/jaxrs/Responses.html) utility class
