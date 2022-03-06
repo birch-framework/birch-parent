@@ -17,14 +17,16 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import org.birchframework.configuration.BirchProperties;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Sets component scan and configuration properties needed to execute auto-configurations that register JAX-RS services and client proxies.
+ * Imports necessary auto-configurations in order to register JAX-RS services and client proxies.
  * @see org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration
  * @see org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
  * @see ResourceProxyBeanAutoConfiguration
@@ -32,10 +34,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Documented
-@ComponentScan({"org.birchframework.configuration",
-                "org.birchframework.framework.spring",
-                "org.birchframework.framework.cxf",
-                "org.springframework.boot.autoconfigure.jackson"})
 @EnableConfigurationProperties(BirchProperties.class)
+@Import({JacksonAutoConfiguration.class, SpanAutoConfiguration.class, ResourceProxyBeanAutoConfiguration.class})
+@ImportResource({"classpath:META-INF/cxf/cxf.xml", "classpath:META-INF/cxf/cxf-servlet.xml"})
 public @interface EnableREST {
 }
