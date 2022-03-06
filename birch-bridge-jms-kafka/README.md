@@ -85,8 +85,10 @@ From **within** the `birch-parent/scripts` directory:
     sudo addgroup --uid 1001 kafka
     sudo adduser --uid 1001 --ingroup kafka --home /home/kafka kafka
     sudo chown kafka:kafka ~kafka
-    docker-compose -f docker-compose-kafka.yml --env-file .env -d up
+    docker-compose -f docker-compose-kafka.yml --env-file .env up -d
     ```
+    **NOTE:** if the `kafka` user and group are not created with respective IDs of `1001`, this docker-compose command will be unable to successfully create the
+    constainers.
 3. Install Kafka CLI by following [these instructions](https://dzone.com/articles/apache-kafka-basic-setup-and-usage-with-command-li)
 4. Test this Kafka instance by running
     ```shell
