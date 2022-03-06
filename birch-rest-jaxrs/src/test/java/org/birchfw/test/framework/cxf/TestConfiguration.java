@@ -15,18 +15,14 @@
 package org.birchfw.test.framework.cxf;
 
 import org.birchframework.configuration.BirchProperties;
+import org.birchframework.framework.cxf.EnableREST;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Test configuration for {@link ResourceClientProxyTest}.
  * @author Keivan Khalichi
  */
-@ComponentScan({"org.birchframework.configuration",
-                "org.birchframework.framework.spring",
-                "org.birchframework.framework.cxf",
-                "org.springframework.boot.autoconfigure.jackson",
-                "org.birchfw.test.framework.cxf"})
+@EnableREST
 @EnableConfigurationProperties(BirchProperties.class)
 public class TestConfiguration {
 }
