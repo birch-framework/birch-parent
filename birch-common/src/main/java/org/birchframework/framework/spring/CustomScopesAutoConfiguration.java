@@ -25,7 +25,7 @@ import org.springframework.context.support.SimpleThreadScope;
  * Auto-configuration that registers custom Spring scopes.
  * @author Keivan Khalichi
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableAutoConfiguration
 @RefreshScope
 public class CustomScopesAutoConfiguration implements BeanFactoryPostProcessor {
