@@ -13,13 +13,12 @@
  ==============================================================*/
 package org.birchframework.framework.i18n;
 
-import javax.annotation.PostConstruct;
+import org.apache.cxf.bus.spring.SpringBus;
+import org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration;
+import org.apache.cxf.transport.servlet.CXFServlet;
 import org.birchframework.configuration.BirchProperties;
 import org.birchframework.framework.spring.CustomScopesAutoConfiguration;
-import org.birchframework.framework.spring.ThreadScope;
 import org.birchframework.framework.stub.Stub;
-import org.apache.cxf.bus.spring.SpringBus;
-import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -30,7 +29,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
@@ -43,44 +42,21 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 @EnableConfigurationProperties(BirchProperties.class)
 @ConditionalOnProperty(prefix = "birch.i18n", name = "enabled")
 @ConditionalOnClass({SpringBus.class, CXFServlet.class})
-@AutoConfigureAfter({DispatcherServletAutoConfiguration.class, CustomScopesAutoConfiguration.class})
+@AutoConfigureAfter({DispatcherServletAutoConfiguration.class, CustomScopesAutoConfiguration.class,
+                     CxfAutoConfiguration.class})
+@Import(CustomScopesAutoConfiguration.class)
 @RefreshScope
 public class InternationalizationAutoConfiguration {
-
-   private final SpanHeadersContainerBean spanHeadersContainerBean;
-   private final BirchProperties          properties;
-   private final SpringBus                bus;
-
-   public InternationalizationAutoConfiguration(final BirchProperties theProperties,
-                                                final SpringBus theBus,
-                                                final GenericApplicationContext theContext) {
-      this.properties               = theProperties;
-      this.bus                      = theBus;
-      theContext.registerBean(SpanHeadersContainerBean.class);
-      this.spanHeadersContainerBean = theContext.getBean(SpanHeadersContainerBean.class);
-   }
-
-   @PostConstruct
-   void init() {
-      final var anInterceptor = new SpanningClientInterceptor(this.spanHeadersContainerBean);
-      this.bus.getOutInterceptors().add(anInterceptor);
-      this.bus.getOutFaultInterceptors().add(anInterceptor);
-   }
 
    /**
     * Creates a {@link ResourceBundleMessageSource}.
     * @return the resource bundle message source instance
     */
    @Bean
-   MessageSource messageSource() {
+   @ConditionalOnProperty(prefix = "birch.i18n", name = "resource-bundle-base-name")
+   MessageSource messageSource(final BirchProperties theProperties) {
       return Stub.of(ResourceBundleMessageSource.class, resourceBundleMessageSource -> {
-         resourceBundleMessageSource.setBasename(this.properties.getI18n().getResourceBundleBaseName());
+         resourceBundleMessageSource.setBasename(theProperties.getI18n().getResourceBundleBaseName());
       });
-   }
-
-   @Bean("spanHeadersContainer")
-   @ThreadScope
-   SpanHeadersContainer spanHeadersContainer() {
-      return new SpanHeadersContainer();
    }
 }
