@@ -16,14 +16,17 @@ package org.birchframework.framework.cxf;
 
 import org.apache.cxf.bus.spring.SpringBus;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * @author Keivan Khalichi
  */
 @Configuration
 @EnableAutoConfiguration
+@EnableAspectJAutoProxy
 public class SpanAutoConfiguration {
 
    @Bean
@@ -43,5 +46,11 @@ public class SpanAutoConfiguration {
    @Bean
    ResourceClientRequestFilter resourceClientRequestFilter(final SpanHeadersContainerBean theSpanHeadersContainerBean) {
       return new ResourceClientRequestFilter(theSpanHeadersContainerBean);
+   }
+
+   @Bean
+   @ConditionalOnBean(SpanHeadersContainerBean.class)
+   ServiceAspect serviceAspect(final SpanHeadersContainerBean theSpanHeadersContainerBean) {
+      return new ServiceAspect(theSpanHeadersContainerBean);
    }
 }
