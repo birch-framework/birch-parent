@@ -134,7 +134,7 @@ within the `@SpringBootApplication` annotated class to create the JAX-RS proxy f
 
 [`@EnableREST`](https://javadoc.io/doc/org.birchframework/birch-rest-jaxrs/latest/org/birchframework/framework/cxf/EnableREST.html) is a marker annotation 
 that imports several JAX-RS related auto-configurations.  It is a convenient way of auto-configuring CXF to seek JAX-RS annotated resources and Spring
-configurations, associating them the the [`SpringBus`](https://cxf.apache.org/javadoc/latest/org/apache/cxf/bus/spring/SpringBus.html).
+configurations, associating them with the [`SpringBus`](https://cxf.apache.org/javadoc/latest/org/apache/cxf/bus/spring/SpringBus.html).
 
 
 ## Span
