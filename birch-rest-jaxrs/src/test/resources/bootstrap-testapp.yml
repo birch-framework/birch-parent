@@ -18,3 +18,7 @@ birch:
   i18n:
     enabled: true
     resource-bundle-base-name: messages
+
+services:
+  coindesk:
+    address: https://api.coindesk.com/v1
