@@ -67,7 +67,7 @@ public class TestResourceImpl implements TestResource {
       if (this.spanHeadersContainer == null) {
          return Response.ok(String.format("%s is not configured", SpanHeadersContainerBean.class.getSimpleName())).build();
       }
-      log.info("Method invoked; SpanHeadersContainer: {}", this.spanHeadersContainer.toString());
+      log.info("Method invoked; {}", this.spanHeadersContainer.toString());
       final var aMap = Map.of(LOCALE_HEADER, this.spanHeadersContainer.getLocale(),
                               CORRELATION_ID_HEADER, this.spanHeadersContainer.getCorrelationID().toString());
       return Response.ok(new HashMap<>(aMap)).build();
