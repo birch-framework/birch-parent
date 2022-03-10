@@ -35,12 +35,12 @@ public @interface AutoProxy {
    /** List of JAX-RS/CXF provider or feature classes (i.e. interceptors, filters, etc.) which are applied to the proxy */
    Class<?>[] providers() default {};
 
-   /** Create thread-safe proxy */
+   /** Create thread-safe proxy; has no effect when {@link #username()} is specified */
    boolean threadSafe() default true;
 
    /** Optional Username for this resource; some APIs refer to this as Access Key */
    String username() default "";
 
-   /** Optional Password this resource; some APIs refer to this as Secret */
+   /** Optional Password this resource; some APIs refer to this as Secret; has no effect if {@link #username()} is not specified */
    String password() default "";
 }
