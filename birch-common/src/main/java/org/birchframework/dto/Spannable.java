@@ -28,9 +28,7 @@ import org.birchframework.framework.beans.Beans;
 @SuppressWarnings({"rawtypes", "unused"})
 public interface Spannable<E extends Enum<E>> {
    /** Discovered implementation in the classpath */
-   Class<? extends Spannable> impl = Beans.findImplementation(Spannable.class)
-                                          .filter(Enum.class::isAssignableFrom)
-                                          .orElse(null);
+   Class<? extends Spannable> impl = Beans.findImplementation(Spannable.class).filter(Enum.class::isAssignableFrom).orElse(null);
    /** String spannable keys */
    List<String>               keys = keys();
 
