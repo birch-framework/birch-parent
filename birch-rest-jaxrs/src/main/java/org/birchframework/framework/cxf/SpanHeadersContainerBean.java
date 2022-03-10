@@ -20,15 +20,12 @@ import java.util.Set;
 import java.util.UUID;
 import javax.ws.rs.core.HttpHeaders;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Delegate;
 import org.apache.commons.lang3.StringUtils;
 import org.birchframework.framework.spring.ThreadScope;
 import org.springframework.beans.factory.annotation.Lookup;
-
-import static lombok.AccessLevel.PACKAGE;
 
 /**
  * Wrapper around the {@link ThreadScope}ed {@link SpanHeadersContainer} bean.
@@ -50,12 +47,23 @@ public class SpanHeadersContainerBean {
    }
 
    /**
+    * Always call this method at the end of your processing thread in order to prevent memory leaks.
+    */
+   public void unload() {
+      this.spanHeadersContainer.remove();
+   }
+
+   @Override
+   public String toString() {
+      return this.delegate().toString();
+   }
+
+   /**
     * A container for HTTP headers used when spanning multiple request/response cycles across multiple microservices.
     * @author Keivan Khalichi
     */
    @Getter
    @ToString
-   @NoArgsConstructor(access = PACKAGE)
    @SuppressWarnings({"InstanceVariableMayNotBeInitialized", "unused"})
    static class SpanHeadersContainer {
 
@@ -65,12 +73,6 @@ public class SpanHeadersContainerBean {
       /** Container for arbitrary HTTP headers */
       @Getter
       private final Map<String, Serializable> map = new HashMap<>();
-
-      SpanHeadersContainer(final SpanHeadersContainer theOtherSpanContainer) {
-         this.locale        = theOtherSpanContainer.locale;
-         this.correlationID = theOtherSpanContainer.correlationID;
-         this.map.putAll(theOtherSpanContainer.map);
-      }
 
       public void setCorrelationID(final UUID theCorrelationID) {
          this.correlationID = theCorrelationID;
