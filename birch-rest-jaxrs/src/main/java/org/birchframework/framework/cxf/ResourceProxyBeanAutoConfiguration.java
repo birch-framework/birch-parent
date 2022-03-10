@@ -13,16 +13,19 @@
  ==============================================================*/
 package org.birchframework.framework.cxf;
 
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Path;
+import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration;
 import org.birchframework.framework.beans.Beans;
+import org.birchframework.framework.text.ValidationUtils;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -66,22 +69,31 @@ public class ResourceProxyBeanAutoConfiguration implements BeanPostProcessor {
                      clazz.getName());
          }
          catch (NoSuchBeanDefinitionException nsbde) {
-            this.registerBean(clazz);
+            try {
+               this.registerBean(clazz);
+            }
+            catch (Exception e) {
+               throw new RuntimeException(Throwables.getRootCause(e));
+            }
          }
       });
    }
 
-   private <T> void registerBean(Class<T> theClass) {
+   private <T> void registerBean(Class<T> theClass) throws MalformedURLException {
       final var anEnvironment = this.context.getEnvironment();
       final var anAutoProxy   = theClass.getAnnotation(AutoProxy.class);
-      final var aBaseURI      = anEnvironment.resolvePlaceholders(anAutoProxy.baseURI());
       final var aProviders    = List.of(this.resourceClientRequestFilter, anAutoProxy.providers());
       final var aUserName     = anEnvironment.resolvePlaceholders(anAutoProxy.username());
       final var aPassword     = anEnvironment.resolvePlaceholders(anAutoProxy.password());
+      final var aBaseURI      = anEnvironment.resolvePlaceholders(anAutoProxy.baseURI());
+      if (!ValidationUtils.validURL(aBaseURI)) {
+         throw new MalformedURLException(String.format("Invalid base URI %s specified for resource %s", aBaseURI, theClass.getName()));
+      }
       final Supplier<T> aProxySupplier = () -> StringUtils.isBlank(aUserName)
                                              ? JAXRSClientFactory.create(aBaseURI, theClass, aProviders, anAutoProxy.threadSafe())
                                              : JAXRSClientFactory.create(aBaseURI, theClass, aProviders, aUserName, aPassword, null);
-      context.registerBean(theClass, aProxySupplier);
+      this.context.registerBean(theClass, aProxySupplier);
+      this.context.getBean(theClass);
       log.info("Registered JAX-RS proxy bean of type {}", theClass.getName());
    }
 }
