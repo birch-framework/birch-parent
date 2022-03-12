@@ -26,4 +26,14 @@ if [ "${VERSION}" == "${ARTIFACT_VERSION}" ]; then
   exit 1
 else
   mvn versions:set -q -DnewVersion=${VERSION} -DgenerateBackupPoms=false
+
+  RELEASE_VERSION=$(echo ${VERSION} | cut -d'-' -f1)
+
+  sed -e "s|<birch.version>.*</birch.version>|<birch.version>${VERSION}</birch.version>|g" birch-starter/pom.xml > birch-starter/pom.xml.new && \
+  mv birch-starter/pom.xml.new birch-starter/pom.xml
+  [ $? -ne 0 ] && exit 2
+
+  sed -e "s|<version>.*</version>|<version>${RELEASE_VERSION}</version>|g" birch-starter/README.md > birch-starter/README.md.new && \
+  mv birch-starter/README.md.new birch-starter/README.md
+  [ $? -ne 0 ] && exit 3
 fi
