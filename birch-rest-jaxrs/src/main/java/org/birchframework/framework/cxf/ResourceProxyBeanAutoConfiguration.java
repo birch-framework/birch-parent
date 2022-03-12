@@ -22,10 +22,10 @@ import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration;
 import org.birchframework.framework.beans.Beans;
-import org.birchframework.framework.text.ValidationUtils;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -54,6 +54,8 @@ import org.springframework.context.support.GenericApplicationContext;
 @Slf4j
 @SuppressWarnings("SpringFacetCodeInspection")
 public class ResourceProxyBeanAutoConfiguration implements BeanPostProcessor {
+
+   private static final UrlValidator URL_VALIDATOR = UrlValidator.getInstance();
 
    private final GenericApplicationContext   context;
    private final ResourceClientRequestFilter resourceClientRequestFilter;
@@ -86,7 +88,7 @@ public class ResourceProxyBeanAutoConfiguration implements BeanPostProcessor {
       final var aUserName     = anEnvironment.resolvePlaceholders(anAutoProxy.username());
       final var aPassword     = anEnvironment.resolvePlaceholders(anAutoProxy.password());
       final var aBaseURI      = anEnvironment.resolvePlaceholders(anAutoProxy.baseURI());
-      if (!ValidationUtils.validURL(aBaseURI)) {
+      if (!URL_VALIDATOR.isValid(aBaseURI)) {
          throw new MalformedURLException(String.format("Invalid base URI %s specified for resource %s", aBaseURI, theClass.getName()));
       }
       final Supplier<T> aProxySupplier = () -> StringUtils.isBlank(aUserName)
