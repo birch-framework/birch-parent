@@ -14,12 +14,12 @@
 package org.birchfw.test.framework.cxf;
 
 import java.lang.reflect.Proxy;
+import java.net.MalformedURLException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.assertj.core.util.Throwables;
+import org.birchframework.framework.cxf.AutoProxy;
 import org.birchframework.framework.jaxrs.Responses;
 import org.birchfw.test.dto.Bitcoin;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -30,50 +30,48 @@ import static org.assertj.core.api.Assertions.*;
  * Tests {@link org.birchframework.framework.cxf.ResourceProxyBeanAutoConfiguration}.
  * @author Keivan Khalichi
  */
-@SuppressWarnings({"StaticVariableMayNotBeInitialized", "StaticVariableUsedBeforeInitialization"})
 public class ResourceClientProxyTest {
-
-   private static ConfigurableApplicationContext context;
-
-   private CoinDeskResource coinDeskResource;
-
-   /**
-    * Because of classloader issues, this is the only way to start the Spring Boot test instead of the traditional way using
-    * {@link org.springframework.boot.test.context.SpringBootTest} .
-    */
-   @BeforeAll
-   static void beforeAll() {
-      context = SpringApplication.run(TestConfiguration.class,
-                                      "--spring.cloud.config.enabled=false",
-                                      "--server.port=18080",
-                                      "--services.coindesk.address=https://api.coindesk.com/v1");
-   }
-
-   @AfterAll
-   static void afterAll() {
-      context.close();
-   }
-
-   @BeforeEach
-   void before() {
-      this.coinDeskResource = context.getBean(CoinDeskResource.class);
-      assertThat(Proxy.isProxyClass(this.coinDeskResource.getClass())).isTrue();
-   }
 
    /**
     * Tests <a href="https://www.coindesk.com/coindesk-api">free online API</a>.
     */
    @Test
    void testExecute() {
-      Responses.of(this.coinDeskResource.currentPrice()).ifOKOrElse(
-         new TypeReference<Bitcoin>() {},
-         bitcoin -> {
-            assertThat(bitcoin).isNotNull();
-            assertThat(bitcoin.getBpi()).isNotEmpty();
-            assertThat(bitcoin.getBpi()).containsKey("USD");
-            assertThat(bitcoin.getBpi().get("USD")).isNotNull();
-         },
-         () -> fail("Service call was not OK")
-      );
+      try (var aContext = this.runSpringBoot("https://api.coindesk.com/v1")) {
+         final var aCoinDeskResource = aContext.getBean(CoinDeskResource.class);
+         assertThat(Proxy.isProxyClass(aCoinDeskResource.getClass())).isTrue();
+         Responses.of(aCoinDeskResource.currentPrice()).ifOKOrElse(
+            new TypeReference<Bitcoin>() {},
+            bitcoin -> {
+               assertThat(bitcoin).isNotNull();
+               assertThat(bitcoin.getBpi()).isNotEmpty();
+               assertThat(bitcoin.getBpi()).containsKey("USD");
+               assertThat(bitcoin.getBpi().get("USD")).isNotNull();
+            },
+            () -> fail("Service call was not OK")
+         );
+      }
+   }
+
+   /**
+    * Tests with invalid {@link AutoProxy#baseURI()}.
+    */
+   @Test
+   void testInvalidURL() {
+      try (ConfigurableApplicationContext ignore = this.runSpringBoot("htps://api.coindesk.com/v1")) {
+         fail("Expected exception was not thrown");
+      }
+      catch (Exception e) {
+         assertThat(Throwables.getRootCause(e)).isInstanceOf(MalformedURLException.class);
+      }
+   }
+
+   private ConfigurableApplicationContext runSpringBoot(final String theCoinDeskURL) {
+      return SpringApplication.run(TestConfiguration.class,
+                                   "--spring.cloud.config.enabled=false",
+                                   "--server.port=18080",
+                                   "--cxf.jaxrs.component-scan=false",
+                                   "--cxf.jaxrs.classes-scan=false",
+                                   String.format("--services.coindesk.address=%s", theCoinDeskURL));
    }
 }
