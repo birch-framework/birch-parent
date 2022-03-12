@@ -97,7 +97,7 @@ public class SpanningContainerRequestFilter implements ContainerRequestFilter {
       }
       final var aMatcher = localePattern.matcher(theHeaderValue);
       return aMatcher.matches()
-           ? aMatcher.group(1).replaceAll("-", "_")
+           ? aMatcher.group(1).replace("-", "_")
            : this.defaultLocale;
    }
 }

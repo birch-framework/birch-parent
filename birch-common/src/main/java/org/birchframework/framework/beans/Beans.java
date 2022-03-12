@@ -210,7 +210,7 @@ public class Beans {
          return theStringValue.charAt(0);
       }
       else if (Enum.class.isAssignableFrom(theTargetType)) {
-         final var aValue = theStringValue.replaceAll("-", "_");
+         final var aValue = theStringValue.replace("-", "_");
          return Stream.of(((Class<Enum<?>>) theTargetType).getEnumConstants()).filter(value -> value.name().equalsIgnoreCase(aValue)).findFirst().orElse(null);
       }
       else if (float.class.isAssignableFrom(theTargetType) || Float.class.isAssignableFrom(theTargetType)) {

@@ -61,6 +61,7 @@ public class BaseMessageProducerApplication extends AbstractCommandLineApplicati
    protected static final String JMSXGROUP_ID              = "JMSXGroupID";
 
    protected static final Set<JmsMessageType> supportedTypes = Set.of(Text, Bytes);
+   @SuppressWarnings("unused")
    protected static final ThreadLocal<Object> threadLocal    = new ThreadLocal<>();
 
    private final JmsMessageType   messageType;
@@ -103,6 +104,7 @@ public class BaseMessageProducerApplication extends AbstractCommandLineApplicati
     */
    @SuppressWarnings("unused")
    protected void before(final String theMessage) {
+      // No-op; meant to be overriden if necessary to do so
    }
 
    /**
@@ -113,6 +115,7 @@ public class BaseMessageProducerApplication extends AbstractCommandLineApplicati
     */
    @SuppressWarnings("unused")
    protected void beforeEach(final int i, final String theMessage) {
+      // No-op; meant to be overriden if necessary to do so
    }
 
    /**

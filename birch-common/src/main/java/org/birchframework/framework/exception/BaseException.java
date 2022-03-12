@@ -25,32 +25,32 @@ import org.birchframework.dto.ErrorResponse;
 public abstract class BaseException extends Exception {
 
    /** Instance of error response */
-   private final ErrorResponse<?> errorResponse;
+   private final ErrorResponse<? extends Enum<?>> errorResponse;
 
    @SuppressWarnings("CPD-START")
-   public BaseException(final ErrorResponse<?> theErrorResponse, final Throwable theCause) {
+   public BaseException(final ErrorResponse<? extends Enum<?>> theErrorResponse, final Throwable theCause) {
       super(theCause);
       this.errorResponse = theErrorResponse;
    }
 
-   public BaseException(final ErrorResponse<?> theErrorResponse) {
+   public BaseException(final ErrorResponse<? extends Enum<?>> theErrorResponse) {
       super();
       this.errorResponse = theErrorResponse;
    }
 
-   public BaseException(final ErrorCode<?> theErrorCode) {
+   public BaseException(final ErrorCode<? extends Enum<?>> theErrorCode) {
       this(theErrorCode.errorResponse());
    }
 
-   public BaseException(final ErrorCode<?> theErrorCode, final Throwable theCause) {
+   public BaseException(final ErrorCode<? extends Enum<?>> theErrorCode, final Throwable theCause) {
       this(theErrorCode.errorResponse(), theCause);
    }
 
-   public ErrorResponse getErrorResponse() {
+   public ErrorResponse<? extends Enum<?>> getErrorResponse() {
       return this.errorResponse;
    }
 
-   public ErrorCode<?> getErrorCode() {
+   public ErrorCode<? extends Enum<?>> getErrorCode() {
       return this.errorResponse.getCode();
    }
 
