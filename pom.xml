@@ -12,8 +12,9 @@
   * You should have received a copy of the GNU General Public License
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ************************************************************-->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
 
@@ -175,7 +176,7 @@
       <asm.plugin.version>7.3.1</asm.plugin.version>
       <failsafe.plugin.version>2.22.2</failsafe.plugin.version>
       <sonar.plugin.version>3.7.0.1746</sonar.plugin.version>
-      <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
+      <jacoco.plugin.version>0.8.7</jacoco.plugin.version>
       <pmd.plugin.version>3.12.0</pmd.plugin.version>
       <spotbugs.plugin.version>4.5.0.0</spotbugs.plugin.version>
       <spotbugs.version>4.5.2</spotbugs.version>
@@ -194,7 +195,7 @@
 
       <doxia.version>1.9</doxia.version>
       <doxia.site-renderer.version>1.9.1</doxia.site-renderer.version>
-      <groovy.version>3.0.8</groovy.version>
+      <groovy.version>3.0.10</groovy.version>
       <commons-cli.version>1.5.0</commons-cli.version>
       <commons-validator.version>1.7</commons-validator.version>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -229,7 +230,6 @@
       <sonar.language>java</sonar.language>
       <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
       <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-      <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
       <sonar.coverage.exclusions>
          **/*DTO.java,
          **/*Configuration.java,
@@ -483,8 +483,8 @@
                <configuration>
                   <!--suppress MavenModelInspection -->
                   <skip>${maven.skip.test}</skip>
-                  <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
-                  <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                  <destFile>${project.basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                  <dataFile>${project.basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
                   <output>file</output>
                   <append>true</append>
                </configuration>
@@ -802,6 +802,10 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
          </plugin>
       </plugins>
 
