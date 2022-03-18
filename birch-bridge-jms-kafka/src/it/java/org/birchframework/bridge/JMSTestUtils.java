@@ -39,33 +39,33 @@ public class JMSTestUtils {
 
    static void executeSendMessage(final int theIterations, final BirchProperties theProperties, final SpringBootCamelContext theContext,
                                   final boolean theIsBytesMessage) {
-      final var aSampleMessage = "Hello World!";
+      final Map<String,Object> aHeaders = Map.of("corrID", UUID.randomUUID().toString(),
+                                              "key", "test-key",
+                                              "isTrue", true);
+      executeSendMessage(theIterations, theProperties, theContext, "Sample Message!", aHeaders, theIsBytesMessage);
+   }
+
+   static void executeSendMessage(final int theIterations, final BirchProperties theProperties, final SpringBootCamelContext theContext,
+                                  final String thePayload, final Map<String,Object> theHeaders, final boolean theIsBytesMessage) {
       final var aProducerTemplate = theContext.createProducerTemplate();
       final var aQueueCF = Arrays.stream(theContext.getApplicationContext().getBeanNamesForType(TopicConnectionFactory.class)).findFirst().orElse(null);
       final var aTopicCF = Arrays.stream(theContext.getApplicationContext().getBeanNamesForType(QueueConnectionFactory.class)).findFirst().orElse(null);
-      IntStream.range(0, theIterations).forEach(
-         i -> theProperties.getBridges()
-                           .entrySet()
-                           .stream()
-                           .filter(e -> e.getValue().getSource() == JMS)
-                           .forEach(e -> {
-                              final var aRouteCF = e.getValue().getJms().destination().getType() == TOPIC ? aTopicCF : aQueueCF;
-                              final var aDestination = e.getValue().getJms().destination();
-                              final var aURI = String.format("jms:%s:%s?connectionFactory=%s&%s",
-                                                             aDestination.getDestinationType(), aDestination.getName(), aRouteCF, PRODUCER_OPTIONS);
-                              aProducerTemplate.sendBodyAndHeaders(
-                                    aURI,
-                                    theIsBytesMessage ? aSampleMessage.getBytes() : aSampleMessage,
-                                    Map.of(
-                                       "corrID", UUID.randomUUID().toString(),
-                                       "key", "test-key",
-                                       "index", i,
-                                       "isTrue", true
-                                    )
-                              );
-                              log.info("Message {} sent to {}: {}",
-                                       i, e.getValue().getJms().destination().getDestinationType(), e.getValue().getJms().destination().getName());
-                           })
+      IntStream.range(0, theIterations).forEach(i -> {
+         theHeaders.put("index", i);
+         theProperties.getBridges()
+                      .entrySet()
+                      .stream()
+                      .filter(e -> e.getValue().getSource() == JMS)
+                      .forEach(e -> {
+                         final var aRouteCF = e.getValue().getJms().destination().getType() == TOPIC ? aTopicCF : aQueueCF;
+                         final var aDestination = e.getValue().getJms().destination();
+                         final var aURI = String.format("jms:%s:%s?connectionFactory=%s&%s",
+                         aDestination.getDestinationType(), aDestination.getName(), aRouteCF, PRODUCER_OPTIONS);
+                         aProducerTemplate.sendBodyAndHeaders(aURI, theIsBytesMessage ? thePayload.getBytes() : thePayload, theHeaders);
+                         log.info("Message {} sent to {}: {}",
+                                  i, e.getValue().getJms().destination().getDestinationType(), e.getValue().getJms().destination().getName());
+                      });
+         }
       );
    }
 }
