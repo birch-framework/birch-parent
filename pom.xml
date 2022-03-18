@@ -202,8 +202,7 @@
       <cxf.version>3.4.5</cxf.version>
       <javax-servlet.version>2.5</javax-servlet.version>
       <javax-el.version>3.0.1-b12</javax-el.version>
-      <camel.version>3.12.0</camel.version>
-      <spring-jms.version>5.2.6.RELEASE</spring-jms.version>
+      <camel.version>3.15.0</camel.version>
       <pooled-jms.version>1.1.1</pooled-jms.version>
       <reflections.version>0.10.2</reflections.version>
       <orika.version>1.5.4</orika.version>
