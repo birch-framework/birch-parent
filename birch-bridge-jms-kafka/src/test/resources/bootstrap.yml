@@ -1,0 +1,52 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+  jta:
+    enabled: true
+  application:
+    name: testbridge
+
+camel:
+  health:
+    routes-enabled: false
+  component:
+    kafka:
+      brokers: ${spring.embedded.kafka.brokers}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      consumers-count: 3
+    jms:
+      error-handler-log-stack-trace: false
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info,health,env,mappings,logfile,loggers,metrics,beans,conditions,scheduledtasks,configprops,jolokia,refresh,prometheus
+
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) %magenta([%15.15t]) %green(%50.50logger{50}) %boldYellow(corrID:[%X{correlationID}]) : %boldCyan(%m%n)'
+  level:
+    root: info
+    org:
+      birchframework: debug
+    kafka:
+      server: fatal
+      utils: fatal
+
+birch:
+  kafka:
+    admin:
+      zookeeper-servers: ${spring.embedded.zookeeper.connect}
+  bridges-global-configs:
+    affinity: us-east-1
+    service-topic: common-service-topic
+    auto-start: true

@@ -1,0 +1,23 @@
+server:
+  port: ${birch.bridge-port}
+
+# ActiveMQ Configuration
+spring:
+  activemq:
+    broker-url: vm://embedded?broker.persistent=false
+    in-memory: true
+    pool:
+      enabled: false
+
+birch:
+  bridge-port: 8081
+  bridges:
+    test-1-in:
+      source: jms
+      jms:
+        queue: test-queue1-in
+        key-property: key
+        correlation-id-property: corrID
+        filter-properties: corrID,key,index,isTrue
+      kafka:
+        topic: test-topic1-in
