@@ -30,9 +30,7 @@ public class MappingAutoConfiguration {
 
    @PostConstruct
    protected void init() {
-      final var aCallerClass = Beans.findCallerClass();
-      final var aBasePackage = aCallerClass.isEmpty() ? null : Beans.computeBasePackageName(aCallerClass.get());
-      final var anAnnotatedClasses = Beans.classesAnnotatedWith(MappingModel.class, aBasePackage);
+      final var anAnnotatedClasses = Beans.classesAnnotatedWith(MappingModel.class);
       if (!CollectionUtils.isEmpty(anAnnotatedClasses)) {
          anAnnotatedClasses.forEach(clazz -> {
             final var aMappingModel = clazz.getAnnotation(MappingModel.class);
