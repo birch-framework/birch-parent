@@ -109,6 +109,7 @@
             <activeByDefault>true</activeByDefault>
          </activation>
          <properties>
+            <kafka.version>2.8.1</kafka.version>
             <jvm.memory.min>128</jvm.memory.min>
             <jvm.memory.max>512</jvm.memory.max>
             <app.log.level>DEBUG</app.log.level>

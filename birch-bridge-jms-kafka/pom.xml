@@ -33,18 +33,6 @@
       <ibm-mq.version>2.5.3</ibm-mq.version>
    </properties>
 
-   <profiles>
-      <profile>
-         <id>test</id>
-         <activation>
-            <activeByDefault>false</activeByDefault>
-         </activation>
-         <properties>
-            <kafka.version>2.8.1</kafka.version>
-         </properties>
-      </profile>
-   </profiles>
-
    <dependencies>
       <dependency>
          <groupId>org.birchframework</groupId>
