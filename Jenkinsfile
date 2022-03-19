@@ -67,7 +67,7 @@ node('ubuntu-node') {
       withSonarQubeEnv(installationName: 'SonarCloud (Birch Framework)', envOnly: true) {
          // This expands the evironment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
          withMaven (mavenSettingsConfig: 'Birch-Maven-Settings') {
-            sh "mvn sonar:sonar -Dsonar.branch.name=${env.BRANCH_NAME}"
+            sh "mvn sonar:sonar -P bci -Dsonar.branch.name=${env.BRANCH_NAME}"
          }
       }
    }
