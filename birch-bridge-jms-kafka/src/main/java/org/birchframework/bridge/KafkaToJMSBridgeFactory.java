@@ -84,6 +84,8 @@ public class KafkaToJMSBridgeFactory extends AbstractBridgeFactory {
                                                   "Rate of errors per second, since last sampling",
                                                   this.meterRegistry, Tag.of("state", "error"));
 
+      final var aBridgeRoutePolicy = new BridgeRoutePolicy(anInGauge, anOutGauge);
+
       final var aFilterPredicate       = (Predicate<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getFilterPredicate());
       final var anAfterReceiveConsumer = (Consumer<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getAfterReceiveConsumer());
       final var aBeforeSendConsumer    = (Consumer<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getBeforeSendConsumer());
@@ -118,11 +120,11 @@ public class KafkaToJMSBridgeFactory extends AbstractBridgeFactory {
          ProcessorDefinition<?> route = rb.from(aFromURI.get())
                                           .routeId(theName)
                                           .autoStartup(theGlobalConfigs.isAutoStart())
-                                          .errorHandler(anErrorHandlerBuilder);
+                                          .errorHandler(anErrorHandlerBuilder)
+                                          .routePolicy(aBridgeRoutePolicy);
          route = Beans.invokeIfNotNull(aTXPolicyBeanRef, route::transacted, route);
          route = aFilterPredicate == null ? route : route.filter(aFilterPredicate::test);
-         route = route.process().body(body -> anInGauge.increment())
-                      .log(INFO, "Incoming message: Body: ${bodyOneLine}");
+         route = route.log(INFO, "Incoming message: Body: ${bodyOneLine}");
          route = Beans.invokeIfNotNull(anAfterReceiveConsumer, route.process()::exchange, route);
          route = route.unmarshal().custom(PayloadDataFormat.BEAN_NAME)
                       .process().message(aSourceProcessor::processCorrelationID)
@@ -132,7 +134,6 @@ public class KafkaToJMSBridgeFactory extends AbstractBridgeFactory {
          route.log(INFO, "Outgoing message: Headers: ${headers}; Body: ${bodyOneLine}")
               .toF("jms:%s:%s?connectionFactory=%s&deliveryMode=2",
                    theProperties.getJms().destination().getDestinationType(), theProperties.getJms().destination().getName(), aRouteCF)
-              .process().body(body -> anOutGauge.increment())
               .stop();
       };
       // CPD-ON

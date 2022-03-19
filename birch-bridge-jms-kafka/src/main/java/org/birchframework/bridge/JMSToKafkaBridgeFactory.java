@@ -28,15 +28,16 @@ import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.commons.lang3.StringUtils;
 import org.birchframework.bridge.dataformat.PayloadDataFormat;
-import org.birchframework.configuration.BirchProperties;
+import org.birchframework.configuration.BirchProperties.BridgeProperties;
+import org.birchframework.configuration.BirchProperties.BridgesGlobalConfigs;
 import org.birchframework.configuration.ConfigurationException;
-import org.birchframework.framework.beans.Beans;
 import org.birchframework.dto.payload.DestinationType;
+import org.birchframework.framework.beans.Beans;
 
 import static org.apache.camel.LoggingLevel.INFO;
 import static org.birchframework.bridge.TransactedPolicyType.*;
 import static org.birchframework.configuration.BirchProperties.BridgeProperties.BridgeSource.JMS;
-import static org.birchframework.dto.BirchErrorCode.*;
+import static org.birchframework.dto.BirchErrorCode.B31031;
 
 /**
  * Factory that creates JMS/Kafka message bridges.  Supports ActiveMQ, IBM MQ, and Tibco EMS.  Requires dependencies on exactly one of the 3
@@ -58,7 +59,7 @@ public class JMSToKafkaBridgeFactory extends AbstractBridgeFactory {
    /** {@inheritDoc} */
    @Override
    @SuppressWarnings({"AutoBoxing", "unchecked", "DuplicatedCode"})
-   public LambdaRouteBuilder createBridge(final String theName, final BirchProperties.BridgeProperties theProperties, final BirchProperties.BridgesGlobalConfigs theGlobalConfigs)
+   public LambdaRouteBuilder createBridge(final String theName, final BridgeProperties theProperties, final BridgesGlobalConfigs theGlobalConfigs)
                              throws Exception {
       // Configure bridge consumer
       if (StringUtils.isNotBlank(theProperties.getJms().getQueue()) && theProperties.getJms().getQueue().equals(theProperties.getJms().getDeadLetterQueue()))
@@ -78,6 +79,8 @@ public class JMSToKafkaBridgeFactory extends AbstractBridgeFactory {
       final var anErrorGauge = this.registerGauge(theProperties, theName, String.format("%s.rate", METRIC_PREFIX),
                                                   "Rate of errors per second, since last sampling",
                                                   this.meterRegistry, Tag.of("state", "error"));
+
+      final var aBridgeRoutePolicy = new BridgeRoutePolicy(anInGauge, anOutGauge);
 
       final var aFilterPredicate       = (Predicate<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getFilterPredicate());
       final var anAfterReceiveConsumer = (Consumer<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getAfterReceiveConsumer());
@@ -114,11 +117,11 @@ public class JMSToKafkaBridgeFactory extends AbstractBridgeFactory {
          ProcessorDefinition<?> route = rb.from(aFromURI.get())
                                           .routeId(theName)
                                           .autoStartup(theGlobalConfigs.isAutoStart())
-                                          .errorHandler(anErrorHandlerBuilder);
+                                          .errorHandler(anErrorHandlerBuilder)
+                                          .routePolicy(aBridgeRoutePolicy);
          route = Beans.invokeIfNotNull(aTXPolicyBeanRef, route::transacted, route);
          route = aFilterPredicate == null ? route : route.filter(aFilterPredicate::test);
-         route = route.process().body(body -> anInGauge.increment())
-                      .process().message(aSourceProcessor::processCorrelationID)
+         route = route.process().message(aSourceProcessor::processCorrelationID)
                       .log(INFO, "Incoming message: Headers: ${headers}; Body: ${bodyOneLine}");
          route = Beans.invokeIfNotNull(aPropertiesFilterPattern, route::removeHeaders, route);
          route = Beans.invokeIfNotNull(anAfterReceiveConsumer, route.process()::exchange, route);
@@ -127,13 +130,12 @@ public class JMSToKafkaBridgeFactory extends AbstractBridgeFactory {
          route = Beans.invokeIfNotNull(aBeforeSendConsumer, route.process()::exchange, route);
          route.log(INFO, "Outgoing message: Body: ${bodyOneLine}")
               .toF("kafka:%s", theProperties.getKafka().getTopic())
-              .process().body(body -> anOutGauge.increment())
               .stop();
       };
    }
 
    @Override
-   protected SourceProcessor createSourceProcessor(final String theName, final BirchProperties.BridgeProperties theProperties) {
+   protected SourceProcessor createSourceProcessor(final String theName, final BridgeProperties theProperties) {
       return new JMSSourceProcessor(theProperties);
    }
 }
