@@ -21,7 +21,6 @@ camel:
       ssl-protocol: TLSv1.2
       #security-protocol: SSL
       consumers-count: 3
-      consumer-streams: 3
     jms:
       error-handler-log-stack-trace: false
 
