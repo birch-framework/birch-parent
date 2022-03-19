@@ -42,6 +42,7 @@ import org.springframework.jms.support.destination.DestinationResolver;
 @SuppressWarnings("SpringFacetCodeInspection")
 public class JMSTemplateConfigurer {
 
+   private final PropertyMapper                      mapper = PropertyMapper.get();
    private final JmsProperties                       jmsProperties;
    private final ObjectProvider<MessageConverter>    messageConverter;
    private final ObjectProvider<DestinationResolver> destinationResolver;
@@ -56,18 +57,17 @@ public class JMSTemplateConfigurer {
 
    @SuppressWarnings("AutoBoxing")
    public void configureJMSTemplate(final JmsTemplate theJMSTemplate) {
-      final var aMapper = PropertyMapper.get();
       final var aTemplateProperties = this.jmsProperties.getTemplate();
       theJMSTemplate.setPubSubDomain(this.jmsProperties.isPubSubDomain());
-      aMapper.from(this.destinationResolver::getIfUnique).whenNonNull().to(theJMSTemplate::setDestinationResolver);
-      aMapper.from(this.messageConverter::getIfUnique).whenNonNull().to(theJMSTemplate::setMessageConverter);
-      aMapper.from(aTemplateProperties::getDefaultDestination).whenNonNull().to(theJMSTemplate::setDefaultDestinationName);
-      aMapper.from(aTemplateProperties::getDeliveryDelay).whenNonNull().as(Duration::toMillis).to(theJMSTemplate::setDeliveryDelay);
-      aMapper.from(aTemplateProperties::determineQosEnabled).to(theJMSTemplate::setExplicitQosEnabled);
-      aMapper.from(aTemplateProperties::getDeliveryMode).whenNonNull().as(JmsProperties.DeliveryMode::getValue).to(theJMSTemplate::setDeliveryMode);
-      aMapper.from(aTemplateProperties::getPriority).whenNonNull().to(theJMSTemplate::setPriority);
-      aMapper.from(aTemplateProperties::getTimeToLive).whenNonNull().as(Duration::toMillis).to(theJMSTemplate::setTimeToLive);
-      aMapper.from(aTemplateProperties::getReceiveTimeout).whenNonNull().as(Duration::toMillis).to(theJMSTemplate::setReceiveTimeout);
-      aMapper.from(() -> theJMSTemplate.getConnectionFactory() instanceof TopicConnectionFactory).to(theJMSTemplate::setPubSubDomain);
+      mapper.from(this.destinationResolver::getIfUnique).whenNonNull().to(theJMSTemplate::setDestinationResolver);
+      mapper.from(this.messageConverter::getIfUnique).whenNonNull().to(theJMSTemplate::setMessageConverter);
+      mapper.from(aTemplateProperties::getDefaultDestination).whenNonNull().to(theJMSTemplate::setDefaultDestinationName);
+      mapper.from(aTemplateProperties::getDeliveryDelay).whenNonNull().as(Duration::toMillis).to(theJMSTemplate::setDeliveryDelay);
+      mapper.from(aTemplateProperties::determineQosEnabled).to(theJMSTemplate::setExplicitQosEnabled);
+      mapper.from(aTemplateProperties::getDeliveryMode).whenNonNull().as(JmsProperties.DeliveryMode::getValue).to(theJMSTemplate::setDeliveryMode);
+      mapper.from(aTemplateProperties::getPriority).whenNonNull().to(theJMSTemplate::setPriority);
+      mapper.from(aTemplateProperties::getTimeToLive).whenNonNull().as(Duration::toMillis).to(theJMSTemplate::setTimeToLive);
+      mapper.from(aTemplateProperties::getReceiveTimeout).whenNonNull().as(Duration::toMillis).to(theJMSTemplate::setReceiveTimeout);
+      mapper.from(() -> theJMSTemplate.getConnectionFactory() instanceof TopicConnectionFactory).to(theJMSTemplate::setPubSubDomain);
    }
 }
