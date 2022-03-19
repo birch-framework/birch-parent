@@ -372,6 +372,7 @@ public class Beans {
     * Invokes {@code theFunction} only if {@code theObject} is not null
     * @param theObject the object to be tested and consumed by {@code theFunction}
     * @param theFunction the consumer
+    * @param theValueIfNull the value if object (first parameter) is null (essentially the default value)
     * @param <T> the datatype of the object being tested and possibly consumed
     * @param <R> the datatype of the return value resulting from invokation of {@code theFunction}
     * @return the result of {@code theFunction}, null if {@code theObject} is null
