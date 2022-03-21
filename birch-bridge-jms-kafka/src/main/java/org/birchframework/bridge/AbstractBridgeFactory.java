@@ -209,7 +209,7 @@ public abstract class AbstractBridgeFactory {
    }
 
    protected RouteDefinition addBridgePolicy(final RouteDefinition theRoute, final RateGauge theInGauge, final RateGauge theOutGauge) {
-      try(final var aBridgeRoutePolicy = new BridgeRoutePolicy(theInGauge, theOutGauge)) {
+      try(var aBridgeRoutePolicy = new BridgeRoutePolicy(theInGauge, theOutGauge)) {
          return theRoute.routePolicy(aBridgeRoutePolicy);
       }
       catch (Exception e) {
