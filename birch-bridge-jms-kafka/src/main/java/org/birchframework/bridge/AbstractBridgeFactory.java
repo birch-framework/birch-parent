@@ -35,6 +35,7 @@ import org.apache.camel.builder.DeadLetterChannelBuilder;
 import org.apache.camel.builder.DefaultErrorHandlerBuilder;
 import org.apache.camel.builder.ErrorHandlerBuilder;
 import org.apache.camel.builder.LambdaRouteBuilder;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.spi.CamelLogger;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.camel.spring.spi.TransactionErrorHandlerBuilder;
@@ -205,6 +206,17 @@ public abstract class AbstractBridgeFactory {
             theErrorConsumer.accept(theExchange);
          }
       }
+   }
+
+   protected RouteDefinition addBridgePolicy(final RouteDefinition theRoute, final RateGauge theInGauge, final RateGauge theOutGauge) {
+      try(final var aBridgeRoutePolicy = new BridgeRoutePolicy(theInGauge, theOutGauge)) {
+         return theRoute.routePolicy(aBridgeRoutePolicy);
+      }
+      catch (Exception e) {
+         final var aRootCause = Throwables.getRootCause(e);
+         log.warn("Exception occured configuring route policy; Exception: {}; Message: {}", aRootCause.getClass().getName(), aRootCause.getMessage());
+      }
+      return theRoute;
    }
 
    private String bodyString(final Object aBody) {

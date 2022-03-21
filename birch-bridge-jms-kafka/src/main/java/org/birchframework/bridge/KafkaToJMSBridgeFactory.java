@@ -24,6 +24,7 @@ import io.micrometer.core.instrument.Tag;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.LambdaRouteBuilder;
 import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.commons.lang3.StringUtils;
@@ -31,8 +32,8 @@ import org.birchframework.bridge.dataformat.PayloadDataFormat;
 import org.birchframework.configuration.BirchProperties.BridgeProperties;
 import org.birchframework.configuration.BirchProperties.BridgesGlobalConfigs;
 import org.birchframework.configuration.ConfigurationException;
-import org.birchframework.framework.beans.Beans;
 import org.birchframework.dto.payload.DestinationType;
+import org.birchframework.framework.beans.Beans;
 
 import static org.apache.camel.LoggingLevel.INFO;
 import static org.birchframework.bridge.TransactedPolicyType.*;
@@ -84,8 +85,6 @@ public class KafkaToJMSBridgeFactory extends AbstractBridgeFactory {
                                                   "Rate of errors per second, since last sampling",
                                                   this.meterRegistry, Tag.of("state", "error"));
 
-      final var aBridgeRoutePolicy = new BridgeRoutePolicy(anInGauge, anOutGauge);
-
       final var aFilterPredicate       = (Predicate<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getFilterPredicate());
       final var anAfterReceiveConsumer = (Consumer<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getAfterReceiveConsumer());
       final var aBeforeSendConsumer    = (Consumer<Exchange>) Beans.findBeanOrCreateInstance(theProperties.getBeforeSendConsumer());
@@ -120,8 +119,10 @@ public class KafkaToJMSBridgeFactory extends AbstractBridgeFactory {
          ProcessorDefinition<?> route = rb.from(aFromURI.get())
                                           .routeId(theName)
                                           .autoStartup(theGlobalConfigs.isAutoStart())
-                                          .errorHandler(anErrorHandlerBuilder)
-                                          .routePolicy(aBridgeRoutePolicy);
+                                          .errorHandler(anErrorHandlerBuilder);
+
+         route = this.addBridgePolicy((RouteDefinition) route, anInGauge, anOutGauge);
+
          route = Beans.invokeIfNotNull(aTXPolicyBeanRef, route::transacted, route);
          route = aFilterPredicate == null ? route : route.filter(aFilterPredicate::test);
          route = route.log(INFO, "Incoming message: Body: ${bodyOneLine}");
