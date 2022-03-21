@@ -20,8 +20,8 @@ Javadocs for documentation on how to auto-configure security for microservices u
 1. Annotate the Spring Boot application with [`@EnableOAuth2ResourceServerSecurity`](https://javadoc.io/doc/org.birchframework/birch-security-oauth-spring/latest/org/birchframework/security/oauth2/EnableOAuth2ResourceServerSecurity.html) 
 in order to signal Spring Boot to auto-configure `birch-security-oauth-spring` for the microservice's JAX-RS endpoints
 2. Provide a concrete class that implements the [`UserDetails`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetails.html) interface
-3. Provide a concrete class that implements the [`GrantedAuthoritiesBuilder`](https://javadoc.io/doc/org.birchframework/birch-security-oauth-spring/latest/org/birchframework/security/oauth2/GrantedAuthoritiesBuilder.html) interface
-interface, and reference it in the application configuration in the property `birch.security.oauth2.realms.<realm-name>.granted-authorities-builder`
+3. Provide a concrete class that implements the [`GrantedAuthoritiesBuilder`](https://javadoc.io/doc/org.birchframework/birch-security-oauth-spring/latest/org/birchframework/security/oauth2/GrantedAuthoritiesBuilder.html)
+interface, and reference it in the application configuration by setting the property `birch.security.oauth2.realms.<realm-name>.granted-authorities-builder`
 4. Provide a Spring bean that implements the [`UserDetailsService`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetailsService.html) 
 interface, returning an instance of the `UserDetails` implementation from step 2 above
 5. Configure Birch Security OAuth2 configurations as per [`OAuth2ResourceServerAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-security-oauth-spring/latest/org/birchframework/security/oauth2/OAuth2ResourceServerAutoConfiguration.html) Javadocs
@@ -41,5 +41,5 @@ interface, returning an instance of the `UserDetails` implementation from step 2
 
 At Spring Boot time, Birch Security OAuth2 will load one instance of each `@Path @Service` annotated JAX-RS service, one per OAuth2 realm specified in 
 Birch Security OAuth2 configurations.  Resources in each realm are attached to the CXF Bus by the base path provided within each realm's configuration.  The 
-Bearer token for each realm is evaluated per that realm's configurations.  Therefore, it is possible each realm must have its own `GrantedAuthoritiesBuilder` because
-each realm's IdP may provide roles in a different manner than others.
+Bearer token for each realm is evaluated per that realm's configurations.  Therefore, it is possible each realm must have its own `GrantedAuthoritiesBuilder`
+in case each realm's IdP provide roles in a different manner than others.
