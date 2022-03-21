@@ -41,6 +41,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.birchframework.configuration.BirchProperties.IdPRealm;
+import org.birchframework.framework.beans.Beans;
 import org.birchframework.framework.cxf.JAXRSUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.condition.ConditionsReportEndpoint;
@@ -268,12 +269,12 @@ public class OAuth2SecurityFilterChain implements SecurityFilterChain, Ordered {
       log.info("Configured services for IdP realm with key {} and name {}", this.properties.getValue(), this.properties.getName());
    }
 
+   @SuppressWarnings("unchecked")
    protected Converter<Jwt, AbstractAuthenticationToken> jwtAuthConverter() throws Exception {
       final var aUserNameClaimName = this.properties.getUserNameClaimName();
       final var aGroupsClaimName = this.properties.getGroupsClaimName();
-      final var aGrantedAuthsBuilder = this.properties.getGrantedAuthoritiesBuilder() == null
-                                       ? this.defaultGrantedAuthoritiesBuilder
-                                       : (GrantedAuthoritiesBuilder) this.properties.getGrantedAuthoritiesBuilder().getConstructor().newInstance();
+      final var aGrantedAuthsBuilder = Beans.instanceOrDefault((Class<GrantedAuthoritiesBuilder>) this.properties.getGrantedAuthoritiesBuilder(),
+                                                               this.defaultGrantedAuthoritiesBuilder);
       return jwt -> {
          final var anAccessToken = new OAuth2AccessToken(BEARER, jwt.getTokenValue(), jwt.getIssuedAt(), jwt.getExpiresAt());
          final String aUserName = jwt.getClaim(aUserNameClaimName);
