@@ -25,5 +25,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 @FunctionalInterface
 public interface GrantedAuthoritiesBuilder {
 
+   /**
+    * Builds a collection of {@link GrantedAuthority} instances from the provided {@link Jwt} instance.  The {@code theRoleClaim} specifies the OAuth2 claim that
+    * includes the set of roles provided by the Identity Provider (IdP).
+    * @param theRoleClaim the name of the claim containing roles provided by the IdP; claim name is normally configured by the IdP administrator
+    * @param theJWT the unmarshalled JWT that was passed as the {@code Bearer} HTTP header
+    * @return collection of {@link GrantedAuthority} instances, normally {@link org.springframework.security.core.authority.SimpleGrantedAuthority}
+    */
    Collection<GrantedAuthority> build(String theRoleClaim, Jwt theJWT);
 }
