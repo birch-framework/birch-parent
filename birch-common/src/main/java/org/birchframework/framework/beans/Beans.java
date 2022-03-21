@@ -15,6 +15,7 @@ package org.birchframework.framework.beans;
 
 import java.lang.StackWalker.StackFrame;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
@@ -383,6 +384,25 @@ public class Beans {
          return theValueIfNull;
       }
       return theFunction.apply(theObject);
+   }
+
+   /**
+    * Tests if {@code theClass} is null.  If so, returns the default value, otherwise instatiates the class using its default constructor and returns its value.
+    * @param theClass the class to be instantiated
+    * @param theDefaultValue the default value if the class is null
+    * @param <T> the class type
+    * @return new instance of class or default value
+    * @throws NoSuchMethodException see {@link java.lang.reflect.Constructor#newInstance(Object...)}
+    * @throws InvocationTargetException see {@link java.lang.reflect.Constructor#newInstance(Object...)}
+    * @throws InstantiationException see {@link java.lang.reflect.Constructor#newInstance(Object...)}
+    * @throws IllegalAccessException see {@link java.lang.reflect.Constructor#newInstance(Object...)}
+    */
+   public static <T> T instanceOrDefault(final Class<T> theClass, final T theDefaultValue) throws NoSuchMethodException, InvocationTargetException,
+                                                                                                  InstantiationException, IllegalAccessException {
+      if (theClass == null) {
+         return theDefaultValue;
+      }
+      return theClass.getConstructor().newInstance();
    }
 
    /**
