@@ -214,7 +214,7 @@ public abstract class AbstractBridgeFactory {
       }
       catch (Exception e) {
          final var aRootCause = Throwables.getRootCause(e);
-         log.warn("Exception occured configuring route policy; Exception: {}; Message: {}", aRootCause.getClass().getName(), aRootCause.getMessage());
+         log.warn("Exception occurred configuring route policy; Exception: {}; Message: {}", aRootCause.getClass().getName(), aRootCause.getMessage());
       }
       return theRoute;
    }
