@@ -26,7 +26,7 @@ interface, and reference it in the application configuration by setting the prop
 interface, returning an instance of the `UserDetails` implementation from step 2 above
 5. Configure Birch Security OAuth2 configurations as per [`OAuth2ResourceServerAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-security-oauth-spring/latest/org/birchframework/security/oauth2/OAuth2ResourceServerAutoConfiguration.html) Javadocs
 6. In order to provide method-level security
-   1. Annotate the Spring Application with [`@EnableGlobalMethodSecurity(prePostEnabled = true)`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/method/configuration/EnableGlobalMethodSecurity.html)
+   1. Annotate the Spring Boot Application with [`@EnableGlobalMethodSecurity(prePostEnabled = true)`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/method/configuration/EnableGlobalMethodSecurity.html)
    2. Provide a concrete class that implements the [`PermissionEvaluator`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/access/PermissionEvaluator.html) interface
    3. Extend the Spring Boot application from [`GlobalMethodSecurityConfiguration`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/method/configuration/GlobalMethodSecurityConfiguration.html); implement the interface's method as follows:
       ```java
@@ -39,7 +39,10 @@ interface, returning an instance of the `UserDetails` implementation from step 2
       ```
    4. Annotate JAX-RS resource implementation class's methods with [`@PreAuthorize`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/access/prepost/PreAuthorize.html)
 
-At Spring Boot time, Birch Security OAuth2 will load one instance of each `@Path @Service` annotated JAX-RS service, one per OAuth2 realm specified in 
+At Spring Boot application startup, Birch Security OAuth2 will load one instance of each `@Path @Service` annotated JAX-RS service, one per OAuth2 realm specified in 
 Birch Security OAuth2 configurations.  Resources in each realm are attached to the CXF Bus by the base path provided within each realm's configuration.  The 
 Bearer token for each realm is evaluated per that realm's configurations.  Therefore, it is possible each realm must have its own `GrantedAuthoritiesBuilder`
-in case each realm's IdP provide roles in a different manner than others.
+in case each realm's IdP provides roles in a different manner than others.
+
+It is strongly recommended to employ a somewhat short-lived caching strategy for the [`UserDetailsService.loadUserByUsername`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetailsService.html#loadUserByUsername(java.lang.String))
+implementation, since this method may be called many times, once per each API request.
