@@ -70,7 +70,7 @@ Add the following dependency for EMS Spring auto-configuration:
 ```
 
 Refer to [`EMSAutoConfiguration`](https://javadoc.io/doc/org.birchframework/birch-ems-support/latest/org/birchframework/ems/EMSAutoConfiguration.html) Javadocs 
-to auto-conffigure EMS bridges that use it as source or sink.
+to auto-configure EMS bridges that use it as source or sink.
 
 ## Apache Kafka
 Refer to the [Apache Kafka component](https://camel.apache.org/components/3.15.x/kafka-component.html#_spring_boot_auto_configuration) documentation to configure Kafka for bridges.
@@ -78,8 +78,8 @@ Refer to the [Apache Kafka component](https://camel.apache.org/components/3.15.x
 # Running Local Kafka Instance
 Use the provided `birch-parent/scripts/docker-compose-kafka.yml` file to setup a local Kafka instances.
 From **within** the `birch-parent/scripts` directory:
-1. Edit the `.env` file in the same folder
-   * Replace the value of `KAFKA_ADVERTISED_HOST_NAME` with the hostname or IP address of the Docker host
+
+1. Edit the `.env` file in the same folder and replace the value of `KAFKA_ADVERTISED_HOST_NAME` with the hostname or IP address of the Docker host
 2. Run:
     ```shell
     sudo addgroup --uid 1001 kafka
@@ -88,7 +88,7 @@ From **within** the `birch-parent/scripts` directory:
     docker-compose -f docker-compose-kafka.yml --env-file .env up -d
     ```
     **NOTE:** if the `kafka` user and group are not created with respective IDs of `1001`, this docker-compose command will be unable to successfully create the
-    constainers.
+    containers.
 3. Install Kafka CLI by following [these instructions](https://dzone.com/articles/apache-kafka-basic-setup-and-usage-with-command-li)
 4. Test this Kafka instance by running
     ```shell

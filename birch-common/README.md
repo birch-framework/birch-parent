@@ -66,7 +66,7 @@ final var objects = parser.parse(Files.lines(Paths.get("path/to/population-demog
 objects.forEach(pojo -> {
    if (pojo instanceof DemographicInfo) {
       final var demographic = (DemographicInfo) pojo;
-      // Here place logic to use consume the 'demographic' pojo
+      // Here place logic to use consume the 'demographic' POJO
    }
 });
 ```
