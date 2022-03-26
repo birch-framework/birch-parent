@@ -14,7 +14,7 @@ The easiest way to use Birch Framework is to use it as a starter parent project 
    <parent>
       <groupId>org.birchframework</groupId>
       <artifactId>birch-starter</artifactId>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
    </parent>
 ```
 ## Import
@@ -25,7 +25,7 @@ Another way of using Birch Framework is to include it as a module dependency in 
          <dependency>
             <groupId>org.birchframework</groupId>
             <artifactId>birch-starter</artifactId>
-            <version>1.3.0</version>
+            <version>1.3.1</version>
             <scope>import</scope>
             <type>pom</type>
          </dependency>
