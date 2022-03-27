@@ -12,8 +12,11 @@
   * You should have received a copy of the GNU General Public License
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ************************************************************-->
+<!--suppress XmlUnusedNamespaceDeclaration -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
@@ -717,6 +720,11 @@
                      <configuration>
                         <target>
                            <copy file="README.md" tofile="src/site/markdown/index.md" failonerror="false" quiet="true"/>
+                           <echo message="about.birchframework.org" file="CNAME" force="true">
+                              <condition>
+                                 <equals arg1="${project.artifactId}" arg2="birch-parent"/>
+                              </condition>
+                           </echo>
                         </target>
                      </configuration>
                   </execution>
