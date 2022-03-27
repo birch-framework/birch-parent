@@ -56,7 +56,7 @@ public class Payload<T extends Serializable> implements Serializable {
    @JsonProperty
    private       Long                       expiration;
    @JsonProperty
-   private       Map<?, ?>                  map;
+   private       HashMap<?, ?>              map;
    @JsonProperty
    private       String                     messageID;
    @JsonProperty

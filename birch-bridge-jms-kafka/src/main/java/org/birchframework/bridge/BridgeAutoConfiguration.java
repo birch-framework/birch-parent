@@ -17,7 +17,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -139,17 +139,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class BridgeAutoConfiguration {
 
-   private static final Pattern znodeBasePathPattern = Pattern.compile("/(.*)");
+   private static final Pattern znodeBasePathPattern         = Pattern.compile("/(.*)");
+   private static final String  KAFKA_BROADCAST_DIRECT_ROUTE = "direct:kafka-broadcast";
+   private static final String  ZOOKEEPER_SET_DIRECT_ROUTE   = "direct:zookeeper-set";
 
    protected static final String START_ACTION = "start";
    protected static final String STOP_ACTION  = "stop";
 
-   private final Map<String, BridgeProperties>            bridges;
-   private final Set<String>                              zookeeperEndpoints;
-   private final Map<BridgeSource, AbstractBridgeFactory> bridgeFactories = new HashMap<>(2);
-   private final BridgesGlobalConfigs                     bridgesGlobalConfigs;
-   private final GenericApplicationContext                context;
-   private final CamelContext                             camelContext;
+   private final Map<String, BridgeProperties>                bridges;
+   private final Set<String>                                  zookeeperEndpoints;
+   private final EnumMap<BridgeSource, AbstractBridgeFactory> bridgeFactories = new EnumMap<>(BridgeSource.class);
+   private final BridgesGlobalConfigs                         bridgesGlobalConfigs;
+   private final GenericApplicationContext                    context;
+   private final CamelContext                                 camelContext;
 
    public BridgeAutoConfiguration(final BirchProperties theProperties, final GenericApplicationContext theContext, final CamelContext theCamelContext) {
       this.bridges              = theProperties.getBridges();
@@ -222,9 +224,9 @@ public class BridgeAutoConfiguration {
               })
               .choice()
                  .when(exchange -> StringUtils.isBlank(aZKServers))
-                    .to("direct:kafka-broadcast")
+                    .to(KAFKA_BROADCAST_DIRECT_ROUTE)
                  .otherwise()
-                    .multicast().to("direct:kafka-broadcast", "direct:zookeeper-set")
+                    .multicast().to(KAFKA_BROADCAST_DIRECT_ROUTE, ZOOKEEPER_SET_DIRECT_ROUTE)
               .end()
            .endRest()
            .get("/isActive")
@@ -244,12 +246,12 @@ public class BridgeAutoConfiguration {
               .marshal().json()
               .log(DEBUG, "${body}");
 
-         rb.from("direct:kafka-broadcast")
+         rb.from(KAFKA_BROADCAST_DIRECT_ROUTE)
            .marshal().custom(ServiceMessageDataFormat.BEAN_NAME)
            .toF("kafka:%s", theProperties.getBridgesGlobalConfigs().getServiceTopic());
 
          if (StringUtils.isNotBlank(aZKServers)) {
-            rb.from("direct:zookeeper-set")
+            rb.from(ZOOKEEPER_SET_DIRECT_ROUTE)
               .setHeader(ZooKeeperMessage.ZOOKEEPER_OPERATION).constant("WRITE")
               .choice()
                  .when(exchange -> StringUtils.equals(exchange.getIn().getBody(ServiceMessageDTO.class).getAction(), START_ACTION))

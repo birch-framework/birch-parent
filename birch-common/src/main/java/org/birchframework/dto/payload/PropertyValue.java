@@ -74,7 +74,7 @@ public class PropertyValue implements Serializable {
       STRING(STRING_TYPE_NAME, String.class);
 
       private static final Map<String, PropertyType> valuesMap = Arrays.stream(values()).collect(Collectors.toMap(
-         propertyType -> propertyType.typeString, propertyType -> propertyType
+         propType -> propType.typeString, propType -> propType
       ));
 
       @Include
