@@ -87,7 +87,6 @@ node('ubuntu-node') {
 
    stage ('Site Deploy') {
       if (Globals.release) {
-         echo "Site Deploy is temporarily disabled"
          withMaven(mavenSettingsConfig: 'Birch-Maven-Settings') {
             sh "mvn -P bci site site:stage scm-publish:publish-scm"
          }
