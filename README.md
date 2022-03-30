@@ -20,16 +20,16 @@ The Birch Framework can be used as a parent module in any Maven project to provi
 following dependencies (defined in module):
 
 * Spring Boot (birch-parent)
-* Spring Actuator (birch-common)
-* Spring Cloud Config (birch-common)
-* Logback (birch-common)
-* Lombok (birch-common)
-* Orika (birch-common)
-* Google Reflections (birch-common)
-* Apache CXF JAX-RS (birch-rest-jaxrs)
-* Open API (birch-rest-jaxrs)
-* Apache Kafka (birch-kakfa-utils, birch-spring-kafka)
-* Spring Security OpenID Connect (OIDC) (birch-security-oauth-spring)
+* Spring Actuator ([birch-common](birch-common/README.md))
+* Spring Cloud Config ([birch-common](birch-common/README.md))
+* Logback ([birch-common](birch-common/README.md))
+* Lombok ([birch-common](birch-common/README.md))
+* Orika ([birch-common](birch-common/README.md))
+* Google Reflections ([birch-common](birch-common/README.md))
+* Apache CXF JAX-RS ([birch-rest-jaxrs](birch-rest-jaxrs/README.md))
+* Open API ([birch-rest-jaxrs](birch-rest-jaxrs/README.md))
+* Apache Kafka ([birch-kakfa-utils](birch-kafka-utils/README.md), birch-spring-kafka)
+* Spring Security OpenID Connect (OIDC) ([birch-security-oauth-spring](birch-security-oauth-spring/README.md))
 
 Birch Framework also provides support for messaging bridges between the following JMS providers and Apache Kafka:
 
@@ -41,10 +41,10 @@ NOTE: the aforementioned product dependencies must be included when using the br
 
 Bridge stack uses the following dependencies:
 
-* Apache Camel (birch-bridge-jms-kafka)
+* Apache Camel ([birch-bridge-jms-kafka](birch-bridge-jms-kafka/README.md))
 
 # Usage
-Refer to [`birch-starter`](birch-starter/README.md) documentation on how to include aggregator dependency of Birch Framework.
+Refer to [birch-starter](birch-starter/README.md) documentation on how to include aggregator dependency of Birch Framework.
 
 # Developer's Guide
 
@@ -52,35 +52,3 @@ Refer to [`birch-starter`](birch-starter/README.md) documentation on how to incl
 Execute the following from the root of the project (`birch-parent`):
 
     mvn clean install
-
-# Release
-
-**Releases can only be executed by Release admins.**
-
-## Prepare local environment
-### Git
-
-Create links to the `post-checkout` script so that your new branches get the correct build status badges.
-#### Windows
-Run the following in the Windows Command Prompt **from the repository root (`birch-parent`)**:
-
-    mklink .git\hooks\post-checkout %cd%\scripts\post-checkout
-
-`git-bash` is required for this script to function properly.  All Git operations must be executed using `git-bash` for Windows.
-#### UNIX
-Run the following in a shell prompt **from the repository root (`birch-parent`)**:
-
-    ln -s ${PWD}/scripts/post-checkout -t .git/hooks
-
-## Creating the release
-In order to create a release:
-1. Ensure all local changes are committed and merged into master before running the release, as not doing so will cause the Maven release to fail.
-2. Run the following script from the root of the project (`birch-parent`):
-```
-   bash scripts/release
-```
-3. Accept all defaults by pressing `Enter` for each prompt, except if creating a release with a minor and/or major version change, then enter the new version number.
-
-   **Do not deviate from default tag naming convention of `birch-parent-<version>` where `<version>` is in the format `<major>.<minor>.<release>`**
-
-4. Release will be committed to `release/<version>` branch and pushed to the repository.  When CI/CD discovers this new release branch, it will publish it to Maven Central.
