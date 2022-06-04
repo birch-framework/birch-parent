@@ -36,7 +36,7 @@
    <inceptionYear>2021</inceptionYear>
    <licenses>
       <license>
-         <name>gpl_v3</name>
+         <name>GNU Public License Version 3</name>
          <distribution>repo</distribution>
          <comments>GNU Public License version 3</comments>
          <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
