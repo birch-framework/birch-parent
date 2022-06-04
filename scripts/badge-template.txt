@@ -1,1 +1,1 @@
-[![Build Status](https://cicd.birchframework.org/buildStatus/icon?job=Birch/BRANCH_NAME&style=plastic)](https://cicd.birchframework.org/job/Birch/job/BRANCH_NAME/)
+[![Build Status](https://jenkins.khalichi.com/buildStatus/icon?job=birch-parent/BRANCH_NAME&style=plastic)](https://jenkins.khalichi.com/job/birch-parent/job/BRANCH_NAME/)
