@@ -45,18 +45,18 @@ public class DemographicInfo {
 ```
 Given a string that matches the [`@RegexBinding`](https://javadoc.io/doc/org.birchframework/birch-common/latest/org/birchframework/framework/regex/RegexBinding.html), 
 the `Parser.parse(String)` 
-method will produce an instance of `DemographicInfo` with capture groups defined by the `@RegexBiding` are properly mapped to their respective values in 
+method will produce an instance of `DemographicInfo` wherein capture groups defined within `@RegexBiding` are mapped to their respective values in 
 properties annotated with [`@CaptureGroup`](https://javadoc.io/doc/org.birchframework/birch-common/latest/org/birchframework/framework/regex/CaptureGroup.html).
 
-The following code initializes the Parser for the above class:
+The following code demonstrates the usage of the `Parser` for the above class:
 ```java
 final var parser = Parser.of(DemographicInfo.class);
 final var objects = parser.parse("Age: 27 | Last Name: Stardust  | First Name: Ziggy    | Deceased: Y | ROCK_STAR");
 ```
 In the above example, `objects` is a `List<?>` containing one instance of `DemographicInfo`.
 
-Multiple classes can be provided to the `Parser.of(Class<?>...)`, for which when parsing each line of input, one instance of the first matched Regex binding POJO
-will be returned in the results.
+Multiple classes can be provided to the `Parser.of(Class<?>...)` factory method, for which parsing each line of input produces one instance of the first matched 
+Regex binding POJO within the returned list.
 
 A common use case is to parse a file split into lines of text and feed those lines as a stream to the overloaded `Parser.parse(Stream<String>)` method which 
 returns a stream.  This pattern is very memory efficient as it returns a stream that can then be used to evaluate the values in real-time.  The following is 
@@ -86,5 +86,5 @@ final var rateGauge = RateGauge.builder()
 ```
 where `meterRegistry` is a reference to a Spring Actuator bean.  Then call the [`rateGauge.increment()`](https://javadoc.io/static/org.birchframework/birch-common/1.1.2/org/birchframework/framework/metric/RateGauge.html#increment()) 
 method in your process to demonstrate one unit of processing. When the APM that consumes Actuator-exported metrics requests a sampling of this metric, this
-RateGauge instance calculates units per second and returns the value to the APM.  A custom value can be provided by calling `builder().valueFunction(BiFunction<Long, Long, Double>` 
+RateGauge instance calculates units per second and returns the value to the APM.  A custom value can be provided by calling `builder().valueFunction(BiFunction<Long, Long, Double>)` 
 in order to override the default `count / second` calculation.
