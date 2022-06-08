@@ -18,6 +18,7 @@
 # Do not deviate from default tag naming convention of <artifactId>-<version>
 # where <version> is in the format <major>.<minor>.<release>
 #
+BADGE_TEMPLATE_FILE=$(realpath scripts/badge-template.txt)
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 git checkout master
@@ -70,13 +71,19 @@ sed -e "s|<birch.version>.*</birch.version>|<birch.version>${VERSION}</birch.ver
 mv birch-starter/pom.xml.new birch-starter/pom.xml
 [ $? -ne 0 ] && exit 16
 
-find . -name pom.xml -exec git add {} +
+NEW_BADGE=$(sed "s@BRANCH_NAME@release%252F${VERSION}@g" ${BADGE_TEMPLATE_FILE}) && \
+sed "/jenkins\.birchframework\.org/c${NEW_BADGE}" README.md > README.tmp && \
+mv README.tmp README.md && \
+git add README.md
 [ $? -ne 0 ] && exit 17
 
-git commit -m "New release"
+find . -name pom.xml -exec git add {} +
 [ $? -ne 0 ] && exit 18
 
-git push --set-upstream origin release/${VERSION}
+git commit -m "New release"
 [ $? -ne 0 ] && exit 19
+
+git push --set-upstream origin release/${VERSION}
+[ $? -ne 0 ] && exit 20
 
 git checkout ${CURRENT_BRANCH}
