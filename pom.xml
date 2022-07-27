@@ -720,10 +720,10 @@
                      <configuration>
                         <target>
                            <copy file="README.md" tofile="src/site/markdown/index.md" failonerror="false" quiet="true"/>
-                           <echo message="about.birchframework.org" file="CNAME" force="true">
-                              <condition>
-                                 <equals arg1="${project.artifactId}" arg2="birch-parent"/>
-                              </condition>
+                           <condition property="isParent">
+                              <equals arg1="${project.artifactId}" arg2="birch-parent"/>
+                           </condition>
+                           <echo if:set="isParent" message="about.birchframework.org" file="CNAME" force="true">
                            </echo>
                         </target>
                      </configuration>
