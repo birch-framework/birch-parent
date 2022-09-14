@@ -723,6 +723,18 @@
                         </target>
                      </configuration>
                   </execution>
+                  <execution>
+                     <id>create-cname</id>
+                     <phase>site-deploy</phase>
+                     <goals>
+                        <goal>run</goal>
+                     </goals>
+                     <configuration>
+                        <target>
+                           <echo message="about.birchframework.org" file="${project.build.directory}/staging/CNAME"/>
+                        </target>
+                     </configuration>
+                  </execution>
                </executions>
             </plugin>
             <plugin>
