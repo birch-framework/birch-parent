@@ -217,7 +217,7 @@ public class Responses {
    /**
     * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified type for the executing function.
-    * @param theClass the the target entity type
+    * @param theClass the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param <T> the expected type of the response entity
     * @return a reference to this object for the purposes of chaining
@@ -232,7 +232,7 @@ public class Responses {
    /**
     * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified type for the executing function.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param <T> the expected type of the response entity
     * @return a reference to this object for the purposes of chaining
@@ -248,7 +248,7 @@ public class Responses {
     * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param <T> the expected type of the response entity
     * @return a reference to this object for the purposes of chaining
@@ -264,7 +264,7 @@ public class Responses {
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
-    * @param theClass the the target entity type
+    * @param theClass the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
@@ -282,7 +282,7 @@ public class Responses {
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
@@ -300,7 +300,7 @@ public class Responses {
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
@@ -318,7 +318,7 @@ public class Responses {
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter.
-    * @param theClass the the target entity type
+    * @param theClass the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
@@ -335,8 +335,8 @@ public class Responses {
    /**
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#OK}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the executing function.
-    * Otherwise will execute the {@code theElseAction} parameter.
-    * @param theType the the target entity type
+    * Otherwise, will execute the {@code theElseAction} parameter.
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
@@ -355,7 +355,7 @@ public class Responses {
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
     * Otherwise will execute the {@code theElseAction} parameter.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #ok()}
     * @param <T> the expected type of the response entity
@@ -372,7 +372,7 @@ public class Responses {
    /**
     * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified type for the executing function.
-    * @param theClass the the target entity type
+    * @param theClass the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param <T> the expected type of the response entity
     * @return a reference to this object for the purposes of chaining
@@ -387,7 +387,7 @@ public class Responses {
    /**
     * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified type for the executing function.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param <T> the expected type of the response entity
     * @return a reference to this object for the purposes of chaining
@@ -403,7 +403,7 @@ public class Responses {
     * Functional method that can be implemented with a lambda.  Will only execute {@code theAction} parameter if the wrapped response was {@link Status#CREATED}.
     * Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified type for the
     * executing function.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param <T> the expected type of the response entity
     * @return a reference to this object for the purposes of chaining
@@ -421,7 +421,7 @@ public class Responses {
     * {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
-    * @param theClass the the target entity type
+    * @param theClass the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
@@ -440,7 +440,7 @@ public class Responses {
     * {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter with the {@link ErrorCode} that is expected within the {@link #response}
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
@@ -458,7 +458,7 @@ public class Responses {
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}.  Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified
     * type for the executing function.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the function to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
@@ -478,7 +478,7 @@ public class Responses {
     * {@link Status#CREATED}.
     * Unwraps the {@link Response#readEntity(Class)}, unmarshalls, and provides it to the specified class type for the executing function.
     * Otherwise will execute the {@code theElseAction} parameter.
-    * @param theClass the the target entity type
+    * @param theClass the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
@@ -496,7 +496,7 @@ public class Responses {
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}. Unwraps the {@link Response#readEntity(GenericType)}, unmarshalls, and provides it to the specified class type for the
     * executing function. Otherwise will execute the {@code theElseAction} parameter.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
@@ -514,7 +514,7 @@ public class Responses {
     * Functional method that can be implemented with 2 lambdas.  Will only execute {@code theAction} parameter {@code theAction} parameter if the wrapped response was
     * {@link Status#CREATED}.  Unwraps the entity via {@link ObjectMapper#readValue(String, TypeReference)}, unmarshalls, and provides it to the specified
     * type for the executing function. Otherwise will execute the {@code theElseAction} parameter.
-    * @param theType the the target entity type
+    * @param theType the target entity type
     * @param theAction the function to be executed when the condition is met
     * @param theElseAction the runnable to be executed if response is <emphasis>not</emphasis> {@link #created()}
     * @param <T> the expected type of the response entity
