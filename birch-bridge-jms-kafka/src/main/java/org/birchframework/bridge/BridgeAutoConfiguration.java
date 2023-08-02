@@ -62,7 +62,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * Auto-configuration for the bridge(s).  Supports ActiveMQ, IBM MQ, and Tibco EMS.  Requires dependencies on exactly one of the 3
- * supported JMS providers.  Each of the supported JMS providers are configured via their own auto-configurations.  This auto-configuration merely
+ * supported JMS providers.  Each of the supported JMS providers are configured via their own auto-configurations.  This autoconfiguration merely
  * provides the source/destination configuration, including their respective listeners.
  * The configuration supports multiple bridges, as long as the underlying JMS provider for all bridges is one of the aforementioned.
  * <p/>
@@ -126,10 +126,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * @author Keivan Khalichi
  */
 @Configuration(proxyBeanMethods = false)
-@ComponentScan(basePackages = {
-   "org.birchframework.bridge", "org.birchframework.bridge.dataformat",
-   "org.birchframework.framework.spring",
-   "org.springframework.boot.autoconfigure.jackson"})
+@ComponentScan(basePackages = {"org.birchframework.bridge", "org.birchframework.bridge.dataformat",
+                               "org.birchframework.framework.spring",
+                               "org.springframework.boot.autoconfigure.jackson"})
 @EnableAutoConfiguration
 @EnableConfigurationProperties(BirchProperties.class)
 @AutoConfigureBefore(CamelAutoConfiguration.class)
@@ -207,8 +206,6 @@ public class BridgeAutoConfiguration {
       final var aZKBasePath = normalizeBasePath(theProperties.getBridgesGlobalConfigs().getZookeeperBasePath());
       final var aZKServers = String.join(",", this.zookeeperEndpoints);
       final var anAffinity = theProperties.getBridgesGlobalConfigs().getAffinity();
-      final var aZKReadURI = String.format("zookeeper://%s/%s/active-affinity", aZKServers, aZKBasePath);
-      final var aZKWriteURI = String.format("zookeeper://%s/%s/active-affinity?create=true&createMode=PERSISTENT", aZKServers, aZKBasePath);
 
       return rb -> {
          rb.rest("/routes")
@@ -239,7 +236,7 @@ public class BridgeAutoConfiguration {
                  .endChoice()
                  .otherwise()
                     .setHeader(ZooKeeperMessage.ZOOKEEPER_OPERATION).constant("READ")
-                    .to(aZKReadURI)
+                    .toF("zookeeper://%s/%s/active-affinity", aZKServers, aZKBasePath)
                     .transform().message(message -> new SimpleEntry<>("isActive", StringUtils.equals(message.getBody(String.class), anAffinity)))
                  .endChoice()
               .end()
@@ -256,11 +253,11 @@ public class BridgeAutoConfiguration {
               .choice()
                  .when(exchange -> StringUtils.equals(exchange.getIn().getBody(ServiceMessageDTO.class).getAction(), START_ACTION))
                     .transform().body(ServiceMessageDTO.class, ServiceMessageDTO::getAffinity)
-                    .to(aZKWriteURI)
+                    .toF("zookeeper://%s/%s/active-affinity?create=true&createMode=PERSISTENT", aZKServers, aZKBasePath)
                     .log(DEBUG, "${header[CamelZooKeeperNode]}: ${bodyOneLine}")
                  .when(exchange -> StringUtils.equals(exchange.getIn().getBody(ServiceMessageDTO.class).getAction(), STOP_ACTION))
                     .setBody(exchange -> "")
-                    .to(aZKWriteURI)
+                    .toF("zookeeper://%s/%s/active-affinity?create=true&createMode=PERSISTENT", aZKServers, aZKBasePath)
                     .log(DEBUG, "${header[CamelZooKeeperNode]}: ${bodyOneLine}")
               .end();
          }
