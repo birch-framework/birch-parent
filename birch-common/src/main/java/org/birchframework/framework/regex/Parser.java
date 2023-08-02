@@ -13,6 +13,7 @@
  ==============================================================*/
 package org.birchframework.framework.regex;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -62,8 +62,10 @@ public class Parser {
             final var aFieldDescriptors =
                FieldUtils.getFieldsListWithAnnotation(clazz, CaptureGroup.class)
                          .stream()
-                         .peek(f -> f.setAccessible(true))
-                         .map(f -> new FieldDescriptor(f, (Integer) Objects.requireNonNull(AnnotationUtils.getValue(f.getAnnotation(CaptureGroup.class)))))
+                         .map(f -> {
+                            f.setAccessible(true);
+                            return new FieldDescriptor(f, (Integer) Objects.requireNonNull(AnnotationUtils.getValue(f.getAnnotation(CaptureGroup.class))));
+                         })
                          .collect(Collectors.toList());
             final var aDuplicatesList =
                aFieldDescriptors.stream()
@@ -91,11 +93,12 @@ public class Parser {
 
    /**
     * Factory method to create an instance of this utility.
-    * @param theTypes class types annotated with {@link RegexBinding}
+    * @param theTypes serializable class types annotated with {@link RegexBinding}
     * @return a parser instance
     */
+   @SafeVarargs
    @SuppressWarnings("VariableArgumentMethod")
-   public static Parser of(@Nonnull Class<?>... theTypes) {
+   public static Parser of(@Nonnull Class<? extends Serializable>... theTypes) {
       if (ArrayUtils.isEmpty(theTypes)) {
          throw new ParseException(B12010);
       }
@@ -107,7 +110,7 @@ public class Parser {
     * @param theInput the input to be parsed 1 line at a time
     * @return instances of types provided, with one instance per match within the input
     */
-   public List<?> parse(@Nonnull String theInput) {
+   public List<Serializable> parse(@Nonnull String theInput) {
       if (StringUtils.isBlank(theInput)) {
          throw new ParseException(B12020);
       }
@@ -115,42 +118,37 @@ public class Parser {
    }
 
    /**
-    * Parses the input stream of strings against the class types provided in the {@link #of(Class[])} method, in a stream.  Though this method is thread-safe,
-    * the provided parameter stream must not be a parrallel stream.
+    * Parses the input stream of strings against the class types provided in the {@link #of(Class[])} method, in a stream.  This method is thread-safe,
+    * and the provided parameter stream can be a parrallel stream.
     * @param theInput the input to be parsed as a stream of strings wherein 1 string is parsed against library of possible {@link RegexBinding} POJOs
     * @return stream of instances of types provided, with one instance per match within the input
-    * @throws ParseException if the provided stream is a parallel stream
+    * @throws ParseException if any fields of the {@code types} POJOs are not accessible
     */
-   public Stream<?> parse(@Nonnull Stream<String> theInput) {
-      if (theInput.isParallel()) {
-         throw new ParseException(B12025);
-      }
-      final var aMatcherRef = new AtomicReference<Matcher>();
+   public Stream<Serializable> parse(@Nonnull Stream<String> theInput) {
+      final var aMatcherRef = new ThreadLocal<Matcher>();
       return theInput.flatMap(line ->
-                        this.types.entrySet()
-                            .stream()      // cannot be a parallel stream
-                            .filter(entry -> {
-                               aMatcherRef.set(entry.getValue().matcher(line));
-                               return aMatcherRef.get().matches();
-                            })
-                            .map(entry -> {
-                               final var aClass     = entry.getKey();
-                               final var aClassDesc = entry.getValue();
-                               return Stub.of(aClass, targetObject -> {
-                                  aClassDesc.fields.forEach((captureGroup, fieldDesc) -> {
-                                     final var aValue = aMatcherRef.get().group(captureGroup);
-                                     if (StringUtils.isNotBlank(aValue)) {
-                                        try {
-                                           FieldUtils.writeField(fieldDesc.field, targetObject, Beans.valueOf(fieldDesc.field.getType(), aValue));
-                                        }
-                                        catch (IllegalAccessException e) {
-                                           throw new ParseException(B12030, e);
-                                        }
-                                     }
-                                  });
-                               });
-                            })
-                     );
+         this.types.entrySet()
+            .stream()
+            .filter(entry -> {
+               aMatcherRef.set(entry.getValue().matcher(line));
+               return aMatcherRef.get().matches();
+            })
+            .map(entry -> {
+               final var aClass     = entry.getKey();
+               final var aClassDesc = entry.getValue();
+               return (Serializable) Stub.of(aClass, targetObject -> aClassDesc.fields.forEach((captureGroup, fieldDesc) -> {
+                  final var aValue = aMatcherRef.get().group(captureGroup);
+                  if (StringUtils.isNotBlank(aValue)) {
+                     try {
+                        FieldUtils.writeField(fieldDesc.field, targetObject, Beans.valueOf(fieldDesc.field.getType(), aValue));
+                     }
+                     catch (IllegalAccessException e) {
+                        throw new ParseException(B12030, e);
+                     }
+                  }
+               }));
+            })
+      );
    }
 
    static class ParseClassDescriptor {
