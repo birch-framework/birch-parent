@@ -14,6 +14,7 @@
 
 package org.birchframework.framework.regex;
 
+import java.io.Serializable;
 import lombok.Getter;
 import org.checkerframework.checker.regex.qual.Regex;
 
@@ -25,7 +26,7 @@ import org.checkerframework.checker.regex.qual.Regex;
 @RegexBinding("Age:\\s+(\\d+)\\s+\\|\\s+Last Name:\\s+(\\w*)\\s+\\|\\s+First Name:(\\s+)(\\w*)\\s+\\|\\s+Alive:\\s+(y|n|Y|N|t|f|T|F)\\s+\\|\\s+(.*)")
 @Getter
 @SuppressWarnings({"unused", "InstanceVariableMayNotBeInitialized"})
-public class TestParseClass {
+public class TestParseClass implements Serializable {
 
    @CaptureGroup(1)
    private int age;
