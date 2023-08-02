@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Stream;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.QueueConnection;
@@ -30,6 +31,7 @@ import com.tibco.tibjms.TibjmsXATopicConnectionFactory;
 import com.tibco.tibjms.naming.TibjmsInitialContextFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -67,10 +69,10 @@ import static org.springframework.jms.listener.DefaultMessageListenerContainer.*
  *    tibco:
  *      ems:
  *        jndi:
- *          url: ${tibco.ems.factory.url}                          # JNDI URI; is often the same as factory URI
- *          principal: ${tibco.ems.factory.username}               # JNDI user; is often the same as factory username
- *          credentials: ${tibco.ems.factory.password}             # JNDI password (optional); is often the same as factory password
- *          protocol: ${tibco.ems.factory.protocol}                # JNDI protocol (optional); is often the same as factory protocol; see {@link javax.naming.Context#SECURITY_PROTOCOL}
+ *          url: ${tibco.ems.factory.url}                          # JNDI URI; defaults to tibco.ems.factory.url value
+ *          principal: ${tibco.ems.factory.username}               # JNDI user; defaults to tibco.ems.factory.username
+ *          credentials: ${tibco.ems.factory.password}             # JNDI password (optional); defaults to tibco.ems.factory.password
+ *          protocol: ${tibco.ems.factory.protocol}                # JNDI protocol (optional); defaults to tibco.ems.factory.protocol; see {@link javax.naming.Context#SECURITY_PROTOCOL}
  *          authentication: simple                                 # Type of JNDI authentication; see {@link javax.naming.Context#SECURITY_AUTHENTICATION}
  *        factory:
  *          url: tcp://localhost:7222                              # EMS server URL
@@ -114,18 +116,20 @@ public class EMSAutoConfiguration {
    @Bean
    @SuppressWarnings("DuplicatedCode")
    public JndiLocatorDelegate jndiLocatorDelegate() {
-      final var aMapper = PropertyMapper.get();
-      final var aJNDI   = this.properties.getJndi();
-      final var anSSL   = this.properties.getSsl();
-      final var aMap = new HashMap<String, Object>(Map.of(INITIAL_CONTEXT_FACTORY,     TibjmsInitialContextFactory.class.getName(),
-                                                          PROVIDER_URL,                aJNDI.getUrl(),
-                                                          SECURITY_PRINCIPAL,          aJNDI.getPrincipal(),
-                                                          SSL_ENABLE_VERIFY_HOST,      Boolean.toString(anSSL.isVerifyHost()),
-                                                          SSL_ENABLE_VERIFY_HOST_NAME, Boolean.toString(anSSL.isVerifyHostname())));
-      aMapper.from(aJNDI::getCredentials)                     .whenNonNull().to(s -> aMap.put(SECURITY_CREDENTIALS, s));
-      aMapper.from(aJNDI::getProtocol)                        .whenNonNull().to(s -> aMap.put(SECURITY_PROTOCOL, s));
-      aMapper.from(aJNDI::getAuthentication)                  .whenNonNull().to(s -> aMap.put(SECURITY_AUTHENTICATION, s));
-      aMapper.from(this.properties.getFactory().getProtocol()).whenNonNull().to(s -> aMap.put(SECURITY_PROTOCOL, s));
+      final var aMapper  = PropertyMapper.get();
+      final var aJNDI    = this.properties.getJndi();
+      final var aFactory = this.properties.getFactory();
+      final var anSSL    = this.properties.getSsl();
+      final var aMap     = new HashMap<String, Object>(Map.of(INITIAL_CONTEXT_FACTORY, TibjmsInitialContextFactory.class.getName(),
+                                                              PROVIDER_URL, StringUtils.defaultIfBlank(aJNDI.getUrl(), aFactory.getUrl()),
+                                                              SSL_ENABLE_VERIFY_HOST, Boolean.toString(anSSL.isVerifyHost()),
+                                                              SSL_ENABLE_VERIFY_HOST_NAME, Boolean.toString(anSSL.isVerifyHostname())));
+
+      aMapper.from(StringUtils.defaultIfBlank(aJNDI.getPrincipal(), aFactory.getUsername())).whenHasText().to(s -> aMap.put(SECURITY_PRINCIPAL, s));
+      aMapper.from(StringUtils.defaultIfBlank(aJNDI.getCredentials(), aFactory.getPassword())).whenHasText().to(s -> aMap.put(SECURITY_CREDENTIALS, s));
+      aMapper.from(StringUtils.defaultIfBlank(aJNDI.getProtocol(), aFactory.getProtocol())).whenHasText().to(s -> aMap.put(SECURITY_PROTOCOL, s));
+      Stream.of(aJNDI.getProtocol(), aFactory.getProtocol()).filter(StringUtils::isNotBlank).findFirst().ifPresent(s -> aMap.put(SECURITY_PROTOCOL, s));
+      aMapper.from(aJNDI::getAuthentication).whenHasText().to(s -> aMap.put(SECURITY_AUTHENTICATION, s));
       final var aProperties = new Properties(aMap.size());
       aProperties.putAll(aMap);
       return new EMSJNDILocatorDelegate(aProperties);
