@@ -16,7 +16,7 @@ To include `birch-common` as a dependency to any Maven project or module, add th
 
 ## Java POJO Regex Binding
 The [`Parser`](https://javadoc.io/doc/org.birchframework/birch-common/latest/org/birchframework/framework/regex/Parser.html) class provides a mechanism for 
-parse a regular expression producing a POJO as a result of binding Regex capture groups to POJO properties. The following is an example of such binding:
+parsing a regular expression producing a POJO as a result of binding Regex capture groups to POJO properties. The following is an example of such binding:
 ```java
 @RegexBinding("Age:\\s+(\\d+)\\s+\\|\\s+Last Name:\\s+(\\w*)\\s+\\|\\s+First Name:(\\s+)(\\w*)\\s+\\|\\s+Deceased:\\s+(y|n|Y|N|t|f|T|F)\\s+\\|\\s+(.*)")
 @Getter
@@ -31,7 +31,7 @@ public class DemographicInfo {
    @CaptureGroup(5)
    private boolean deceased;
 
-   @CaptureGroup(4)
+   @CaptureGroup(3)
    private String firstName;
 
    @CaptureGroup(6)
