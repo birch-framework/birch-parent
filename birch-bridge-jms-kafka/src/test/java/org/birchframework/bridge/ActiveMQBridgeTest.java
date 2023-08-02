@@ -49,7 +49,7 @@ import static org.birchframework.bridge.TestConfiguration.MESSAGE_RECEIVED_URI;
 @ActiveProfiles("activemq")
 @SuppressWarnings("AutoBoxing")
 @Slf4j
-public class ActiveMQBridgeTest {
+class ActiveMQBridgeTest {
 
    public static final int ITERATIONS = 5;
 
