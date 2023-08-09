@@ -18,8 +18,12 @@
 # Do not deviate from default tag naming convention of <artifactId>-<version>
 # where <version> is in the format <major>.<minor>.<release>
 #
-BADGE_TEMPLATE_FILE=$(realpath scripts/badge-template.txt)
+SCRIPTS_DIR=$(dirname $(realpath ${0}))
+PARENT_DIR=$(dirname ${SCRIPTS_DIR})
+BADGE_TEMPLATE_FILE=${SCRIPTS_DIR}/badge-template.txt
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+cd ${PARENT_DIR}
 
 git checkout master
 [ $? -ne 0 ] && exit 2
