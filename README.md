@@ -7,7 +7,7 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=security_rating)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.birchframework%3Abirch-parent)
 
-[![Build Status](https://jenkins.birchframework.org/buildStatus/icon?job=birch-parent/master&style=plastic)](https://jenkins.birchframework.org/job/birch-parent/job/master/)
+[![Build Status](https://jenkins.khalichi.com/buildStatus/icon?job=birch-parent/release%252F1.3.4&style=plastic)](https://jenkins.khalichi.com/job/birch-parent/job/release%252F1.3.4/)
 ![Status Checks](https://img.shields.io/github/checks-status/birch-framework/birch-parent/HEAD?style=plastic)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
