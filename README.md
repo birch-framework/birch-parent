@@ -5,7 +5,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=security_rating)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework_birch-parent&metric=sqale_index)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=birch_framework_birch-parent&metric=sqale_index)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
 
 [![Build Status](https://jenkins.birchframework.org/buildStatus/icon?job=birch-parent/master&style=plastic)](https://jenkins.birchframework.org/job/birch-parent/job/master/)
 ![Status Checks](https://img.shields.io/github/checks-status/birch-framework/birch-parent/HEAD?style=plastic)
