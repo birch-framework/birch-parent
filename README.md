@@ -1,11 +1,11 @@
-[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=birch-framework%3Abirch-parent)
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=birch-framework%3Abirch-parent&metric=bugs)](https://sonarcloud.io/dashboard?id=birch-framework%3Abirch-parent)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=birch-framework%3Abirch-parent&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=birch-framework%3Abirch-parent)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework%3Abirch-parent&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=birch-framework%3Abirch-parent)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework%3Abirch-parent&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=birch-framework%3Abirch-parent)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework%3Abirch-parent&metric=security_rating)](https://sonarcloud.io/dashboard?id=birch-framework%3Abirch-parent)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework%3Abirch-parent&metric=sqale_index)](https://sonarcloud.io/dashboard?id=birch-framework%3Abirch-parent)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=bugs)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=birch-framework_birch-parent&metric=security_rating)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.birchframework_birch-parent&metric=sqale_index)](https://sonarcloud.io/dashboard?id=birch-framework_birch-parent)
 
 [![Build Status](https://jenkins.birchframework.org/buildStatus/icon?job=birch-parent/master&style=plastic)](https://jenkins.birchframework.org/job/birch-parent/job/master/)
 ![Status Checks](https://img.shields.io/github/checks-status/birch-framework/birch-parent/HEAD?style=plastic)
